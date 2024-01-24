@@ -1,0 +1,33 @@
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="main-card">
+                <div class="card-body">
+                    <div #contenidoDiv>
+                        <div class="contenedor" style="position: relative;left: -18px;height: 580px;" id="contenido">
+                            <img src="https://webapp.mdsmp.gob.pe/sanidadbackend/public/files/carnetmodel.png" style="position: absolute;z-index: 2;" />
+                            <img src="https://webapp.mdsmp.gob.pe/sanidadbackend/public/files/carnetmodel.png" style="position: absolute;z-index: 2;" />
+                            <img src="http://172.17.1.56/files/salud/{{inputPersona.car_imgfot}}" style="position: absolute; width: 125px;top: 170px;left: 135px;z-index: 1;height: 125px;" />
+                            <img src="http://172.17.1.56/files/salud/{{inputPersona.car_imgfot}}" style="position: absolute; width: 125px;top: 170px;left: 135px;z-index: 1;height: 125px;" />
+                            
+                            <div class="centrado" style="z-index: 3;position: absolute;top: 309px;left: 123px;width: 39vh;text-align: left;font-size: 11px;font-family: sans-serif;font-weight: bold;">{{inputPersona.pen_nombre}}</div>
+                            <div class="centrado" style="z-index: 3;position: absolute;top: 344px;left: 123px;width: 39vh;text-align: left;font-size: 11px;font-family: sans-serif;font-weight: bold;">{{inputPersona.pen_apepat}} {{inputPersona.pen_apemat}}</div>
+                            <div class="centrado" style="z-index: 3;position: absolute;top: 376px;left: 123px;width: 39vh;text-align: left;font-size: 11px;font-family: sans-serif;font-weight: bold;">{{inputPersona.per_numdoi}}</div>
+                            <div class="centrado" style="z-index: 3;position: absolute;top: 410px;left: 123px;width: 39vh;text-align: left;font-size: 11px;font-family: sans-serif;font-weight: bold;">{{inputPersona.act_descri}}</div>
+                            <div class="centrado" style="z-index: 3;position: absolute;top: 443px;left: 123px;width: 39vh;text-align: left;font-size: 11px;font-family: sans-serif;font-weight: bold;">{{inputPersona.ocu_descri}}</div>
+                            <div class="centrado" style="z-index: 3;position: absolute;top: 484px;left: 150px;width: 30vh;text-align: left;font-size: 11px;font-family: sans-serif;font-weight: bold;">{{inputPersona.txt_manali}}</div>
+                            <div class="centrado" style="z-index: 3;position: absolute;top: 516px;left: 185px;width: 30vh;text-align: left;font-size: 11px;font-family: sans-serif;font-weight: bold;">{{inputPersona.car_numrec}}</div>
+                            
+                            <div class="centrado" style="z-index: 3;position: absolute;top: 172px;left: 567px;text-align: center;font-size: 11px;;font-family: sans-serif;font-weight: bold;">{{inputPersona.car_fecemi}}</div>
+                            <div class="centrado" style="z-index: 3;position: absolute;top: 247px;left: 567px;text-align: center;font-size: 11px;;font-family: sans-serif;font-weight: bold;">{{inputPersona.car_fecven}}</div>
+                            <div class="centrado" style="z-index: 3;position: absolute;top: 325px;left: 425px;text-align: center;font-size: 10px;width: 354px;;font-family: sans-serif;font-weight: bold;">{{inputPersona.car_direcc}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 d-grid gap-2">
+            <button (click)="convertirAPDF()" class="btn btn-primary btn-block btn-sm" id="clickbtn"><i class="pe-7s-note btn-icon-wrapper"> </i> IMPRIMIR CARNET </button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,236 @@
+<div class="main-content">
+  <div class="page-content">
+    <div class="card container-fluid">
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-lg-9" style="margin-top: 10px; justify-content: center">
+            <div class="row">
+              <div class="col-4">
+                <div class="mb-3">
+                  <label for="firstNameinput"
+                    class="form-label col-sm-6 col-form-label col-form-label-sm">Codigo</label>
+                  <input [(ngModel)]="p_codcon" (change)="obtenerNombrePorCod()"
+                    oninput="this.value = this.value.toUpperCase()" maxlength="6" type="text"
+                    class="form-control form-control-sm" placeholder="Codigo..." id="firstNameinput" />
+                </div>
+              </div>
+              <div class="col-8">
+                <div class="mb-3">
+                  <label for="lastNameinput" class="form-label col-sm-10 col-form-label col-form-label-sm">Propietario -
+                    Nombre o Razón del Infractor</label>
+                  <input disabled="" [(ngModel)]="cnombre" oninput="this.value = this.value.toUpperCase()" type="text"
+                    class="form-control form-control-sm" placeholder="" id="lastNameinput"
+                    style="background-color: #e1e1e1" />
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="mb-3">
+                  <label for="compnayNameinput" class="form-label col-sm-6 col-form-label col-form-label-sm">Dirección :
+                    Avenida / Jiron/Calle/Pasaje</label>
+                  <input disabled="" [(ngModel)]="dfiscal" oninput="this.value = this.value.toUpperCase()" type="text"
+                    class="form-control form-control-sm" placeholder="" id="compnayNameinput"
+                    style="background-color: #e1e1e1" />
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="mb-3">
+                  <label for="compnayNameinput" class="form-label col-sm-6 col-form-label col-form-label-sm">Referencia
+                    donde se cometio la infracciön</label>
+                  <input [(ngModel)]="crefere" oninput="this.value = this.value.toUpperCase()" type="text"
+                    class="form-control form-control-sm" placeholder="" id="compnayNameinput" />
+                </div>
+              </div>
+              <div class="col-2">
+                <div class="mb-3">
+                  <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Manzana</label>
+                  <input [(ngModel)]="manzana" oninput="this.value = this.value.toUpperCase()" type="email"
+                    class="form-control form-control-sm" placeholder="" id="" />
+                </div>
+              </div>
+              <div class="col-2">
+                <div class="mb-3">
+                  <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Lote</label>
+                  <input [(ngModel)]="lote" oninput="this.value = this.value.toUpperCase()" type="email"
+                    class="form-control form-control-sm" placeholder="" id="" />
+                </div>
+              </div>
+              <div class="col-2">
+                <div class="mb-3">
+                  <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Nro.Fiscal</label>
+                  <input type="number" class="form-control form-control-sm" placeholder="" id="" />
+                </div>
+              </div>
+              <div class="col-2">
+                <div class="mb-3">
+                  <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Dpto/Int</label>
+                  <input [(ngModel)]="dpto_int" oninput="this.value = this.value.toUpperCase()" type="text"
+                    class="form-control form-control-sm" placeholder="" id="" />
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="mb-3">
+                  <label [(ngModel)]="referencia" for=""
+                    class="form-label col-sm-8 col-form-label col-form-label-sm">Referencia</label>
+                  <input oninput="this.value = this.value.toUpperCase()" type="text"
+                    class="form-control form-control-sm" placeholder="" id="" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3" style="margin-top: 10px">
+            <div class="mb-2-5">
+              <label for="employeeName" class="form-label col-sm-8 col-form-label-sm mt-label-notificacion">Nro. Notif.
+                de Cargo</label>
+              <input [(ngModel)]="nnumnot" type="text" maxlength="6"
+                class="form-control form-control-sm mt-input-notificacion" id="employeeName" placeholder="" />
+            </div>
+            <div class="mb-2-5">
+              <label for="employeeUrl" class="form-label col-sm-8 col-form-label-sm mt-label-notificacion">Nro. Acta
+                Const.</label>
+              <input [(ngModel)]="nro_acta" type="url" class="form-control form-control-sm mt-input-notificacion"
+                id="employeeUrl" placeholder="" />
+            </div>
+            <div class="mb-2-5">
+              <label for="StartleaveDate" class="form-label col-sm-6 col-form-label-sm mt-label-notificacion">Fecha
+                Multa</label>
+              <input type="date" class="form-control form-control-sm mt-input-notificacion" id="StartleaveDate" />
+            </div>
+            <div class="mb-2-5">
+              <label for="EndleaveDate"
+                class="form-label col-sm-6 col-form-label-sm mt-label-notificacion">Nro.Res.Sanción</label>
+              <input disabled="" type="number" class="form-control form-control-sm mt-input-notificacion"
+                id="EndleaveDate" style="background-color: #e1e1e1" />
+            </div>
+            <div class="mb-2-5">
+              <label for="EndleaveDate" class="form-label col-sm-6 col-form-label-sm mt-label-notificacion">Fecha
+                Resolución</label>
+              <input disabled="" type="date" class="form-control form-control-sm mt-input-notificacion"
+                id="EndleaveDate" style="background-color: #e1e1e1" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card container-fluid">
+      <div class="row" style="align-items: center">
+        <div class="col-7">
+          <div class="mb-3">
+            <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Medida Complementaria</label>
+            <ng-select [(ngModel)]="csancio" (input)="onInputChange($event)" [ngModel]="
+                datosMedidaComp.length > 0 ? datosMedidaComp[0].CCODTIP : null
+              " [items]="datosMedidaComp" [closeOnSelect]="true" [searchable]="true" bindValue="CCODTIP"
+              bindLabel="DCODTIP" name="" class="form-control custom" style="border: 1px solid #b9b9b9 !important">
+            </ng-select>
+          </div>
+        </div>
+        <div class="col-sm-1" style="display: flex; justify-content: center">
+          <div class="" style="display: flex; align-items: center">
+            <input [(ngModel)]="tieneActa" type="checkbox" class="form-check-input" id="tiene-acta"
+              style="margin-right: 15px;" />
+            <label for="tiene-acta" class="form-check-label col-form-label-sm">Acta</label>
+          </div>
+        </div>
+        <div class="col-2">
+          <div class="mb-3">
+            <label for="compnayNameinput" class="form-label col-sm-6 col-form-label col-form-label-sm">Nº de
+              acta</label>
+            <input [disabled]="!tieneActa" type="text" class="form-control form-control-sm" id="compnayNameinput"
+              [style.background-color]="tieneActa ? '' : '#e1e1e1'" />
+          </div>
+        </div>
+        <div class="col-2">
+          <div class="mb-3">
+            <label for="phonenumberInput" class="form-label col-sm-8 col-form-label col-form-label-sm">Fecha
+              Ejecución</label>
+            <input [disabled]="!tieneActa" [(ngModel)]="f_ejecucion" type="date" class="form-control form-control-sm"
+              id="phonenumberInput" [style.background-color]="tieneActa ? '' : '#e1e1e1'" />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card container-fluid">
+      <div class="row" style="align-items: center; padding: 15px">
+        <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">Giro de Establecimiento</label>
+        <div class="col-sm-10">
+          <input [(ngModel)]="giro" type="email" oninput="this.value = this.value.toUpperCase()"
+            class="form-control form-control-sm" id="colFormLabelSm" />
+        </div>
+      </div>
+    </div>
+    <div class="card container-fluid">
+      <div class="col-md-12" style="margin-top: 10px">
+        <div class="mb-2-5 col-sm-12">
+          <label for="employeeName" class="form-label col-form-label-sm">
+            <span style="font-weight: bold"> SE RESUELVE: </span> Articulo
+            Unico: sancionar a la persona natural y/o juridica indicada en la
+            parte Expositiva de la presente Resolución, por incurrir en la
+            infracciön prevista en el CUIS.</label>
+        </div>
+        <div class="row" style="display: flex; justify-content: center; align-items: center">
+          <div class="mb-3 col-sm-2">
+            <label for="" class="form-label col-form-label-sm">Código infracción</label>
+            <input (change)="obtenerAreaPorCod()" [(ngModel)]="p_codinf" (keypress)="validarNumero($event)" type="text"
+              maxlength="7" class="form-control form-control-sm" id="employeeUrl" placeholder="" />
+          </div>
+          <div class="mb-3 col-sm-2">
+            <label for="StartleaveDate" class="form-label col-sm-6 col-form-label-sm">Monto infracción</label>
+            <input disabled="" [value]="nmonto | number:'1.2-2'" type="text" class="form-control form-control-sm"
+              id="StartleaveDate" style="background-color: #e1e1e1" />
+          </div>
+          <div class="mb-3 col-sm-8">
+            <label for="" class="form-label col-form-label-sm">Oficina</label>
+            <input disabled="" [(ngModel)]="dareas" type="text" class="form-control form-control-sm" id=""
+              placeholder="" style="background-color: #e1e1e1" />
+          </div>
+        </div>
+        <div class="mb-3 col-sm-12">
+          <label for="EndleaveDate" class="form-label col-sm-6 col-form-label-sm mt-label-notificacion">Concepto
+            infracción</label>
+          <input disabled="" [(ngModel)]="r_descri" type="text" class="form-control form-control-sm" id=""
+            placeholder="" style="background-color: #e1e1e1" />
+        </div>
+      </div>
+    </div>
+    <div class="card container-fluid">
+      <div class="row" style="display: flex; align-items: center">
+        <div class="mb-3 col-sm-12">
+          <label for="EndleaveDate" class="form-label col-form-label-sm mt-label-notificacion">Observaciones</label>
+          <input [(ngModel)]="mobserv" type="text" oninput="this.value = this.value.toUpperCase()"
+            class="form-control form-control-lg" id="" placeholder="" />
+        </div>
+      </div>
+    </div>
+    <div class="card container-fluid">
+      <div class="row">
+        <div class="mb-3 col-sm-4">
+          <label for="" class="form-label col-form-label-sm">Inspector Municipal</label>
+          <input [(ngModel)]="ins_municipal" type="text" class="form-control form-control-sm" id="employeeUrl"
+            placeholder="" />
+        </div>
+        <div class="mb-3 col-sm-2">
+          <label for="" class="form-label col-form-label-sm">Nº de Informes</label>
+          <input [(ngModel)]="nro_informe" type="text" oninput="this.value = this.value.toUpperCase()"
+            (keypress)="validarNumero($event)" class="form-control form-control-sm" id="employeeUrl" placeholder="" />
+        </div>
+        <div class="col-sm-2" style="display: flex; align-items: center"></div>
+        <div class="col-sm-2" style="display: flex; align-items: center; justify-content: right">
+          <button type="button" class="btn btn-primary btn-label btn btn-sm" style="margin-top: 24px;">
+            <i class="ri-save-3-line label-icon align-middle fs-16"></i>
+            Registrar
+          </button>
+        </div>
+        <div class="col-sm-2" style="display: flex; align-items: center; justify-content: left">
+          <button [routerLink]="['/multas']" type="button" class="btn btn-danger btn-label btn btn-sm"
+            style="margin-top: 24px;">
+            <i class="ri-close-fill label-icon align-middle fs-16"></i>
+            Cancelar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="ball-square-spin" [fullScreen]="false">
+    <p style="color: white">Buscando información...</p>
+  </ngx-spinner>
+</div>

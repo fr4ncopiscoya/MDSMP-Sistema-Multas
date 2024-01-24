@@ -1,0 +1,134 @@
+<div class="main-content">
+    <div class="page-content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                        <h4 class="mb-sm-0">Lista de Personas</h4>
+                        <div class="page-title-right">
+                            <ol class="breadcrumb m-0">
+                                <li class="breadcrumb-item"><a href="javascript: void(0);">Inicio</a></li>
+                                <li class="breadcrumb-item"><a href="javascript: void(0);">Personas</a></li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card p-2">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-1">
+                                  <label class="col-form-label">T. Doc:</label>
+                                </div>
+                                <div class="col-2">
+                                    <select class="form-select form-select-sm" [(ngModel)]="p_tdi_id"
+                                        data-choices-sorting="true">
+                                        <option selected="" value="0">Seleccione...</option>
+                                        <option *ngFor="let data of datosTipoDocumento"
+                                            value="{{data.tdi_id}}">{{data.tdi_abrevi}}</option>
+                                    </select>
+                                </div>
+                                <div class="col-1">
+                                  <label class="col-form-label">N° Doc:</label>
+                                </div>
+                                <div class="col-2">
+                                  <input [(ngModel)]="p_per_numdoi" type="number" class="form-control form-control-sm">
+                                </div>
+                                <div class="col-1">
+                                  <label class="col-form-label">Género:</label>
+                                </div>
+                                <div class="col-2">
+                                    <select class="form-select form-select-sm" [(ngModel)]="p_tge_id"
+                                        data-choices-sorting="true">
+                                        <option selected="" value="0">Seleccione...</option>
+                                        <option *ngFor="let data of datosTipoGenero"
+                                            value="{{data.tge_id}}">{{data.tge_descri}}</option>
+                                    </select>
+                                </div>
+                                <div class="col-1">
+                                    <label class="col-form-label">Nacionalidad:</label>
+                                </div>
+                                <div class="col-2">
+                                    <ng-select [(ngModel)]="selectedPais" style="border: 1px solid #b9b9b9 !important;">
+                                        <ng-option *ngFor="let pais of datosPais" [value]="pais.pai_id">{{pais.pai_descri}}</ng-option>
+                                     </ng-select>
+                                </div>
+                            </div>
+                            <div class="row g-3 pt-2 align-items-center">
+                                <div class="col-1">
+                                  <label class="col-form-label">Apellido Paterno</label>
+                                </div>
+                                <div class="col-5">
+                                  <input [(ngModel)]="p_pen_apepat" type="text" class="form-control form-control-sm">
+                                </div>
+                                <div class="col-1">
+                                  <label class="col-form-label">Apellido Materno</label>
+                                </div>
+                                <div class="col-5">
+                                  <input [(ngModel)]="p_pen_apemat" type="text" class="form-control form-control-sm">
+                                </div>
+                            </div>
+                            <div class="row pt-3">
+                                <div class="col-sm-auto">
+                                    <button type="button" (click)="ListarRecurrente()" class="btn btn-primary btn-label btn-sm"><i class="ri-search-line label-icon align-middle fs-16 me-2"></i> Buscar</button>
+                                </div>
+                                <div class="col-sm-auto">
+                                    <button type="button" [routerLink]="['/persona/crear-persona']" class="btn btn-info btn-label btn-sm"><i class="mdi mdi-plus label-icon align-middle fs-16 me-2"></i> Nuevo</button>
+                                </div>
+                                <div class="col-sm-auto">
+                                    <button type="button" class="btn btn-success btn-label btn-sm" id="ExportarExcel" (click)="descargaExcel()"><i class="ri-markup-line label-icon align-middle fs-16 me-2"></i> Excel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card card-h-100">
+                        <div class="card-body">
+                            <!-- <button [routerLink]="['/persona/crear-persona']" type="button"
+                                class="btn btn-soft-primary btn-label mb-3"><i
+                                    class="bx bx-user-plus label-icon fs-16"></i> Crear Persona</button> -->
+                            <div>
+                                <table id="tablaAplicacion" datatable [dtOptions]="dtOptions"
+                                [dtTrigger]="dtTrigger" class="row-border hover cell-border compact stripe">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th scope="col" class="text-center">N°</th>
+                                            <th scope="col" class="text-center">NOMBRE</th>
+                                            <th scope="col" class="text-center">DOC</th>
+                                            <th scope="col" class="text-center">N° DOC</th>
+                                            <th scope="col" class="text-center">DIRECCIÓN</th>
+                                            <th scope="col" class="text-center">DISTRITO</th>
+                                            <th scope="col" class="text-center">CORREO</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let data of dataRecurrente;let idx = index"
+                                            class="text-center">
+                                            <td>{{idx + 1}}</td>
+                                            <td>{{ data.per_nombre }}</td>
+                                            <td>{{ data.tdi_abrevi }}</td>
+                                            <td>{{ data.per_numdoi }}</td>
+                                            <td class="tddirecciondatatable">{{ data.dir_direcc }}</td>
+                                            <td>{{ data.udi_descri }}</td>
+                                            <td>{{ data.pec_correo }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="ball-square-spin" [fullScreen]="false">
+    <p style="color: white"> Buscando información... </p>
+</ngx-spinner>
+<app-toast></app-toast>

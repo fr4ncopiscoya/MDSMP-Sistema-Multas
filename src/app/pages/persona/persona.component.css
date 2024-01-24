@@ -1,0 +1,49 @@
+table#tablaAplicacion {
+    font-size: 10.5px; /* Ajusta el tamaño de la fuente según tus preferencias */
+}
+.tddirecciondatatable{
+    font-size: 12px;
+}
+.card-body{
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+.form-control.ng-select {
+    border: none;
+    padding: 0;
+}
+
+/* CARNET */
+.imagencarnet{
+    width: 794px;
+    height: 560px;
+}
+.contenedor{
+    position: relative;
+    display: inline-block;
+    text-align: center;
+}
+
+td {
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+}
+
+thead.table-light {
+    background-color: #20529d;
+    color: white;
+}
+
+input {
+    border: 1px solid #b9b9b9
+}
+select {
+    border: 1px solid #b9b9b9;
+}
+ng-select.form-control.input-sm.ng-select-searchable.ng-select-clearable.ng-select.ng-select-single.ng-pristine.ng-valid.ng-select-bottom.ng-touched {
+    border: 1px solid #b9b9b9 !important;
+}
+.ng-select-container.ng-has-value {
+    border: 1px solid #b9b9b9 !important;
+}

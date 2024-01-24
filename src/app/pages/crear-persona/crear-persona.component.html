@@ -1,0 +1,341 @@
+<ng-template #EditarImagen>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left"> <i class="pe-7s-plus btn-icon-wrapper"> </i> Edición de Carne</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()"
+            onclick="Limpiartalcancelar()" id="closeModal">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-6 col-md-6 col-sm-6">
+                <image-cropper
+                    [imageChangedEvent]="imageChangedEvent"
+                    [maintainAspectRatio]="true"
+                    [aspectRatio]="3 / 4"
+                    format="png"
+                    (imageCropped)="imageCropped($event)"
+                    (imageLoaded)="imageLoaded($event)"
+                    (cropperReady)="cropperReady()"
+                    (loadImageFailed)="loadImageFailed()"
+                ></image-cropper>
+            </div>
+            <div class="col-6 col-md-6 col-sm-6">
+                <div>
+                    <img [src]="croppedImage" class="img-responsive" style="width: 100%;"/>
+                </div>
+            </div>
+            <div class="col-12 col-md-12 col-sm-12">
+                <div>
+                    <div class="d-grid gap-2">
+                        <button type="button" class="btn btn-primary" (click)="GuardarCambiosImagen()">Guardar Cambios</button>
+                        <button type="button" class="btn btn-danger" (click)="cerrarModal()">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+<button (click)="openModal(EditarImagen, 'modal-xl')" style="display: none;" id="btnmodalimagen">x</button>
+<div class="main-content">
+    <div class="page-content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                        <h4 class="mb-sm-0">Crear Persona</h4>
+                        <div class="page-title-right">
+                            <ol class="breadcrumb m-0">
+                                <li class="breadcrumb-item"><a href="javascript: void(0);">Inicio</a></li>
+                                <li class="breadcrumb-item"><a href="javascript: void(0);">Usuarios</a></li>
+                                <li class="breadcrumb-item"><a href="javascript: void(0);">Nueva Persona</a></li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-12">
+                <div class="card card-h-100">
+                    <div class="card-body">
+                            <form [formGroup]="form">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-lg-3">
+                                                <div class="col-md-12" style="text-align: -webkit-center;">
+                                                    <div class="text-center" style="width:215px">
+                                                        <img [src]="imageUrl" class="img-fluid" alt="Responsive image">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 mt-4" style="position: absolute;top: 270px;padding-right: 7px;">
+                                                    <input class="form-control form-control-sm" id="fileimagenup" type="file" (change)="onFileSelected($event)" accept="image/*">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-9">
+                                                <div class="col-md-12">
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <div class="form-floating">
+                                                                <select class="form-select"
+                                                                    formControlName="p_tdi_id" [(ngModel)]="p_tdi_id"
+                                                                    data-choices-sorting="true">
+                                                                    <option selected="" value="0">Seleccione...</option>
+                                                                    <option *ngFor="let data of datosTipoDocumento"
+                                                                    value="{{data.tdi_id}}">{{data.tdi_descri}}</option>
+                                                                </select>
+                                                                <label>Tipo de Documento</label>
+                                                            </div>
+                                                            <div
+                                                                *ngIf="form.get('p_tdi_id')?.invalid && (form.get('p_tdi_id')?.dirty || form.get('p_tdi_id')?.touched)">
+                                                                <div class="text-danger"
+                                                                    *ngIf="form.get('p_tdi_id')?.hasError('required')">
+                                                                    Campo obligatorio</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-8">
+                                                            <div class="form-floating">
+                                                                    <input type="text" class="form-control" [(ngModel)]="p_tdi_numero" formControlName="p_tdi_numero" (blur)="buscarRecurrente()">
+                                                                    <label>N° de Documento</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 mt-2">
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <div class="form-floating">
+                                                                <input type="text" class="form-control form-control-sm" formControlName="p_rec_nombre" [(ngModel)]="p_rec_nombre">
+                                                                <div
+                                                                    *ngIf="form.get('p_rec_nombre')?.invalid && (form.get('p_rec_nombre')?.dirty || form.get('p_rec_nombre')?.touched)">
+                                                                    <div class="text-danger"
+                                                                        *ngIf="form.get('p_rec_nombre')?.hasError('required')">
+                                                                        Campo obligatorio</div>
+                                                                </div>
+                                                                <label>Nombres</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <div class="form-floating">
+                                                                <input type="text" class="form-control form-control-sm" formControlName="p_rec_apepat" [(ngModel)]="p_rec_apepat">
+                                                                <div
+                                                                    *ngIf="form.get('p_rec_apepat')?.invalid && (form.get('p_rec_apepat')?.dirty || form.get('p_rec_apepat')?.touched)">
+                                                                    <div class="text-danger"
+                                                                        *ngIf="form.get('p_rec_apepat')?.hasError('required')">
+                                                                        Campo obligatorio</div>
+                                                                </div>
+                                                                <label>Apellido Paterno</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <div class="form-floating">
+                                                                <input type="text" class="form-control form-control-sm" formControlName="p_rec_apemat" [(ngModel)]="p_rec_apemat">
+                                                                <div
+                                                                    *ngIf="form.get('p_rec_apemat')?.invalid && (form.get('p_rec_apemat')?.dirty || form.get('p_rec_apemat')?.touched)">
+                                                                    <div
+                                                                        *ngIf="form.get('p_rec_apemat')?.invalid && (form.get('p_rec_apemat')?.dirty || form.get('p_rec_apemat')?.touched)">
+                                                                        <div class="text-danger"
+                                                                            *ngIf="form.get('p_rec_apemat')?.hasError('required')">
+                                                                            Campo obligatorio</div>
+                                                                    </div>
+                                                                </div>
+                                                                <label>Apellido Materno</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 mt-2">
+                                                    <div class="row">
+                                                        <div class="col-md-4">
+                                                            <div class="form-floating">
+                                                                <select class="form-select"
+                                                                    [(ngModel)]="p_tge_id" formControlName="p_tge_id">
+                                                                    <option selected value="0">Seleccione...</option>
+                                                                    <option *ngFor="let data of datosTipoGenero"
+                                                                        value="{{data.tge_id}}">
+                                                                        {{data.tge_descri}}
+                                                                    </option>
+                                                                </select>
+                                                                <label>Género</label>
+                                                            </div>
+                                                            <div
+                                                                *ngIf="form.get('p_tge_id')?.invalid && (form.get('p_tge_id')?.dirty || form.get('p_tge_id')?.touched)">
+                                                                <div class="text-danger"
+                                                                    *ngIf="form.get('p_tge_id')?.hasError('required')">
+                                                                    Campo obligatorio</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <div class="form-floating">
+                                                                <input type="text" [(ngModel)]="p_rec_correo" class="form-control form-control-sm" formControlName="p_rec_correo">
+                                                                <label>Correo Electrónico</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <div class="form-floating">
+                                                                <input type="text" class="form-control form-control-sm" [(ngModel)]="p_rec_telcel" formControlName="p_rec_telcel">
+                                                                <label>N° de Teléfono</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 mt-2">
+                                                    <div class="row">
+                                                        <div class="col-md-3">
+                                                            <div class="form-floating">
+                                                                <ng-select class="custom-ng-select" formControlName="p_pai_id" [items]="datosPais" [(ngModel)]="p_pai_id" placeholder="Seleccione" bindLabel="pai_descri" bindValue="pai_id" style="border: 1px solid #b9b9b9 !important;"></ng-select>
+                                                                <label for="p_jsperf">País de origen</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div class="form-floating">
+                                                                <select class="form-select" id="p_ude_id"
+                                                                    formControlName="p_ude_id" [(ngModel)]="p_ude_id"
+                                                                    (change)="listarProvincias()">
+                                                                    <option selected value="0">Seleccione...</option>
+                                                                    <option *ngFor="let data of datosDepartamento"
+                                                                        value="{{data.ude_id}}">{{data.ude_descri}}</option>
+                                                                </select>
+                                                                <label>Departamento</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div class="form-floating">
+                                                                <select class="form-select "
+                                                                    [(ngModel)]="p_upr_id" (change)="listarDistritos()"
+                                                                    formControlName="p_upr_id">
+                                                                    <option selected value="0">Seleccione...</option>
+                                                                    <option *ngFor="let data of datosProvincia"
+                                                                        value="{{data.upr_id}}">
+                                                                        {{data.upr_descri}}</option>
+                                                                </select>
+                                                                <label>Provincia</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div class="form-floating">
+                                                                <select class="form-select"
+                                                                    [(ngModel)]="p_udi_id" formControlName="p_udi_id">
+                                                                    <option selected="" value="0">Seleccione...</option>
+                                                                    <option *ngFor="let data of datosDistrito"
+                                                                        value="{{data.udi_id}}">
+                                                                        {{data.udi_descri}}</option>
+                                                                </select>
+                                                                <label>Distrito</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 mt-2">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="form-floating">
+                                                                <input type="email" class="form-control form-control-sm"
+                                                                    [(ngModel)]="p_rec_direcc" formControlName="p_rec_direcc">
+                                                                <div
+                                                                    *ngIf="form.get('p_rec_direcc')?.invalid && (form.get('p_rec_direcc')?.dirty || form.get('p_rec_direcc')?.touched)">
+                                                                    <div class="text-danger"
+                                                                        *ngIf="form.get('p_rec_direcc')?.hasError('required')">
+                                                                        Campo obligatorio</div>
+                                                                </div>
+                                                                <label>Dirección</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="row">
+                                <div class="col-xl-12 pt-3">
+                                    <!-- card -->
+                                    <div class="card text-primary border-0">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <h5 class="card-title fs-17">Datos de Establecimiento</h5>
+                                                </div>
+                                                <div class="col-md-12 mt-2">
+                                                    <div class="row">
+                                                        <div class="col-md-5">
+                                                            <div class="form-floating">
+                                                                <input [(ngModel)]="selectedValueRubro" [typeahead]="datosRubro"
+                                                                        (typeaheadOnBlur)="typeaheadOnBlurRubro($event)"
+                                                                        (typeaheadNoResults)="typeaheadNoResultsRubro($event)"
+                                                                        typeaheadOptionField="act_descri" (typeaheadOnSelect)="onSelectRubro($event)"
+                                                                        (typeaheadOnPreview)="onPreviewPuestRubro($event)" class="form-control"
+                                                                        oninput="this.value = this.value.toUpperCase()">
+                                                                <!-- <ng-select class="custom-ng-select" [(ngModel)]="p_act_id" [items]="datosRubro" placeholder="Seleccione" bindLabel="act_descri" bindValue="act_id" style="border: 1px solid #b9b9b9 !important;"></ng-select> -->
+                                                                <label>Rubro / Giro</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-5">
+                                                            <div class="form-floating">
+                                                                <input [(ngModel)]="selectedValueOcupacion" [typeahead]="datosOcupacion"
+                                                                        (typeaheadOnBlur)="typeaheadOnBlurOcupacion($event)"
+                                                                        (typeaheadNoResults)="typeaheadNoResultsOcupacion($event)"
+                                                                        typeaheadOptionField="ocu_descri" (typeaheadOnSelect)="onSelectOcupacion($event)"
+                                                                        (typeaheadOnPreview)="onPreviewPuestOcupacion($event)" class="form-control"
+                                                                        oninput="this.value = this.value.toUpperCase()">
+                                                                <!-- <ng-select class="custom-ng-select" [(ngModel)]="p_ocu_id" [items]="datosOcupacion" placeholder="Seleccione" bindLabel="ocu_descri" bindValue="ocu_id" style="border: 1px solid #b9b9b9 !important;"></ng-select> -->
+                                                                <label>Ocupación</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <label for="colFormLabelSm"
+                                                                class="col-form-label col-form-label-sm">Manipula
+                                                                alimentos?<span class="text-danger"> *</span></label>
+                                                            <div class="form-check form-switch mb-3" dir="ltr">
+                                                                <input type="checkbox" class="form-check-input" [(ngModel)]="p_manali" checked="" (change)="Changemanali()">
+                                                                <label class="col-form-label-sm">{{confsinomanali}}</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 mt-2">
+                                                    <div class="row">
+                                                        <div class="col-md-3">
+                                                            <div class="form-floating">
+                                                                <input [(ngModel)]="selectedValue" [typeahead]="datosEstablecimientos"
+                                                                        (typeaheadOnBlur)="typeaheadOnBlur($event)"
+                                                                        (typeaheadNoResults)="typeaheadNoResults($event)"
+                                                                        typeaheadOptionField="etb_nombre" (typeaheadOnSelect)="onSelect($event)"
+                                                                        (typeaheadOnPreview)="onPreviewPuest($event)" class="form-control"
+                                                                        oninput="this.value = this.value.toUpperCase()">
+                                                                <!-- <ng-select class="custom-ng-select" [items]="datosEstablecimientos" [(ngModel)]="p_etb_id" placeholder="Seleccione" bindLabel="etb_nombre" bindValue="etb_id" style="border: 1px solid #b9b9b9 !important;" (change)="ChangeEstablecimiento()"></ng-select> -->
+                                                                <label for="p_jsperf">Establecimiento</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-9">
+                                                            <div class="form-floating">
+                                                                <input type="text" class="form-control form-control-sm" [(ngModel)]="p_etb_direcc">
+                                                                <label>Dirección del Establecimiento</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 mt-2">
+                                                    <div class="row">
+                                                        <div class="text-end">
+                                                            <button type="button" class="btn btn-primary" style="margin-right: 5px;"
+                                                                (click)="guardarRecurrente()"> <i class=""></i>Guardar</button>
+                                                            <button type="button" class="btn btn-danger" [routerLink]="['/persona']">Cancelar</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="ball-square-spin" [fullScreen]="false">
+    <p style="color: white"> Buscando información... </p>
+</ngx-spinner>
+<app-toast></app-toast>
