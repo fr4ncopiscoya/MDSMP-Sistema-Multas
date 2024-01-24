@@ -116,9 +116,8 @@
         <div class="col-7">
           <div class="mb-3">
             <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Medida Complementaria</label>
-            <ng-select [(ngModel)]="csancio" (input)="onInputChange($event)" [ngModel]="
-                datosMedidaComp.length > 0 ? datosMedidaComp[0].CCODTIP : null
-              " [items]="datosMedidaComp" [closeOnSelect]="true" [searchable]="true" bindValue="CCODTIP"
+            <ng-select (input)="onInputChange($event)" [ngModel]="csancio" [items]="datosMedidaComp"
+              (change)="onSelectionChange($event)" [closeOnSelect]="true" [searchable]="true" bindValue="CCODTIP"
               bindLabel="DCODTIP" name="" class="form-control custom" style="border: 1px solid #b9b9b9 !important">
             </ng-select>
           </div>
@@ -152,8 +151,13 @@
       <div class="row" style="align-items: center; padding: 15px">
         <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">Giro de Establecimiento</label>
         <div class="col-sm-10">
-          <input [(ngModel)]="giro" type="email" oninput="this.value = this.value.toUpperCase()"
-            class="form-control form-control-sm" id="colFormLabelSm" />
+          <!-- <input [(ngModel)]="giro" type="email" oninput="this.value = this.value.toUpperCase()"
+            class="form-control form-control-sm" id="colFormLabelSm" /> -->
+
+          <ng-select (input)="onInputChange($event)" [ngModel]="giro" [items]="datosGiroEstablecimiento"
+            (change)="onSelectionChange($event)" [closeOnSelect]="true" [searchable]="true" bindValue="ccodgir"
+            bindLabel="ddesgir" name="" class="form-control custom" style="border: 1px solid #b9b9b9 !important">
+          </ng-select>
         </div>
       </div>
     </div>

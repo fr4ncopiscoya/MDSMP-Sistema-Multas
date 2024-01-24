@@ -19,6 +19,16 @@ export class SigtaService {
         })
       );
   }
+
+  listarGiroEstablecimiento(data: any) {
+    return this.httpClientUtils
+      .postQuery('sigta/giro/listar', data)
+      .pipe(
+        map((data) => {
+          return data;
+        })
+      );
+  }
   
   listarMedidaComp(data: any) {
     return this.httpClientUtils.postQuery('sigta/medidacomp/listar', data).pipe(

@@ -46,6 +46,7 @@ export class CrearMultaComponent implements OnInit {
 
   datosAreaOficina: any;
   datosMedidaComp: any;
+  datosGiroEstablecimiento: any;
 
   booleanValue: boolean = false;
 
@@ -70,6 +71,8 @@ export class CrearMultaComponent implements OnInit {
 
   cnombre: string = '';
   dfiscal: string = '';
+
+  p_desgir: string = '';
 
 
 
@@ -122,6 +125,7 @@ export class CrearMultaComponent implements OnInit {
   ngOnInit(): void {
     // this.listarAreaOficina();
     this.listarMedidaComp();
+    this.listarGiroEstablecimiento();
   }
 
   ngOnDestroy(): void {
@@ -174,6 +178,26 @@ export class CrearMultaComponent implements OnInit {
   //   });
   // }
 
+  listarGiroEstablecimiento() {
+    let post = {
+      
+    };
+
+    this.sigtaService.listarGiroEstablecimiento(post).subscribe({
+      next: (data: any) => {
+        // console.log(data);
+
+        this.datosGiroEstablecimiento = data;
+        this.giro= data[0].ddesgir;
+        console.log(this.giro);
+        
+      },
+      error: (error: any) => {
+        console.log(error);
+      },
+    });
+  }
+
   listarMedidaComp() {
     let post = {
 
@@ -181,14 +205,26 @@ export class CrearMultaComponent implements OnInit {
 
     this.sigtaService.listarMedidaComp(post).subscribe({
       next: (data: any) => {
-        console.log(data);
+        // console.log(data);
 
         this.datosMedidaComp = data;
+        this.csancio= data[0].CCODTIP;
+        console.log(this.csancio);
+        
       },
       error: (error: any) => {
         console.log(error);
       },
     });
+  }
+
+  onSelectionChange(event: any) {
+
+    this.giro = event.ccodgir
+    this.csancio = event.CCODTIP
+
+    console.log(this.csancio);
+    console.log(this.giro);
   }
 
   obtenerAreaPorCod() {
@@ -197,6 +233,7 @@ export class CrearMultaComponent implements OnInit {
     let post = {
       p_anypro: añoActual.toString(),
       p_codinf: this.p_codinf,
+      r_descri: this.r_descri
     };
 
     console.log(post);
@@ -217,7 +254,7 @@ export class CrearMultaComponent implements OnInit {
           this.errorSweetAlertCode();
         }
 
-        console.log(data);
+        console.log(this.r_codint);
       },
       error: (error: any) => {
         this.spinner.hide();
@@ -230,6 +267,7 @@ export class CrearMultaComponent implements OnInit {
   obtenerNombrePorCod() {
     let post = {
       p_codcon: this.p_codcon,
+      cnombre: this.cnombre
     };
 
     this.spinner.show();
@@ -242,6 +280,10 @@ export class CrearMultaComponent implements OnInit {
         if (data && data.length > 0 && data[0].cnombre) {
           this.cnombre = data[0].cnombre;
           this.dfiscal = data[0].dfiscal;
+          this.ccontri = data[0].ccontri;
+
+          console.log(this.ccontri);
+          
         } else {
           this.errorSweetAlertCode();
         }
@@ -254,70 +296,77 @@ export class CrearMultaComponent implements OnInit {
     });
   }
 
-    //Registrar multa
-    nnumnot: string = '' // --Numero de Notificacion =====
-    // dfecnot: string = '' // --Fecha de Notificacion multa ====
-    ccontri: string = '' // --Codigo Administrado ====
-    cpredio: string = '' // --Pasar en Blanco
-    cmulta: string = '' //  --Codigo Multa o Infraccion =====
-    nmonto: string = '' // --Monto Multa o Infraccion ======
-    // dfecres: string = '' // --Fecha de Resolucion
-    // cnumres: string = '' // --Numero de Resolucion
-    cofisan: string = '' // --Area propietaria de la multa
-    // dfecrec: string = '' // --Fecha de Recepcion
-    crefere: string = '' // --Referencia =====
-    cusutra: string = '' // --Usuario Transaccion
-    csancio: string = '' // --Medida Complementaria ======
-    mobserv: string = '' // --Observaciones =========
-    nreinci: string = '' // --Reincidencia
-    manzana: string = '' // --Manzana ======
-    lote: string = '' // --Lote ===
-    nro_fiscal: string = '' // --Numero ====
-    dpto_int: string = '' // --Departamento o Interior ======
-    referencia: string = '' // --Referencia ======
-    ins_municipal: string = '' // --Inspector que impone la multa =====
-    nro_acta: string = '' // --Numero de Acta ===
-    nro_informe: string = '' // --Numero de Informe =======
-    giro: string = '' // --Codigo Giro
-    f_ejecucion: string = '' // --Fecha Ejecucion ====
-    // f_registro: string = '' // --Fecha Registro
-    via: string = '' // --Nombre Via o Calle
-    haburb: string = '' //  --Nombre Habilitacion Urbana(Urbanizacion)
-    nroActaConstatacion: string = '' // -- Numero Acta Constatacion ===
+  //Registrar multa
+  nnumnot: string = '' // --Numero de Notificacion =====
+  // dfecnot: string = '' // --Fecha de Notificacion multa ====
+  ccontri: string = '' // --Codigo Administrado ====
+  cpredio: string = '' // --Pasar en Blanco
+  cmulta: string = '' //  --Codigo Multa o Infraccion =====
+  nmonto: string = '' // --Monto Multa o Infraccion ======
+  // dfecres: string = '' // --Fecha de Resolucion
+  // cnumres: string = '' // --Numero de Resolucion
+  cofisan: string = '' // --Area propietaria de la multa
+  // dfecrec: string = '' // --Fecha de Recepcion
+  crefere: string = '' // --Referencia =====
+  cusutra: string = '' // --Usuario Transaccion
+  csancio: string = '' // --Medida Complementaria ======
+  mobserv: string = '' // --Observaciones =========
+  nreinci: string = '' // --Reincidencia
+  manzana: string = '' // --Manzana ======
+  lote: string = '' // --Lote ===
+  nro_fiscal: string = '' // --Numero ====
+  dpto_int: string = '' // --Departamento o Interior ======
+  referencia: string = '' // --Referencia ======
+  ins_municipal: string = '' // --Inspector que impone la multa =====
+  nro_acta: string = '' // --Numero de Acta ===
+  nro_informe: string = '' // --Numero de Informe =======
+  giro: string = '' // --Codigo Giro
+  f_ejecucion: string = '' // --Fecha Ejecucion ====
+  // f_registro: string = '' // --Fecha Registro
+  via: string = '' // --Nombre Via o Calle
+  haburb: string = '' //  --Nombre Habilitacion Urbana(Urbanizacion)
+  nroActaConstatacion: string = '' // -- Numero Acta Constatacion ===
 
-  registrarInfraccion() {
-    const dataPost = new FormData();
+  // registrarInfraccion() {
+  //   const dataPost = new FormData();
 
-    var nnumnot = this.nnumnot;
-    var p_codcon = this.p_codcon;
-    var cpredio = this.cpredio;
-    var r_codint = this.r_codint;
-    var carea = this.carea;
-    var p_act_id = this.p_act_id;
-    var p_ocu_id = this.p_ocu_id;
-    var p_udi_id = this.noseque;
-    var p_car_direcc = this.p_car_direcc;
-    var p_car_correo = this.p_car_correo;
-    var p_car_fecemi = this.p_car_fecemi;
-    var p_car_imgfot = this.p_car_imgfot;
-    var p_tdi_id = this.p_tdi_id;
-    var p_per_numdoi = this.p_per_numdoi;
+  //   var nnumnot = this.nnumnot;
 
-    dataPost.append('p_car_id', p_car_id);
-    dataPost.append('p_per_id', p_per_id);
-    dataPost.append('p_act_id', p_act_id);
-    dataPost.append('p_ocu_id', p_ocu_id);
-    dataPost.append('p_udi_id', p_udi_id);
-    dataPost.append('p_car_direcc', p_Fcar_direcc);
-    dataPost.append('p_car_correo', p_car_correo);
-    dataPost.append('p_car_manali', p_car_manali.toString());
-    dataPost.append('p_car_fecemi', p_car_fecemi);
-    dataPost.append('p_car_numrec', p_car_numrec);
-    dataPost.append('p_car_imgfot', p_car_imgfot);
-    dataPost.append('p_car_imgfot_file[]', this.imagenrecort, this.imagenrecort.name);
-    dataPost.append('p_car_imgext', p_car_imgext);
-    dataPost.append('p_tdi_id', p_tdi_id.toString());
-    dataPost.append('p_per_numdoi', p_per_numdoi.toString());
+  //   var p_codcon = this.p_codcon; //ccontri
+  //   var cpredio = this.cpredio;
+  //   var r_codint = this.r_codint; //cmulta
+  //   var nmonto = this.nmonto; 
 
-  }
+
+  //   var cofisan = this.cofisan; 
+
+
+  //   var carea = this.carea;
+  //   var p_act_id = this.p_act_id;
+  //   var p_ocu_id = this.p_ocu_id;
+  //   var p_udi_id = this.noseque;
+  //   var p_car_direcc = this.p_car_direcc;
+  //   var p_car_correo = this.p_car_correo;
+  //   var p_car_fecemi = this.p_car_fecemi;
+  //   var p_car_imgfot = this.p_car_imgfot;
+  //   var p_tdi_id = this.p_tdi_id;
+  //   var p_per_numdoi = this.p_per_numdoi;
+
+  //   dataPost.append('p_car_id', p_car_id);
+  //   dataPost.append('p_per_id', p_per_id);
+  //   dataPost.append('p_act_id', p_act_id);
+  //   dataPost.append('p_ocu_id', p_ocu_id);
+  //   dataPost.append('p_udi_id', p_udi_id);
+  //   dataPost.append('p_car_direcc', p_Fcar_direcc);
+  //   dataPost.append('p_car_correo', p_car_correo);
+  //   dataPost.append('p_car_manali', p_car_manali.toString());
+  //   dataPost.append('p_car_fecemi', p_car_fecemi);
+  //   dataPost.append('p_car_numrec', p_car_numrec);
+  //   dataPost.append('p_car_imgfot', p_car_imgfot);
+  //   dataPost.append('p_car_imgfot_file[]', this.imagenrecort, this.imagenrecort.name);
+  //   dataPost.append('p_car_imgext', p_car_imgext);
+  //   dataPost.append('p_tdi_id', p_tdi_id.toString());
+  //   dataPost.append('p_per_numdoi', p_per_numdoi.toString());
+
+  // }
 }
