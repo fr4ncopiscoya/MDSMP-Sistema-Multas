@@ -11,6 +11,7 @@ import { CarneComponent } from './pages/carne/carne.component';
 import { CertificadoComponent } from './pages/certificado/certificado.component';
 import { MultasComponent } from './pages/multas/multas.component';
 import { CrearMultaComponent } from './pages/crear-multa/crear-multa.component';
+import { EditarMultaComponent } from './pages/editar-multa/editar-multa.component';
 
 
 export const ROUTES: Routes = [
@@ -28,6 +29,7 @@ export const ROUTES: Routes = [
   },
   { path: 'multas', component: MultasComponent },
   { path: 'multas/crear-multa', component: CrearMultaComponent },
+  { path: 'multas/editar-multa/:id', component: EditarMultaComponent },
   { path: '', pathMatch: 'full', redirectTo: 'login' },
   { path: '**', pathMatch: 'full', redirectTo: 'login' },
 ];

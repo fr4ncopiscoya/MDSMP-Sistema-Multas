@@ -32,7 +32,7 @@
             <div class="" style="display: flex; align-items: center">
               <input id="cnombre" disabled="" [(ngModel)]="cnombre" oninput="this.value = this.value.toUpperCase()"
                 type="text" class="form-control form-control-sm" style="background-color: #e1e1e1" />
-              <button type="button" title="Asignar Perfil" (click)="asignarPerfil(template)"
+              <button type="button" title="Buscar" (click)="asignarPerfil(template)"
                 class="btn btn-primary btn-sm" style="margin-left: 5px">
                 <i class="ri-search-line"></i>
               </button>
@@ -40,11 +40,11 @@
           </div>
           <div class="mb-2-5 col-sm-2">
             <label for="StartleaveDate" class="form-label col-form-label-sm">Fecha Inicio</label>
-            <input [(ngModel)]="p_fecini" type="date" class="form-control form-control-sm" id="StartleaveDate" />
+            <input [(ngModel)]="p_fecini" type="date" class="form-control form-control-sm" id="StartleaveDate" max="{{getMaxDate()}}" />
           </div>
           <div class="mb-2-5 col-sm-2">
             <label for="StartleaveDate" class="form-label col-form-label-sm">Fecha Fin</label>
-            <input [(ngModel)]="p_fecfin" type="date" class="form-control form-control-sm" id="StartleaveDate" />
+            <input [(ngModel)]="p_fecfin" type="date" class="form-control form-control-sm" id="StartleaveDate"  max="{{getMaxDate()}}"/>
           </div>
         </div>
         <div class="row">
@@ -57,9 +57,9 @@
           <div class="mb-2-5 col-sm-6">
             <label for="" class="form-label col-form-label-sm">Descripción infracción</label>
             <div class="" style="display: flex; align-items: center">
-              <input disabled="" [(ngModel)]="r_descri"  type="text" class="form-control form-control-sm" id="r_descri"
+              <input disabled="" [(ngModel)]="r_descri" type="text" class="form-control form-control-sm" id="r_descri"
                 style="background-color: #e1e1e1" />
-              <button type="button" title="Asignar Perfil" class="btn btn-primary btn-sm" style="margin-left: 5px">
+              <button type="button" title="Buscar" class="btn btn-primary btn-sm" style="margin-left: 5px">
                 <i class="ri-search-line"></i>
               </button>
             </div>
@@ -96,6 +96,9 @@
                       <th scope="col" class="text-center">F.Noti</th>
                       <th scope="col" class="text-center">Monto</th>
                       <th scope="col" class="text-center">Estado</th>
+                      <th scope="col" class="text-center">
+
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -117,6 +120,14 @@
                         <span style="font-weight: bold" [style.color]="data.colreg">
                           {{ data.estreg }}
                         </span>
+                      </td>
+                      <td style="display: flex; justify-content: center;">
+                        <button (click)="editarDatosMulta(data.id_corrl)" type="button" title="Editar" class="btn btn-primary btn-sm"
+                          style="margin: 5px;"><i class="ri-file-edit-fill"></i>
+                        </button>
+                        <button type="button" title="Anular" class="btn btn-danger btn-sm"
+                          style="margin: 5px;"><i class="ri-close-fill"></i>
+                        </button>
                       </td>
                     </tr>
                   </tbody>
@@ -152,19 +163,7 @@
           <div class="col-sm-auto mb-2-5">
             <button type="button" [routerLink]="['/multas/crear-multa']" class="btn btn-info btn-label btn-sm">
               <i class="ri-file-2-fill label-icon align-middle fs-16 me-2"></i>
-              Nuevo   
-            </button>
-          </div>
-          <div class="col-sm-auto mb-2-5">
-            <button type="button" class="btn btn-primary btn-label btn-sm">
-              <i class="ri-file-edit-fill -line label-icon align-middle fs-16 me-2"></i>
-              Editar
-            </button>
-          </div>
-          <div class="col-sm-auto mb-2-5">
-            <button type="button" class="btn btn-danger btn-label btn-sm" id="ExportarExcel">
-              <i class="ri-close-fill label-icon align-middle fs-16 me-2"></i>
-              Anular
+              Nuevo
             </button>
           </div>
           <div class="col-sm-auto mb-2-5">

@@ -36,6 +36,7 @@ import { ModalcertificadoComponent } from './components/modalcertificado/modalce
 import { TypeaheadModule } from "ngx-bootstrap/typeahead";
 import { MultasComponent } from './pages/multas/multas.component';
 import { CrearMultaComponent } from './pages/crear-multa/crear-multa.component';
+import { EditarMultaComponent } from './pages/editar-multa/editar-multa.component';
 
 @NgModule({
   declarations: [
@@ -58,6 +59,7 @@ import { CrearMultaComponent } from './pages/crear-multa/crear-multa.component';
     ModalcertificadoComponent,
     MultasComponent,
     CrearMultaComponent,
+    EditarMultaComponent,
   ],
   imports: [
     BrowserModule,

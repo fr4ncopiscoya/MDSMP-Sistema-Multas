@@ -70,9 +70,10 @@ export class MultasComponent implements OnInit {
   datosDescripcion: any;
   cnombre: string = '';
   r_descri: string = '';
-
+  
   data: any;
-
+  
+  p_idcorr: number = 0;
   p_codcon: string = '';
   p_numnot: string = '';
   p_desinf: string = '';
@@ -84,7 +85,6 @@ export class MultasComponent implements OnInit {
 
   p_nomcontri: string = '';
   p_mensaje: string = '';
-
 
   constructor(
     private appComponent: AppComponent,
@@ -100,7 +100,12 @@ export class MultasComponent implements OnInit {
     this.appComponent.login = false;
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    const fechaActual = new Date().toISOString().split('T')[0];
+
+    this.p_fecini = fechaActual;
+    this.p_fecfin = fechaActual;
+  }
 
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
@@ -183,17 +188,30 @@ export class MultasComponent implements OnInit {
     });
   }
 
+  getMaxDate(): string {
+    // Obtener la fecha actual en formato "YYYY-MM-DD"
+    return new Date().toISOString().split('T')[0];
+  }
 
 
 
   //METODOS
+
+  editarDatosMulta(id: string | null) {
+    if (id !== null) {
+      this.router.navigate(['/multas/editar-multa/', id]);
+    }
+  }
+  
+
   consultarMulta() {
     let post = {
       p_codcon: this.p_codcon,
       p_numnot: this.p_numnot,
-      p_desinf: this.p_desinf,
-      p_fecini: this.p_fecini,
-      p_fecfin: this.p_fecfin,
+      p_codinf: this.r_descri,
+      p_fecini: this.p_fecini.toString(),
+      p_fecfin: this.p_fecfin.toString(),
+      p_idcorr: this.p_idcorr,
     };
     console.log(post);
     this.spinner.show();
@@ -259,7 +277,7 @@ export class MultasComponent implements OnInit {
       next: (data: any) => {
         this.spinner.hide();
         console.log(data);
-        
+
 
         if (data && data.length > 0 && data[0].r_descri) {
           this.r_descri = data[0].r_descri;

@@ -56,8 +56,6 @@ export class CrearMultaComponent implements OnInit {
 
 
   //Variables
-  p_codare: string = '';
-
   p_anypro: string = '';
   p_codinf: string = '';
 
@@ -126,6 +124,10 @@ export class CrearMultaComponent implements OnInit {
     // this.listarAreaOficina();
     this.listarMedidaComp();
     this.listarGiroEstablecimiento();
+
+    const fechaActual = new Date().toISOString().split('T')[0];
+
+    this.p_anypro = fechaActual
   }
 
   ngOnDestroy(): void {
@@ -156,9 +158,39 @@ export class CrearMultaComponent implements OnInit {
       text: 'Por favor ingrese un código válido',
     });
   }
+  private errorSweetAlertDate() {
+    Swal.fire({
+      icon: 'info',
+      text: 'Por favor ingrese la Fecha Multa',
+    });
+  }
+
+  // changeDate() {
+  //   if (this.p_anypro = '') {
+  //     this.p_codinf = '';
+  //     this.dareas = '';
+  //     this.nmonto = '';
+  //     this.r_descri = '';
+  //   }
+  // }
+
+  onSelectionChangeGiro(event: any) {
+    this.giro = event.ccodgir
+    console.log(this.giro);
+  }
+
+  onSelectionChangeMedida(event: any) {
+    this.csancio = event.CCODTIP
+    console.log(this.csancio)
+  }
 
   onInputChange(event: any) {
     event.target.value = event.target.value.toUpperCase();
+  }
+
+  getMaxDate(): string {
+    // Obtener la fecha actual en formato "YYYY-MM-DD"
+    return new Date().toISOString().split('T')[0];
   }
 
   // listarAreaOficina() {
@@ -180,7 +212,7 @@ export class CrearMultaComponent implements OnInit {
 
   listarGiroEstablecimiento() {
     let post = {
-      
+
     };
 
     this.sigtaService.listarGiroEstablecimiento(post).subscribe({
@@ -188,9 +220,9 @@ export class CrearMultaComponent implements OnInit {
         // console.log(data);
 
         this.datosGiroEstablecimiento = data;
-        this.giro= data[0].ddesgir;
+        this.giro = data[0].ddesgir;
         console.log(this.giro);
-        
+
       },
       error: (error: any) => {
         console.log(error);
@@ -208,9 +240,9 @@ export class CrearMultaComponent implements OnInit {
         // console.log(data);
 
         this.datosMedidaComp = data;
-        this.csancio= data[0].CCODTIP;
+        this.csancio = data[0].CCODTIP;
         console.log(this.csancio);
-        
+
       },
       error: (error: any) => {
         console.log(error);
@@ -218,22 +250,25 @@ export class CrearMultaComponent implements OnInit {
     });
   }
 
-  onSelectionChange(event: any) {
+  validarFechaMulta() {
+    if (this.p_anypro == '') {
+      // this.errorSweetAlertDate();
+      this.p_codinf = '';
+      this.dareas = '';
+      this.nmonto = '';
+      this.r_descri = '';
 
-    this.giro = event.ccodgir
-    this.csancio = event.CCODTIP
-
-    console.log(this.csancio);
-    console.log(this.giro);
+    }
   }
 
   obtenerAreaPorCod() {
-    const añoActual = new Date().getFullYear();
+    const p_anyproDate = new Date(this.p_anypro).getFullYear();
 
     let post = {
-      p_anypro: añoActual.toString(),
+      p_anypro: p_anyproDate.toString(),
       p_codinf: this.p_codinf,
-      r_descri: this.r_descri
+      r_descri: this.r_descri,
+      p_arecod: this.carea
     };
 
     console.log(post);
@@ -243,18 +278,27 @@ export class CrearMultaComponent implements OnInit {
     this.sigtaService.obtenerDescripcionPorCod(post).subscribe({
       next: (data: any) => {
         this.spinner.hide();
+        if (this.p_anypro == '') {
+          this.errorSweetAlertDate();
+          this.p_codinf = '';
+          this.dareas = '';
+          this.nmonto = '';
+          this.r_descri = '';
 
-        if (data && data.length > 0 && data[0].dareas) {
-          this.dareas = data[0].dareas;
-          this.carea = data[0].carea;
-          this.nmonto = data[0].nmontot;
-          this.r_descri = data[0].r_descri;
-          this.r_codint = data[0].r_codint;
         } else {
-          this.errorSweetAlertCode();
+          if (data && data.length > 0 && data[0].dareas) {
+            this.dareas = data[0].dareas;
+            this.carea = data[0].carea;
+            this.nmonto = data[0].nmontot;
+            this.r_descri = data[0].r_descri;
+            this.r_codint = data[0].r_codint;
+          } else {
+            this.errorSweetAlertCode();
+          }
         }
 
-        console.log(this.r_codint);
+
+        console.log(data);
       },
       error: (error: any) => {
         this.spinner.hide();
@@ -277,16 +321,22 @@ export class CrearMultaComponent implements OnInit {
         this.spinner.hide();
         console.log(data);
 
-        if (data && data.length > 0 && data[0].cnombre) {
-          this.cnombre = data[0].cnombre;
-          this.dfiscal = data[0].dfiscal;
-          this.ccontri = data[0].ccontri;
+        if (this.p_codcon = '') {
+          console.log("Esta vacio: " + this.p_codcon);
 
-          console.log(this.ccontri);
-          
         } else {
-          this.errorSweetAlertCode();
+          if (data && data.length > 0 && data[0].cnombre) {
+            this.cnombre = data[0].cnombre;
+            this.dfiscal = data[0].dfiscal;
+            this.ccontri = data[0].ccontri;
+
+            console.log(this.ccontri);
+
+          } else {
+            this.errorSweetAlertCode();
+          }
         }
+
       },
       error: (error: any) => {
         this.spinner.hide();
@@ -298,7 +348,7 @@ export class CrearMultaComponent implements OnInit {
 
   //Registrar multa
   nnumnot: string = '' // --Numero de Notificacion =====
-  // dfecnot: string = '' // --Fecha de Notificacion multa ====
+  dfecnot: string = '' // --Fecha de Notificacion multa ====
   ccontri: string = '' // --Codigo Administrado ====
   cpredio: string = '' // --Pasar en Blanco
   cmulta: string = '' //  --Codigo Multa o Infraccion =====
@@ -329,18 +379,12 @@ export class CrearMultaComponent implements OnInit {
 
   // registrarInfraccion() {
   //   const dataPost = new FormData();
-
   //   var nnumnot = this.nnumnot;
-
   //   var p_codcon = this.p_codcon; //ccontri
   //   var cpredio = this.cpredio;
   //   var r_codint = this.r_codint; //cmulta
-  //   var nmonto = this.nmonto; 
-
-
-  //   var cofisan = this.cofisan; 
-
-
+  //   var nmonto = this.nmonto;
+  //   var cofisan = this.cofisan;
   //   var carea = this.carea;
   //   var p_act_id = this.p_act_id;
   //   var p_ocu_id = this.p_ocu_id;
@@ -367,6 +411,5 @@ export class CrearMultaComponent implements OnInit {
   //   dataPost.append('p_car_imgext', p_car_imgext);
   //   dataPost.append('p_tdi_id', p_tdi_id.toString());
   //   dataPost.append('p_per_numdoi', p_per_numdoi.toString());
-
   // }
 }
