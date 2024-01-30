@@ -70,9 +70,9 @@ export class MultasComponent implements OnInit {
   datosDescripcion: any;
   cnombre: string = '';
   r_descri: string = '';
-  
+
   data: any;
-  
+
   p_idcorr: number = 0;
   p_codcon: string = '';
   p_numnot: string = '';
@@ -148,6 +148,19 @@ export class MultasComponent implements OnInit {
 
 
   //GLOBAL
+
+  confirmClick(value: string) {
+    this.p_codcon = value;
+    this.obtenerNombrePorCod();
+    this.modalService.hide(1);
+  }
+
+  confirmClickDescri(value: string) {
+    this.p_codinf = value;
+    this.obtenerDescriPorCod();
+    this.modalService.hide(1);
+  }
+
   validarNumero(event: any): void {
     const keyCode = event.keyCode;
     if (keyCode < 48 || keyCode > 57) {
@@ -163,7 +176,11 @@ export class MultasComponent implements OnInit {
   }
 
   asignarPerfil(template: TemplateRef<any>) {
-    this.modalRef = this.modalService.show(template, { id: 1 });
+    this.modalRef = this.modalService.show(template, { id: 1 , class: 'modal-lg'});
+  }
+
+  modalDescri(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template, { id: 1 , class: 'modal-lg'});
   }
 
   formatFecha(fechaBD: string): string {
@@ -202,7 +219,7 @@ export class MultasComponent implements OnInit {
       this.router.navigate(['/multas/editar-multa/', id]);
     }
   }
-  
+
 
   consultarMulta() {
     let post = {
@@ -266,7 +283,7 @@ export class MultasComponent implements OnInit {
 
     let post = {
       p_anypro: añoActual.toString(),
-      p_codinf: this.p_codinf,
+      p_desinf: this.p_desinf,
     };
 
     console.log(post);

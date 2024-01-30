@@ -5,6 +5,7 @@ import { MasterService } from 'src/app/services/master.service';
 import { SanidadService } from 'src/app/services/sanidad.service';
 import { SigtaService } from 'src/app/services/sigta.service';
 import { DataTableDirective } from 'angular-datatables';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { Subject } from 'rxjs';
 import { NgxSpinnerService } from 'ngx-spinner';
 import Swal from 'sweetalert2';
@@ -16,6 +17,7 @@ import Swal from 'sweetalert2';
 })
 export class CrearMultaComponent implements OnInit {
   @ViewChild(DataTableDirective, { static: false })
+  modalRef?: BsModalRef;
   dtElement: any;
   dtTrigger: Subject<void> = new Subject<void>();
   dtOptions: any = {
@@ -48,8 +50,6 @@ export class CrearMultaComponent implements OnInit {
   datosMedidaComp: any;
   datosGiroEstablecimiento: any;
 
-  booleanValue: boolean = false;
-
   datosTipoEspecie: any;
 
   tieneActa = false;
@@ -65,13 +65,12 @@ export class CrearMultaComponent implements OnInit {
   dareas: string = '';
   carea: string = '';
 
-  p_codcon: string = '';
-
   cnombre: string = '';
   dfiscal: string = '';
 
   p_desgir: string = '';
 
+  ahora: any;
 
 
 
@@ -116,6 +115,7 @@ export class CrearMultaComponent implements OnInit {
     private serviceSanidad: SanidadService,
     private sigtaService: SigtaService,
     private sanidadService: SanidadService,
+    private modalService: BsModalService
   ) {
     this.appComponent.login = false;
   }
@@ -174,6 +174,17 @@ export class CrearMultaComponent implements OnInit {
   //   }
   // }
 
+  
+  confirmClick(value: string) {
+    this.ccontri = value;
+    this.obtenerNombrePorCod();
+    this.modalService.hide(1);
+  }
+
+  asignarPerfil(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template, { id: 1 , class: 'modal-lg'});
+  }
+
   onSelectionChangeGiro(event: any) {
     this.giro = event.ccodgir
     console.log(this.giro);
@@ -189,7 +200,6 @@ export class CrearMultaComponent implements OnInit {
   }
 
   getMaxDate(): string {
-    // Obtener la fecha actual en formato "YYYY-MM-DD"
     return new Date().toISOString().split('T')[0];
   }
 
@@ -310,7 +320,7 @@ export class CrearMultaComponent implements OnInit {
 
   obtenerNombrePorCod() {
     let post = {
-      p_codcon: this.p_codcon,
+      p_codcon: this.ccontri,
       cnombre: this.cnombre
     };
 
@@ -321,16 +331,16 @@ export class CrearMultaComponent implements OnInit {
         this.spinner.hide();
         console.log(data);
 
-        if (this.p_codcon = '') {
-          console.log("Esta vacio: " + this.p_codcon);
+        if (this.ccontri = '') {
+          console.log("Esta vacio: " + this.ccontri);
 
         } else {
           if (data && data.length > 0 && data[0].cnombre) {
             this.cnombre = data[0].cnombre;
-            this.dfiscal = data[0].dfiscal;
+            this.dpredio = data[0].dfiscal;
             this.ccontri = data[0].ccontri;
 
-            console.log(this.ccontri);
+            console.log(this.dpredio);
 
           } else {
             this.errorSweetAlertCode();
@@ -348,18 +358,21 @@ export class CrearMultaComponent implements OnInit {
 
   //Registrar multa
   nnumnot: string = '' // --Numero de Notificacion =====
-  dfecnot: string = '' // --Fecha de Notificacion multa ====
+  // dfecnot: string = '' // --Fecha de Notificacion multa ====
   ccontri: string = '' // --Codigo Administrado ====
   cpredio: string = '' // --Pasar en Blanco
+  dpredio: string = '' // --Dirección : Avenida / Jiron/Calle/Pasaje
   cmulta: string = '' //  --Codigo Multa o Infraccion =====
+  dmulta: string = '' // -- Descripcion Multa
   nmonto: string = '' // --Monto Multa o Infraccion ======
-  // dfecres: string = '' // --Fecha de Resolucion
-  // cnumres: string = '' // --Numero de Resolucion
+  dfecres: string = '' // --Fecha de Resolucion
+  cnumres: string = '' // --Numero de Resolucion
   cofisan: string = '' // --Area propietaria de la multa
   // dfecrec: string = '' // --Fecha de Recepcion
   crefere: string = '' // --Referencia =====
   cusutra: string = '' // --Usuario Transaccion
-  csancio: string = '' // --Medida Complementaria ======
+  csancio: string = '' // --Medida Complementaria - code ======
+  dsancio: string = '' // --Medida Complementaria - descri ======
   mobserv: string = '' // --Observaciones =========
   nreinci: string = '' // --Reincidencia
   manzana: string = '' // --Manzana ======
@@ -376,6 +389,67 @@ export class CrearMultaComponent implements OnInit {
   via: string = '' // --Nombre Via o Calle
   haburb: string = '' //  --Nombre Habilitacion Urbana(Urbanizacion)
   nroActaConstatacion: string = '' // -- Numero Acta Constatacion ===
+  chkact = 0;
+  
+  registrarMulta(){
+    let post = {
+      nnumnot: this.nnumnot,
+      dfecnot: this.p_anypro,
+      ccontri: this.ccontri,
+      cmulta: this.cmulta,
+      crefere: this.crefere,
+      cusutra: this.cusutra,
+      csancio: this.csancio,
+      mobserv: this.mobserv,
+      nreinci: this.nreinci,
+      manzana: this.manzana,
+      lote: this.lote,
+      nro_fiscal: this.nro_fiscal,
+      dpto_int: this.dpto_int,
+      referencia: this.referencia,
+      ins_municipal: this.ins_municipal,
+      nro_acta: this.nro_acta,
+      nro_informe: this.nro_informe,
+      giro: this.giro,
+      f_ejecucion: this.f_ejecucion,
+      via: this.via,
+      haburb: this.haburb,
+      nroActaConstatacion: this.nroActaConstatacion
+    };
+
+    this.spinner.show();
+
+    this.sigtaService.registrarMulta(post).subscribe({
+
+      // next: (data: any) => {
+      //   this.spinner.hide();
+      //   console.log(data);
+
+      //   if (this.ccontri = '') {
+      //     console.log("Esta vacio: " + this.ccontri);
+
+      //   } else {
+      //     if (data && data.length > 0 && data[0].cnombre) {
+      //       this.cnombre = data[0].cnombre;
+      //       this.dpredio = data[0].dfiscal;
+      //       this.ccontri = data[0].ccontri;
+
+      //       console.log(this.dpredio);
+
+      //     } else {
+      //       this.errorSweetAlertCode();
+      //     }
+      //   }
+
+      // },
+      error: (error: any) => {
+        this.spinner.hide();
+        this.errorSweetAlertCode();
+        console.log(error);
+      },
+    });
+  }
+
 
   // registrarInfraccion() {
   //   const dataPost = new FormData();

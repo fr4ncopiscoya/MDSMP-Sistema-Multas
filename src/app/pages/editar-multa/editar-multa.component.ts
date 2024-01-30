@@ -51,9 +51,6 @@ export class EditarMultaComponent implements OnInit {
   datosMulta: any;
   datosTipoEspecie: any;
 
-  chkact = 0;
-
-
   //Variables
   p_anypro: string = ''; // --Fecha de Notificacion multa ====
   p_codinf: string = '';
@@ -112,6 +109,7 @@ export class EditarMultaComponent implements OnInit {
   via: string = '' // --Nombre Via o Calle
   haburb: string = '' //  --Nombre Habilitacion Urbana(Urbanizacion)
   nroActaConstatacion: string = '' // -- Numero Acta Constatacion ===
+  chkact = 0;
 
 
   constructor(
@@ -134,6 +132,7 @@ export class EditarMultaComponent implements OnInit {
     // console.log(id);
     // this.consultarMulta();
     this.listarMedidaComp();
+    this.listarGiroEstablecimiento();
 
     const datePite = new DatePipe('en-Us')
     this.ahora = datePite.transform(new Date(), 'yyyy-MM-dd')
@@ -227,13 +226,14 @@ export class EditarMultaComponent implements OnInit {
           this.dpto_int = data [0].dpto_int
           this.referencia = data [0].referencia
           this.nnumnot = data [0].nnumnot
-          this.nro_acta = data [0].ACTA_CONSTATACION
+          this.nro_acta = data [0].nro_acta
           this.p_anypro = data [0].dfecnot //Fecha Multa
           this.cnumres = data [0].cnumres 
           this.dfecres = data [0].dfectra
+          this.csancio = data[0].csancio
           this.dsancio = data [0].dsancio 
           this.chkact = data [0].chkact 
-          // this.nro_acta2 = data [0].nro_acta2 
+          this.nroActaConstatacion = data [0].ACTA_CONSTATACION 
           this.f_ejecucion = data [0].f_ejecucion
           // this.giro = data [0].giro
           this.cmulta = data [0].cmulta
@@ -244,7 +244,7 @@ export class EditarMultaComponent implements OnInit {
           this.ins_municipal = data [0].ins_municipal 
           this.nro_informe = data [0].nro_informe
 
-          console.log(this.dfecres);
+          console.log(this.csancio);
           
         } else {
           this.errorSweetAlertData();
@@ -265,12 +265,9 @@ export class EditarMultaComponent implements OnInit {
 
     this.sigtaService.listarGiroEstablecimiento(post).subscribe({
       next: (data: any) => {
-        // console.log(data);
-
         this.datosGiroEstablecimiento = data;
         this.giro = data[0].ddesgir;
-        console.log(this.giro);
-
+        // console.log(this.giro);
       },
       error: (error: any) => {
         console.log(error);
@@ -289,9 +286,9 @@ export class EditarMultaComponent implements OnInit {
         if (data && data.length > 0 && data){
           this.datosMedidaComp = data;
           this.csancio = data[0].CCODTIP;
-          console.log(this.csancio);
+          // console.log(this.csancio);
         } else{
-          
+
         }
 
       },

@@ -37,6 +37,9 @@ import { TypeaheadModule } from "ngx-bootstrap/typeahead";
 import { MultasComponent } from './pages/multas/multas.component';
 import { CrearMultaComponent } from './pages/crear-multa/crear-multa.component';
 import { EditarMultaComponent } from './pages/editar-multa/editar-multa.component';
+import { ListarAdministradoComponent } from './components/listar-administrado/listar-administrado.component';
+import { ListarDescripcionComponent } from './components/listar-descripcion/listar-descripcion.component';
+import { ListarReferenciaComponent } from './componets/listar-referencia/listar-referencia.component';
 
 @NgModule({
   declarations: [
@@ -60,6 +63,9 @@ import { EditarMultaComponent } from './pages/editar-multa/editar-multa.componen
     MultasComponent,
     CrearMultaComponent,
     EditarMultaComponent,
+    ListarAdministradoComponent,
+    ListarDescripcionComponent,
+    ListarReferenciaComponent,
   ],
   imports: [
     BrowserModule,

@@ -95,7 +95,7 @@ export class SigtaService {
         })
       );
   }
-  registrarInfraccion(data: any) {
+  registrarMulta(data: any) {
     return this.httpClientUtils
       .postQuery('sigta/infraccion/registrar', data)
       .pipe(
