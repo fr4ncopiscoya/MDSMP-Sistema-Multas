@@ -118,7 +118,7 @@
         <div class="col-7">
           <div class="mb-3">
             <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Medida Complementaria</label>
-            <ng-select (input)="onInputChange($event)" [ngModel]="dsancio" [items]="datosMedidaComp"
+            <ng-select (input)="onInputChange($event)" [ngModel]="csancio" [items]="datosMedidaComp"
               (change)="onSelectionChangeMedida($event)" [closeOnSelect]="true" [searchable]="true" bindVaFlue="CCODTIP"
               bindLabel="DCODTIP" name="" class="form-control custom" style="border: 1px solid #b9b9b9 !important">
             </ng-select>
@@ -220,7 +220,7 @@
         </div>
         <div class="col-sm-2" style="display: flex; align-items: center"></div>
         <div class="col-sm-2" style="display: flex; align-items: center; justify-content: right">
-          <button type="button" class="btn btn-primary btn-label btn btn-sm" style="margin-top: 24px;">
+          <button (click)="editarInfraccion()" type="button" class="btn btn-primary btn-label btn btn-sm" style="margin-top: 24px;">
             <i class="ri-save-3-line label-icon align-middle fs-16"></i>
             Registrar
           </button>

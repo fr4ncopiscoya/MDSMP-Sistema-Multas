@@ -39,7 +39,8 @@ import { CrearMultaComponent } from './pages/crear-multa/crear-multa.component';
 import { EditarMultaComponent } from './pages/editar-multa/editar-multa.component';
 import { ListarAdministradoComponent } from './components/listar-administrado/listar-administrado.component';
 import { ListarDescripcionComponent } from './components/listar-descripcion/listar-descripcion.component';
-import { ListarReferenciaComponent } from './componets/listar-referencia/listar-referencia.component';
+import { ListarReferenciaComponent } from './components/listar-referencia/listar-referencia.component';
+import { CrearAdministradoComponent } from './components/crear-administrado/crear-administrado.component';
 
 @NgModule({
   declarations: [
@@ -66,6 +67,7 @@ import { ListarReferenciaComponent } from './componets/listar-referencia/listar-
     ListarAdministradoComponent,
     ListarDescripcionComponent,
     ListarReferenciaComponent,
+    CrearAdministradoComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,8 +1,9 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewChild, OnDestroy, AfterViewInit, TemplateRef } from '@angular/core';
 import { Subject } from 'rxjs';
 import { SigtaService } from 'src/app/services/sigta.service';
 import { DataTableDirective } from 'angular-datatables';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-listar-administrado',
@@ -10,6 +11,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
   styleUrls: ['./listar-administrado.component.css']
 })
 export class ListarAdministradoComponent implements OnInit, AfterViewInit, OnDestroy {
+
+  modalRef?: BsModalRef;
 
   //parámetros de búsqueda
   p_nomcontri: string = '';
@@ -26,6 +29,7 @@ export class ListarAdministradoComponent implements OnInit, AfterViewInit, OnDes
   constructor(
     private sigtaService: SigtaService,
     private spinner: NgxSpinnerService,
+    private modalService: BsModalService
   ) { }
 
   ngOnInit(): void {
@@ -37,7 +41,13 @@ export class ListarAdministradoComponent implements OnInit, AfterViewInit, OnDes
         url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
       },
     }
+    // this.busContribuyente();
+  }
+
+  confirmClick(value: string) {
+    this.p_nomcontri = value;
     this.busContribuyente();
+    this.modalService.hide(1);
   }
 
   ngOnDestroy(): void {
@@ -49,6 +59,11 @@ export class ListarAdministradoComponent implements OnInit, AfterViewInit, OnDes
 
   emitir(id: string): void {
     this.confirmClicked.emit(id);
+  }
+
+  modalDescri(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template, { id: 2 , class: 'modal-xl'});
+    this.modalService.hide(1);
   }
 
   busContribuyente() {

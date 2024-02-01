@@ -127,7 +127,7 @@ export class MultasComponent implements OnInit {
           {
             extend: 'excelHtml5',
             text: 'Exportar a Excel',
-            filename: 'MASCOTA', // Nombre personalizado del archivo
+            filename: 'MULTA', // Nombre personalizado del archivo
           },
         ],
         lengthChange: false,
@@ -151,13 +151,13 @@ export class MultasComponent implements OnInit {
 
   confirmClick(value: string) {
     this.p_codcon = value;
-    this.obtenerNombrePorCod();
+    this.obtenerNombrePorCod(value);
     this.modalService.hide(1);
   }
 
   confirmClickDescri(value: string) {
     this.p_codinf = value;
-    this.obtenerDescriPorCod();
+    this.obtenerDescriPorCod(value);
     this.modalService.hide(1);
   }
 
@@ -167,6 +167,16 @@ export class MultasComponent implements OnInit {
       event.preventDefault();
     }
   }
+
+  // validarCodAdm() {
+  //   if (this.p_anypro == '') {
+  //     // this.errorSweetAlertDate();
+  //     this.p_codinf = '';
+  //     this.dareas = '';
+  //     this.nmonto = '';
+  //     this.r_descri = '';
+
+  //   }
 
   descargaExcel() {
     let btnExcel = document.querySelector(
@@ -180,7 +190,7 @@ export class MultasComponent implements OnInit {
   }
 
   modalDescri(template: TemplateRef<any>) {
-    this.modalRef = this.modalService.show(template, { id: 1 , class: 'modal-lg'});
+    this.modalRef = this.modalService.show(template, { id: 1 , class: 'modal-xl'});
   }
 
   formatFecha(fechaBD: string): string {
@@ -252,7 +262,7 @@ export class MultasComponent implements OnInit {
     });
   }
 
-  obtenerNombrePorCod() {
+  obtenerNombrePorCod(value:any) {
     let post = {
       p_codcon: this.p_codcon,
     };
@@ -278,7 +288,7 @@ export class MultasComponent implements OnInit {
     });
   }
 
-  obtenerDescriPorCod() {
+  obtenerDescriPorCod(value:any) {
     const añoActual = new Date().getFullYear();
 
     let post = {

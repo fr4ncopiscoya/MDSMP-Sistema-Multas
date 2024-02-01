@@ -29,7 +29,7 @@ export class SigtaService {
         })
       );
   }
-  
+
   listarMedidaComp(data: any) {
     return this.httpClientUtils.postQuery('sigta/medidacomp/listar', data).pipe(
       map((data) => {
@@ -86,6 +86,16 @@ export class SigtaService {
       );
   }
 
+  listarReferencia(data: any) {
+    return this.httpClientUtils
+      .postQuery('sigta/referencia/listar', data)
+      .pipe(
+        map((data) => {
+          return data;
+        })
+      );
+  }
+
   consultarMulta(data: any) {
     return this.httpClientUtils
       .postQuery('sigta/consultarMulta/listar', data)
@@ -98,6 +108,24 @@ export class SigtaService {
   registrarMulta(data: any) {
     return this.httpClientUtils
       .postQuery('sigta/infraccion/registrar', data)
+      .pipe(
+        map((data) => {
+          return data;
+        })
+      );
+  }
+  editarInfraccion(data: any) {
+    return this.httpClientUtils
+      .postQuery('sigta/infraccion/editar', data)
+      .pipe(
+        map((data) => {
+          return data;
+        })
+      );
+  }
+  listarTipoPersona(data: any) {
+    return this.httpClientUtils
+      .postQuery('sigta/tipoPersona/listar', data)
       .pipe(
         map((data) => {
           return data;

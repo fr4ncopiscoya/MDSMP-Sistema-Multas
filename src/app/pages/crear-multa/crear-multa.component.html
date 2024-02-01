@@ -9,7 +9,7 @@
                 <div class="mb-3">
                   <label for="firstNameinput"
                     class="form-label col-sm-6 col-form-label col-form-label-sm">Codigo</label>
-                  <input [(ngModel)]="ccontri" (blur)="obtenerNombrePorCod()"
+                  <input #inputCodigoAdm [(ngModel)]="ccontri" (keyup.enter)="obtenerNombrePorCod(inputCodigoAdm.value)"
                     oninput="this.value = this.value.toUpperCase()" maxlength="6" type="text"
                     class="form-control form-control-sm" placeholder="Codigo..." id="firstNameinput" />
                 </div>
@@ -44,11 +44,12 @@
               <div class="col-12">
                 <div class="mb-3">
                   <label for="compnayNameinput" class="form-label col-sm-6 col-form-label col-form-label-sm">Referencia
-                    donde se cometio la infracciön</label>
+                    donde se cometió la infracción</label>
                   <div class="" style="display: flex; align-items: center">
                     <input [(ngModel)]="crefere" oninput="this.value = this.value.toUpperCase()" type="text"
-                      class="form-control form-control-sm" placeholder="" id="compnayNameinput" style="background-color: #e1e1e1" />
-                    <button type="button" title="Buscar" (click)="asignarPerfil(template)"
+                      class="form-control form-control-sm" placeholder="" id="compnayNameinput"
+                      style="background-color: #e1e1e1" />
+                    <button type="button" title="Buscar" (click)="asignarPerfil(templateRefere)"
                       class="btn btn-primary btn-sm" style="margin-left: 5px">
                       <i class="ri-search-line"></i>
                     </button>
@@ -61,35 +62,35 @@
                 <div class="mb-3">
                   <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Manzana</label>
                   <input [(ngModel)]="manzana" oninput="this.value = this.value.toUpperCase()" type="email"
-                    class="form-control form-control-sm" placeholder="" id="" style="background-color: #e1e1e1" />
+                    class="form-control form-control-sm" placeholder="" id="" />
                 </div>
               </div>
               <div class="col-2">
                 <div class="mb-3">
                   <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Lote</label>
                   <input [(ngModel)]="lote" oninput="this.value = this.value.toUpperCase()" type="email"
-                    class="form-control form-control-sm" placeholder="" id="" style="background-color: #e1e1e1" />
+                    class="form-control form-control-sm" placeholder="" id="" />
                 </div>
               </div>
               <div class="col-2">
                 <div class="mb-3">
                   <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Nro.Fiscal</label>
                   <input type="number" [(ngModel)]="nro_fiscal" class="form-control form-control-sm" placeholder=""
-                    id="" style="background-color: #e1e1e1" />
+                    id="" (keypress)="validarNumero($event)" />
                 </div>
               </div>
               <div class="col-2">
                 <div class="mb-3">
                   <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Dpto/Int</label>
                   <input [(ngModel)]="dpto_int" oninput="this.value = this.value.toUpperCase()" type="text"
-                    class="form-control form-control-sm" placeholder="" id="" style="background-color: #e1e1e1" />
+                    class="form-control form-control-sm" placeholder="" id="" />
                 </div>
               </div>
               <div class="col-4">
                 <div class="mb-3">
                   <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Referencia</label>
                   <input [(ngModel)]="referencia" oninput="this.value = this.value.toUpperCase()" type="text"
-                    class="form-control form-control-sm" placeholder="" id="" style="background-color: #e1e1e1" />
+                    class="form-control form-control-sm" placeholder="" id="" />
                 </div>
               </div>
             </div>
@@ -104,8 +105,8 @@
             <div class="mb-2-5">
               <label for="employeeUrl" class="form-label col-sm-8 col-form-label-sm mt-label-notificacion">Nro. Acta
                 Const.</label>
-              <input [(ngModel)]="nro_acta" type="url" class="form-control form-control-sm mt-input-notificacion"
-                id="employeeUrl" placeholder="" />
+              <input [(ngModel)]="nroActaConstatacion" type="url"
+                class="form-control form-control-sm mt-input-notificacion" id="employeeUrl" placeholder="" />
             </div>
             <div class="mb-2-5">
               <label for="StartleaveDate" class="form-label col-sm-6 col-form-label-sm mt-label-notificacion">Fecha
@@ -136,7 +137,7 @@
         <div class="col-7">
           <div class="mb-3">
             <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Medida Complementaria</label>
-            <ng-select (input)="onInputChange($event)" [ngModel]="csancio" [items]="datosMedidaComp"
+            <ng-select placeholder="Selecciona..." (input)="onInputChange($event)" [ngModel]="dsancio" [items]="datosMedidaComp"
               (change)="onSelectionChangeMedida($event)" [closeOnSelect]="true" [searchable]="true" bindVaFlue="CCODTIP"
               bindLabel="DCODTIP" name="" class="form-control custom" style="border: 1px solid #b9b9b9 !important">
             </ng-select>
@@ -193,8 +194,9 @@
         <div class="row" style="display: flex; justify-content: center; align-items: center">
           <div class="mb-3 col-sm-2">
             <label for="" class="form-label col-form-label-sm">Código infracción</label>
-            <input (blur)="obtenerAreaPorCod()" [(ngModel)]="cmulta" (keypress)="validarNumero($event)" type="text"
-              maxlength="7" class="form-control form-control-sm" id="employeeUrl" placeholder="" />
+            <input #inputCodInfra (keyup.enter)="obtenerAreaPorCod(inputCodInfra.value)" [(ngModel)]="cmulta"
+              (keypress)="validarNumero($event)" type="text" maxlength="7" class="form-control form-control-sm"
+              id="employeeUrl" placeholder="" />
           </div>
           <div class="mb-3 col-sm-2">
             <label for="StartleaveDate" class="form-label col-sm-6 col-form-label-sm">Monto infracción</label>
@@ -228,7 +230,7 @@
       <div class="row">
         <div class="mb-3 col-sm-4">
           <label for="" class="form-label col-form-label-sm">Inspector Municipal</label>
-          <input [(ngModel)]="ins_municipal" [value]="ins_municipal" type="text" class="form-control form-control-sm"
+          <input [(ngModel)]="ins_municipal" [value]="ins_municipal" oninput="this.value = this.value.toUpperCase()" type="text" class="form-control form-control-sm"
             id="employeeUrl" placeholder="" />
         </div>
         <div class="mb-3 col-sm-2">
@@ -238,7 +240,8 @@
         </div>
         <div class="col-sm-2" style="display: flex; align-items: center"></div>
         <div class="col-sm-2" style="display: flex; align-items: center; justify-content: right">
-          <button type="button" class="btn btn-primary btn-label btn btn-sm" style="margin-top: 24px;">
+          <button (click)="registrarInfraccion()" type="button" class="btn btn-primary btn-label btn btn-sm"
+            style="margin-top: 24px;">
             <i class="ri-save-3-line label-icon align-middle fs-16"></i>
             Registrar
           </button>
@@ -263,6 +266,21 @@
           </div>
           <div class="card-body">
             <app-listar-administrado (confirmClicked)="confirmClick($event)"></app-listar-administrado>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template #templateRefere>
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="card-title mb-0">Buscar</h4>
+          </div>
+          <div class="card-body">
+            <app-listar-referencia (confirmClicked)="confirmClickRefere($event)"></app-listar-referencia>
           </div>
         </div>
       </div>

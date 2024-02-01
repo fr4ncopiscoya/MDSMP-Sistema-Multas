@@ -5,17 +5,17 @@ import { DataTableDirective } from 'angular-datatables';
 import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
-  selector: 'app-listar-descripcion',
-  templateUrl: './listar-descripcion.component.html',
-  styleUrls: ['./listar-descripcion.component.css']
+  selector: 'app-listar-referencia',
+  templateUrl: './listar-referencia.component.html',
+  styleUrls: ['./listar-referencia.component.css']
 })
-export class ListarDescripcionComponent implements OnInit, AfterViewInit, OnDestroy {
+export class ListarReferenciaComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  p_codinf: string = '';
+  crefere: string = '';
 
   //parámetros de búsqueda
   p_desinf: string = '';
-  datosDescripcion: any;
+  datosReferencia: any;
 
   @ViewChild(DataTableDirective, { static: false }) dtElementModal!: DataTableDirective;
 
@@ -38,7 +38,7 @@ export class ListarDescripcionComponent implements OnInit, AfterViewInit, OnDest
         url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
       },
     }
-    // this.obtenerDescriPorCod();
+    // this.obtenerReferencia();
   }
 
   ngOnDestroy(): void {
@@ -81,27 +81,24 @@ export class ListarDescripcionComponent implements OnInit, AfterViewInit, OnDest
   // }
 
 
-  obtenerDescriPorCod() {
-    const añoActual = new Date().getFullYear();
+  obtenerReferencia() {
 
     let post = {
-      p_anypro: añoActual.toString(),
-      p_codinf: this.p_codinf,
-      p_desinf: this.p_desinf
+      p_desubi: this.crefere,
     };
 
     console.log(post);
 
     this.spinner.show();
 
-    this.sigtaService.obtenerDescripcionPorCod(post).subscribe({
+    this.sigtaService.listarReferencia(post).subscribe({
       next: (data: any) => {
         this.spinner.hide();
         console.log(data);
-        this.datosDescripcion = data;
-        this.p_codinf = data[0].r_codint;
-        console.log("llgaste descri");
-        
+        this.datosReferencia = data;
+        // this.crefere = data[0].viaurb;
+        console.log("llgaste refere");
+
 
         this.dtElementModal.dtInstance.then((dtInstance: DataTables.Api) => {
           dtInstance.destroy();

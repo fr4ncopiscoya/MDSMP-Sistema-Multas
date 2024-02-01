@@ -23,7 +23,7 @@
           <div class="mb-2-5 col-sm-2">
             <label for="" class="form-label col-form-label-sm">Codigo Administrado</label>
             <div class="" style="display: flex">
-              <input (change)="obtenerNombrePorCod()" maxlength="6" [(ngModel)]="p_codcon"
+              <input #inputCodigoAdm (keyup.enter)="obtenerNombrePorCod(inputCodigoAdm.value)" maxlength="6" [(ngModel)]="p_codcon"
                 oninput="this.value = this.value.toUpperCase()" type="text" class="form-control form-control-sm" />
             </div>
           </div>
@@ -52,7 +52,7 @@
         <div class="row">
           <div class="mb-3 col-sm-2">
             <label for="" class="form-label col-form-label-sm">Codigo Infracción</label>
-            <input (change)="obtenerDescriPorCod()" maxlength="7" [(ngModel)]="p_codinf"
+            <input #inputCodInfra (keyup.enter)="obtenerDescriPorCod(inputCodInfra.value)" maxlength="7" [(ngModel)]="p_codinf"
               oninput="this.value = this.value.toUpperCase()" type="text" class="form-control form-control-sm"
               id="employeeUrl" style="margin-right: 5px" />
           </div>
@@ -214,6 +214,8 @@
     </div>
   </div>
 </ng-template>
+
+
 
 <ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="ball-square-spin" [fullScreen]="false">
   <p style="color: white">Buscando información...</p>
