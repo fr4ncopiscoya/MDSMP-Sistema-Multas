@@ -22,7 +22,12 @@ export class ListarDescripcionComponent implements OnInit, AfterViewInit, OnDest
   @Output() confirmClicked = new EventEmitter<any>();
 
   dtTriggerModal: Subject<void> = new Subject<void>();
-  dtOptionsModal: DataTables.Settings = {};
+  dtOptionsModal: DataTables.Settings = {
+    columnDefs: [
+      // { width: '2px', targets: 0 },
+      // { width: '2px', targets: 1 },
+    ],
+  };
   dtInstance: DataTables.Api | undefined;
   constructor(
     private sigtaService: SigtaService,
@@ -46,6 +51,13 @@ export class ListarDescripcionComponent implements OnInit, AfterViewInit, OnDest
   }
   ngAfterViewInit() {
     this.dtTriggerModal.next();
+    this.dtOptionsModal = {
+      columnDefs: [
+        // { width: '20px', targets: 0 },
+        // { width: '20px', targets: 1 },
+        // { width: '20px', targets: 2 },
+        // { width: '20px', targets: 3 },
+      ],};
   }
 
   emitir(id: string): void {

@@ -132,6 +132,24 @@ export class SigtaService {
         })
       );
   }
+  listarDistrito(data: any) {
+    return this.httpClientUtils
+      .postQuery('sigta/distrito/listar', data)
+      .pipe(
+        map((data) => {
+          return data;
+        })
+      );
+  }
+  registrarAdministrado(data: any) {
+    return this.httpClientUtils
+      .postQuery('sigta/administrado/registrar', data)
+      .pipe(
+        map((data) => {
+          return data;
+        })
+      );
+  }
 
 
 

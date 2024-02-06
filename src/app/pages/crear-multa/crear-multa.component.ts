@@ -204,8 +204,8 @@ export class CrearMultaComponent implements OnInit {
     this.modalService.hide(1);
   }
 
-  confirmClickRefere(value: string) {
-    this.crefere = value;
+  confirmClickRefere(value: any) {
+    this.p_desubi = value.viaurb;
     this.obtenerReferencia();
     this.modalService.hide(1);
   }
@@ -400,8 +400,8 @@ export class CrearMultaComponent implements OnInit {
     this.sigtaService.listarReferencia(post).subscribe({
       next: (data: any) => {
         this.spinner.hide();
-        console.log(data);
         this.datosReferencia = data;
+        console.log(data);
         // this.manzana = data[0].cpostal;
         this.via = data[0].cdvia;
         this.haburb = data[0].cpbdo

@@ -6,149 +6,159 @@
                 <div class="container-administrado" style="display: flex;">
                     <div class="row g-3"
                         style="padding: 0px 2px 16px 2px; margin: 5px; border: 0.5px ridge #e1e1e1; width: 50%; ">
-                        <div class="col-sm-6">
+                        <div class="col-sm-4">
                             <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Tipo
                                 Persona</label>
-                            <ng-select placeholder="Selecciona..." (input)="onInputChange($event)" [items]="datosTipoPersona"
-                                (change)="onSelectionChangeMedida($event)" [closeOnSelect]="true" [searchable]="true"
-                                bindVaFlue="ccodtip" bindLabel="dcodtip" name="" class="form-control custom"
-                                style="border: 1px solid #b9b9b9 !important">
+                            <ng-select placeholder="Selecciona..." (input)="onInputChange($event)"
+                                [items]="datosTipoPersona" (change)="ChangeTipoPer($event)" [closeOnSelect]="true"
+                                [searchable]="true" bindVaFlue="ccodtip" bindLabel="dcodtip" name=""
+                                class="form-control custom" style="border: 1px solid #b9b9b9 !important">
                             </ng-select>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-4">
                             <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Tipo
                                 Documento</label>
-                            <ng-select placeholder="Selecciona..." (input)="onInputChange($event)" [items]="datosTipoDocumento"
-                                (change)="onSelectionChangeMedida($event)" [closeOnSelect]="true" [searchable]="true"
-                                bindVaFlue="ccodtip" bindLabel="dcodtip" name="" class="form-control custom"
-                                style="border: 1px solid #b9b9b9 !important">
+                            <ng-select placeholder="Selecciona..." (input)="onInputChange($event)"
+                                [items]="datosTipoDocumento" (change)="ChangeTipoDoc($event)" [closeOnSelect]="true"
+                                [searchable]="true" bindVaFlue="ccodtip" bindLabel="dcodtip" name=""
+                                class="form-control custom" style="border: 1px solid #b9b9b9 !important">
                             </ng-select>
+                        </div>
+                        <div class="col-sm-4">
+                            <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Nº Doc.
+                            </label>
+                            <input [(ngModel)]="dtipdoc" oninput="this.value = this.value.toUpperCase()" type="text"
+                                class="form-control form-control-sm" id="" />
                         </div>
                         <div class="col-sm-6">
                             <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Apellido
                                 Paterno</label>
-                            <input oninput="this.value = this.value.toUpperCase()" type="text"
-                                class="form-control form-control-sm" placeholder="" id="" />
+                            <input [(ngModel)]="dpatern" oninput="this.value = this.value.toUpperCase()" type="text"
+                                class="form-control form-control-sm" id="" />
                         </div>
                         <div class="col-sm-6">
                             <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Apellido
                                 Materno</label>
-                            <input oninput="this.value = this.value.toUpperCase()" type="text"
-                                class="form-control form-control-sm" placeholder="" id="" />
+                            <input [(ngModel)]="dmatern" oninput="this.value = this.value.toUpperCase()" type="text"
+                                class="form-control form-control-sm" id="" />
                         </div>
                         <div class="col-sm-12">
                             <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm"> Nombres </label>
-                            <input oninput="this.value = this.value.toUpperCase()" type="text"
-                                class="form-control form-control-sm" placeholder="" id="" />
+                            <input [(ngModel)]="dnombre" oninput="this.value = this.value.toUpperCase()" type="text"
+                                class="form-control form-control-sm" id="" />
                         </div>
-                        <div class="col-sm-4">
+                        <div class="col-sm-6">
                             <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm"> Telefono Fijo
                             </label>
-                            <input oninput="this.value = this.value.toUpperCase()" type="text"
-                                class="form-control form-control-sm" placeholder="" id="" />
+                            <input [(ngModel)]="dnumtel" oninput="this.value = this.value.toUpperCase()" type="text"
+                                class="form-control form-control-sm" id="" />
                         </div>
-                        <div class="col-sm-4">
+                        <!-- <div class="col-sm-4">
                             <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm"> Nro. Fax
                             </label>
-                            <input oninput="this.value = this.value.toUpperCase()" type="text"
-                                class="form-control form-control-sm" placeholder="" id="" />
-                        </div>
-                        <div class="col-sm-4">
+                            <input [(ngModel)]="" oninput="this.value = this.value.toUpperCase()" type="text"
+                                class="form-control form-control-sm" id="" />
+                        </div> -->
+                        <div class="col-sm-6">
                             <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm"> Nro. Celular
                             </label>
-                            <input oninput="this.value = this.value.toUpperCase()" type="text"
-                                class="form-control form-control-sm" placeholder="" id="" />
+                            <input [(ngModel)]="dnumcel" oninput="this.value = this.value.toUpperCase()" type="text"
+                                class="form-control form-control-sm" id="" />
                         </div>
                         <div class="col-sm-8">
                             <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm"> Correo
                                 Electrónico </label>
-                            <input oninput="this.value = this.value.toUpperCase()" type="text"
-                                class="form-control form-control-sm" placeholder="" id="" />
+                            <input [(ngModel)]="de_mail" oninput="this.value = this.value.toUpperCase()" type="text"
+                                class="form-control form-control-sm" id="" />
                         </div>
                         <div class="col-sm-4">
                             <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm"> Fecha nacimiento
                             </label>
-                            <input max="{{getMaxDate()}}" oninput="this.value = this.value.toUpperCase()" type="date"
-                                class="form-control form-control-sm" placeholder="" id="" />
+                            <input [(ngModel)]="fecnaci" max="{{getMaxDate()}}"
+                                oninput="this.value = this.value.toUpperCase()" type="date"
+                                class="form-control form-control-sm" id="" />
                         </div>
                     </div>
                     <div class="row g-3"
                         style=" padding: 0px 2px 16px 2px; margin: 5px; border: 0.5px ridge #e1e1e1; width: 50%; ">
                         <div class="col-sm-12">
                             <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Distrito</label>
-                            <ng-select (input)="onInputChange($event)" [items]="datosTipoPersona"
-                                (change)="onSelectionChangeMedida($event)" [closeOnSelect]="true" [searchable]="true"
-                                bindVaFlue="CCODTIP" bindLabel="DCODTIP" name="" class="form-control custom"
-                                style="border: 1px solid #b9b9b9 !important">
-                            </ng-select>
+                            <div class="" style="display: flex; justify-content: center; ">
+                                <ng-select (input)="onInputChange($event)" [items]="datosDistrito"
+                                    (change)="ChangeTipoDistrito($event)" [closeOnSelect]="true" [searchable]="true"
+                                    bindVaFlue="CPOSTAL" bindLabel="DPOSTAL" name="" class="form-control custom"
+                                    style="border: 1px solid #b9b9b9 !important">
+                                </ng-select>
+                                <button style="margin-left: 5px;" (click)="asignarPerfil(templateRefere)" type="button"
+                                    class="btn btn-primary btn-label btn-sm">
+                                    <i class="ri-search-line label-icon align-middle fs-16 me-2"></i>
+                                    Via/Urb.
+                                </button>
+                            </div>
                         </div>
                         <div class="col-sm-12">
-                            <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Nombre de la
-                                via</label>
-                            <ng-select (input)="onInputChange($event)" [items]="datosTipoPersona"
-                                (change)="onSelectionChangeMedida($event)" [closeOnSelect]="true" [searchable]="true"
-                                bindVaFlue="CCODTIP" bindLabel="DCODTIP" name="" class="form-control custom"
-                                style="border: 1px solid #b9b9b9 !important">
-                            </ng-select>
+                            <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm"> Nombre de la
+                                via
+                            </label>
+                            <input [(ngModel)]="dnomvia" disabled="" oninput="this.value = this.value.toUpperCase()"
+                                type="text" class="form-control form-control-sm" placeholder="" id=""
+                                style="background-color: #e1e1e1;" />
                         </div>
                         <div class="col-sm-12">
                             <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Habilitacion
                                 Urbana</label>
-                            <ng-select (input)="onInputChange($event)" [items]="datosTipoPersona"
-                                (change)="onSelectionChangeMedida($event)" [closeOnSelect]="true" [searchable]="true"
-                                bindVaFlue="CCODTIP" bindLabel="DCODTIP" name="" class="form-control custom"
-                                style="border: 1px solid #b9b9b9 !important">
-                            </ng-select>
+                            <input [(ngModel)]="dnomurb" disabled="" oninput="this.value = this.value.toUpperCase()"
+                                type="text" class="form-control form-control-sm" placeholder="" id=""
+                                style="background-color: #e1e1e1;" />
                         </div>
                         <div class="col-sm-2">
-                            <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm"> Lote
+                            <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm"> Nro
                             </label>
-                            <input oninput="this.value = this.value.toUpperCase()" type="text"
-                                class="form-control form-control-sm" placeholder="" id="" />
-                        </div>
-                        <div class="col-sm-10">
-                            <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm"> Referencia
-                            </label>
-                            <input oninput="this.value = this.value.toUpperCase()" type="text"
+                            <input [(ngModel)]="dnrofis" oninput="this.value = this.value.toUpperCase()" type="text"
                                 class="form-control form-control-sm" placeholder="" id="" />
                         </div>
                         <div class="col-sm-2">
                             <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm"> Dpto.
                             </label>
-                            <input oninput="this.value = this.value.toUpperCase()" type="text"
+                            <input [(ngModel)]="ddepfis" oninput="this.value = this.value.toUpperCase()" type="text"
                                 class="form-control form-control-sm" placeholder="" id="" />
                         </div>
                         <div class="col-sm-2">
                             <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm"> Interior
                             </label>
-                            <input oninput="this.value = this.value.toUpperCase()" type="text"
+                            <input [(ngModel)]="dintfis" oninput="this.value = this.value.toUpperCase()" type="text"
                                 class="form-control form-control-sm" placeholder="" id="" />
                         </div>
                         <div class="col-sm-2">
                             <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm"> Letra
                             </label>
-                            <input oninput="this.value = this.value.toUpperCase()" type="text"
+                            <input [(ngModel)]="dletfis" oninput="this.value = this.value.toUpperCase()" type="text"
                                 class="form-control form-control-sm" placeholder="" id="" />
                         </div>
                         <div class="col-sm-2">
                             <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm"> Block
                             </label>
-                            <input oninput="this.value = this.value.toUpperCase()" type="text"
+                            <input [(ngModel)]="dblofis" oninput="this.value = this.value.toUpperCase()" type="text"
                                 class="form-control form-control-sm" placeholder="" id="" />
                         </div>
                         <div class="col-sm-2">
                             <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm"> Mz
                             </label>
-                            <input oninput="this.value = this.value.toUpperCase()" type="text"
+                            <input [(ngModel)]="dmzafis" oninput="this.value = this.value.toUpperCase()" type="text"
                                 class="form-control form-control-sm" placeholder="" id="" />
                         </div>
                         <div class="col-sm-2">
-                            <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm"> Nro
+                            <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm"> Lote
                             </label>
-                            <input oninput="this.value = this.value.toUpperCase()" type="text"
+                            <input [(ngModel)]="dlotfis" oninput="this.value = this.value.toUpperCase()" type="text"
                                 class="form-control form-control-sm" placeholder="" id="" />
                         </div>
-
+                        <div class="col-sm-10">
+                            <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm"> Referencia
+                            </label>
+                            <input [(ngModel)]="drefere" oninput="this.value = this.value.toUpperCase()" type="text"
+                                class="form-control form-control-sm" placeholder="" id="" />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -157,9 +167,24 @@
 </div>
 <div class="row" style="display: flex; justify-content: right; margin-top: 10px;">
     <div class="col-sm-auto mb-2-5">
-        <button type="button" [routerLink]="['/multas/crear-multa']" class="btn btn-primary btn-label btn-sm">
+        <button type="button" (click)="registrarAdministrado()" class="btn btn-primary btn-label btn-sm">
             <i class="ri-file-2-fill label-icon align-middle fs-16 me-2"></i>
             Registrar
         </button>
     </div>
 </div>
+
+<ng-template #templateRefere>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title mb-0">Buscar</h4>
+                </div>
+                <div class="card-body">
+                    <app-listar-referencia (confirmClicked)="confirmClickRefere($event)"></app-listar-referencia>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>

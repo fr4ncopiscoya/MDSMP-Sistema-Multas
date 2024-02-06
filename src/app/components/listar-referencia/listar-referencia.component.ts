@@ -3,6 +3,7 @@ import { Subject } from 'rxjs';
 import { SigtaService } from 'src/app/services/sigta.service';
 import { DataTableDirective } from 'angular-datatables';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { BsModalService } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-listar-referencia',
@@ -11,8 +12,15 @@ import { NgxSpinnerService } from 'ngx-spinner';
 })
 export class ListarReferenciaComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  crefere: string = '';
+  p_desubi: string = '';
+  via: string = '';
+  haburb: string = '';
 
+  //Parametros de crear-admininstrado
+  ccodurb: string = '';
+  dtipurb: string = '';
+  ccodvia: string = '';
+  dtipvia: string = '';
   //parámetros de búsqueda
   p_desinf: string = '';
   datosReferencia: any;
@@ -48,8 +56,8 @@ export class ListarReferenciaComponent implements OnInit, AfterViewInit, OnDestr
     this.dtTriggerModal.next();
   }
 
-  emitir(id: string): void {
-    this.confirmClicked.emit(id);
+  emitir(data:any): void {
+    this.confirmClicked.emit(data);
   }
 
   // busContribuyente() {
@@ -84,7 +92,7 @@ export class ListarReferenciaComponent implements OnInit, AfterViewInit, OnDestr
   obtenerReferencia() {
 
     let post = {
-      p_desubi: this.crefere,
+      p_desubi: this.p_desubi,
     };
 
     console.log(post);
@@ -96,9 +104,20 @@ export class ListarReferenciaComponent implements OnInit, AfterViewInit, OnDestr
         this.spinner.hide();
         console.log(data);
         this.datosReferencia = data;
-        // this.crefere = data[0].viaurb;
-        console.log("llgaste refere");
+        this.via = data[0].cdvia;
+        this.haburb = data[0].cpbdo;
 
+        this.ccodurb = data[0].cpoblad;
+        this.dtipurb = data[0].dtippob;
+        // this.dnomurb = data[0].dpoblad;
+        this.ccodvia = data[0].v_codi;
+        this.dtipvia = data[0].v_tipo;
+        // this.dnomvia= data[0].cdvia;
+        console.log(this.ccodurb);
+        console.log(this.dtipurb);
+        console.log(this.ccodvia);
+        console.log(this.dtipvia);
+        
 
         this.dtElementModal.dtInstance.then((dtInstance: DataTables.Api) => {
           dtInstance.destroy();

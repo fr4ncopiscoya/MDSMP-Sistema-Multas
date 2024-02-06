@@ -38,23 +38,18 @@ export class MultasComponent implements OnInit {
   dtOptionsModal: any;
   dtOptions: any = {
     columnDefs: [
-      // { width: '2px', targets: 0 },
-      // { width: '2px', targets: 1 },
-      // { width: '50px', targets: 2 },
-      { width: '400px', targets: 3 },
+      { width: '2px', targets: 0 },
+      { width: '2px', targets: 1 },
+      { width: '2px', targets: 2 },
+      { width: '200px', targets: 3 },
       { width: '400px', targets: 4 },
+      { width: '2px', targets: 5 },
+      { width: '2px', targets: 6 },
+      { width: '2px', targets: 7 },
+      { width: '2px', targets: 8 },
+      { width: '2px', targets: 9 },
     ],
-    dom: 'Bfrtip',
-    buttons: [
-      {
-        extend: 'excelHtml5',
-        text: 'Exportar a Excel',
-        filename: 'MASCOTA', // Nombre personalizado del archivo
-      },
-    ],
-    lengthChange: false,
-    searching: false,
-    lengthMenu: [15],
+
     paging: true,
     language: {
       url: '//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json',
@@ -253,6 +248,11 @@ export class MultasComponent implements OnInit {
         } else {
           this.errorSweetAlertData();
         }
+
+        this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+          dtInstance.destroy();
+          this.dtTrigger.next();
+        });
       },
       error: (error: any) => {
         this.errorSweetAlertData();
@@ -293,7 +293,7 @@ export class MultasComponent implements OnInit {
 
     let post = {
       p_anypro: añoActual.toString(),
-      p_desinf: this.p_desinf,
+      p_codinf: this.p_codinf,
     };
 
     console.log(post);

@@ -1,0 +1,17 @@
+tbody {
+    display:block;
+    height:500px;
+    overflow:auto;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+thead, tbody tr {
+    display:table;
+    width:100%;
+    table-layout:fixed;
+}
+
+tbody , td {
+    width:100%;
+}
