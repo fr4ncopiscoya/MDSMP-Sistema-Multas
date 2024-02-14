@@ -3,9 +3,9 @@
         <div class="mb-2-5 col-lg-12">
             <label for="" class="form-label col-form-label-sm">Descripción Infracción</label>
             <div class="" style="display: flex; align-items: center">
-                <input [(ngModel)]="p_desinf" type="text" class="form-control form-control-sm" id="employeeUrl"
+                <input #inputDescri [(ngModel)]="p_desinf" type="text" (keyup.enter)="obtenerDescriPorCod(inputDescri.value)" (keydown.tab)="obtenerDescriPorCod(inputDescri.value)" class="form-control form-control-sm" id="employeeUrl"
                     oninput="this.value = this.value.toUpperCase()" style="margin-right: 5px" />
-                <button type="button" class="btn btn-primary btn-label btn-sm" (click)="obtenerDescriPorCod()">
+                <button type="button" class="btn btn-primary btn-label btn-sm" (click)="obtenerDescriPorCod(inputDescri.value)">
                     <i class="ri-search-line label-icon align-middle fs-16 me-2"></i>
                     Consultar
                 </button>
@@ -21,23 +21,23 @@
                             [dtTrigger]="dtTriggerModal" class="table table-hover align-middle mb-0">
                             <thead class="table-light">
                                 <tr>
-                                    <th scope="col" class="text-center" style="width: 100px">
+                                    <th scope="col" class="text-center">
                                         ID
                                     </th>
-                                    <th scope="col" class="text-center" style="width: 100px">
+                                    <th scope="col" class="text-center">
                                         Código
                                     </th>
-                                    <th scope="col" class="text-center" style="width: 380px">
-                                        Descripción
+                                    <th scope="col" class="text-center">
+                                        Descripción Infracción
                                     </th>
-                                    <th scope="col" class="text-center" style="width: 100px">
+                                    <th scope="col" class="text-center">
                                         Acción
                                     </th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr *ngFor="let data of datosDescripcion;let idx = index"
-                                    class="text-center parentesco-data-row" style="text-align: center">
+                                    class="text-center parentesco-data-row">
                                     <td>{{ idx + 1 }}</td>
                                     <td>{{ data.r_codint }}</td>
                                     <td>{{ data.r_descri }}</td>

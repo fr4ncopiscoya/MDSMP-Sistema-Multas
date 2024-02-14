@@ -64,6 +64,8 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
 
   @Output() confirmClicked = new EventEmitter<any>();
 
+  modalRefs: { [key: string]: BsModalRef } = {}; // Objeto para almacenar los modalRefs
+
   dtTriggerModal: Subject<void> = new Subject<void>();
   dtOptionsModal: DataTables.Settings = {};
   dtInstance: DataTables.Api | undefined;
@@ -155,10 +157,21 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
     this.modalService.hide(1);
   }
 
-  asignarPerfil(template: TemplateRef<any>) {
-    this.modalRef = this.modalService.show(template, { id: 1, class: ' modal-lg modal-bc' });
-    // this.modalService.hide(2)
+  cerrarModal(modalKey: string) {
+    if (this.modalRefs[modalKey]) {
+      this.modalRefs[modalKey].hide(); // Cierra el modal si está definido
+    }
   }
+
+  modalDescri(template: TemplateRef<any>) {
+    this.modalRefs['listar-urba'] = this.modalService.show(template, { id: 1, class: ' modal-lg second', backdrop: 'static', keyboard: false });
+    const secondModalBackdrop = document.getElementsByClassName('second')[0]?.parentElement;
+    if (secondModalBackdrop) {
+        secondModalBackdrop.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+    }
+    console.log("modal-descri-ubi");
+}
+
 
   ChangeTipoDoc(event: any) {
     // this.dtipdoc = event.dcodtip

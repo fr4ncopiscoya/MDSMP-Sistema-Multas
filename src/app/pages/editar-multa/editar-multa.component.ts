@@ -9,6 +9,7 @@ import { Subject } from 'rxjs';
 import { NgxSpinnerService } from 'ngx-spinner';
 import Swal from 'sweetalert2';
 import { DatePipe } from '@angular/common';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-editar-multa',
@@ -17,6 +18,9 @@ import { DatePipe } from '@angular/common';
 })
 export class EditarMultaComponent implements OnInit {
   @ViewChild(DataTableDirective, { static: false })
+  dtTriggerModal: any;
+  dtElementModal: any;
+  modalRef?: BsModalRef;
   dtElement: any;
   dtTrigger: Subject<void> = new Subject<void>();
   dtOptions: any = {
@@ -50,6 +54,7 @@ export class EditarMultaComponent implements OnInit {
   datosGiroEstablecimiento: any;
   datosMulta: any;
   datosTipoEspecie: any;
+  datosReferencia: any;
   error: string = '';
   chkact = 0;
 
@@ -57,6 +62,7 @@ export class EditarMultaComponent implements OnInit {
   //Variables
   p_anypro: string = ''; // --Fecha de Notificacion multa ====
   p_codinf: string = '';
+  p_desubi: string = '';
 
   r_descri: string = '';
   r_codint: string = '';
@@ -125,6 +131,7 @@ export class EditarMultaComponent implements OnInit {
     private serviceSanidad: SanidadService,
     private sigtaService: SigtaService,
     private sanidadService: SanidadService,
+    private modalService: BsModalService
   ) {
     let id = Number(this.route.snapshot.paramMap.get('id'));
     this.id_corrl = id;
@@ -152,6 +159,10 @@ export class EditarMultaComponent implements OnInit {
     this.dtTrigger.next();
   }
 
+  asignarPerfil(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template, { id: 1, class: 'modal-lg' });
+  }
+
   descargaExcel() {
     let btnExcel = document.querySelector(
       '#tablaAplicacion_wrapper .dt-buttons .dt-button.buttons-excel.buttons-html5'
@@ -163,6 +174,15 @@ export class EditarMultaComponent implements OnInit {
     const keyCode = event.keyCode;
     if (keyCode < 48 || keyCode > 57) {
       event.preventDefault();
+    }
+  }
+
+  goBackToMultas(){
+    setTimeout(() => {
+      
+    }, 4000);
+    if(this.error = "Notificacion Actualizada Correctamente" ){
+      this.router.navigateByUrl('/multas')
     }
   }
 
@@ -201,6 +221,7 @@ export class EditarMultaComponent implements OnInit {
     this.giro = event.ccodgir
     this.desgiro = event.ddesgir
     console.log(this.giro);
+    console.log(this.desgiro);
   }
 
   onSelectionChangeMedida(event: any) {
@@ -210,6 +231,12 @@ export class EditarMultaComponent implements OnInit {
 
   onInputChange(event: any) {
     event.target.value = event.target.value.toUpperCase();
+  }
+
+  confirmClickRefere(value: any) {
+    this.p_desubi = value.viaurb;
+    this.obtenerReferencia();
+    this.modalService.hide(1);
   }
 
 
@@ -222,11 +249,11 @@ export class EditarMultaComponent implements OnInit {
 
   consultarMulta() {
     let post = {
-      p_codcon: this.p_codcon,
-      p_numnot: this.nnumnot,
-      p_codinf: this.r_descri,
-      p_fecini: this.p_fecini.toString(),
-      p_fecfin: this.p_fecfin.toString(),
+      // p_codcon: this.p_codcon,
+      // p_numnot: this.nnumnot,
+      // p_codinf: this.r_descri,
+      // p_fecini: this.p_fecini.toString(),
+      // p_fecfin: this.p_fecfin.toString(),
       p_idcorr: this.id_corrl,
     };
     console.log(post);
@@ -242,20 +269,20 @@ export class EditarMultaComponent implements OnInit {
           this.ccontri = data[0].ccontri;
           this.cnombre = data[0].cnombre;
           this.dpredio = data[0].dpredio;
-          this.crefere = data[0].crefere
+          this.p_desubi = data[0].crefere
           this.manzana = data[0].manzana
           this.lote = data[0].lote
           this.nro_fiscal = data[0].nro_fiscal
           this.dpto_int = data[0].dpto_int
           this.referencia = data[0].referencia
           this.nnumnot = data[0].nnumnot
-          this.nro_acta = data[0].ACTA_CONSTATACION
+          this.nro_acta = data[0].nro_acta
           this.p_anypro = data[0].dfecnot //Fecha Multa
           this.cnumres = data[0].cnumres
           this.dfecres = data[0].dfectra
           this.dsancio = data[0].dsancio
           this.chkact = data[0].chkact
-          // this.nro_acta2 = data [0].nro_acta2 
+          this.nroActaConstatacion = data [0].ACTA_CONSTATACION 
           this.f_ejecucion = data[0].f_ejecucion
           this.giro = data [0].giro
           this.desgiro= data [0].OTROS_GIROS
@@ -267,7 +294,7 @@ export class EditarMultaComponent implements OnInit {
           this.ins_municipal = data[0].ins_municipal
           this.nro_informe = data[0].nro_informe
 
-          console.log(this.giro);
+          console.log(this.desgiro);
 
         } else {
           this.errorSweetAlertData();
@@ -291,9 +318,9 @@ export class EditarMultaComponent implements OnInit {
         // console.log(data);
 
         this.datosGiroEstablecimiento = data;
-        this.desgiro = data[0].ddesgir
+        // this.desgiro = data[0].ddesgir
         this.giro = data[0].ccodgir;
-        console.log(this.desgiro);
+        console.log(this.giro);
 
       },
       error: (error: any) => {
@@ -336,7 +363,7 @@ export class EditarMultaComponent implements OnInit {
     }
   }
 
-  obtenerAreaPorCod() {
+  obtenerAreaPorCod(value:any) {
     const p_anyproDate = new Date(this.p_anypro).getFullYear();
 
     let post = {
@@ -421,6 +448,40 @@ export class EditarMultaComponent implements OnInit {
     });
   }
 
+  obtenerReferencia() {
+    let post = {
+      p_desubi: this.p_desubi,
+    };
+
+    console.log(post);
+
+    this.spinner.show();
+
+    this.sigtaService.listarReferencia(post).subscribe({
+      next: (data: any) => {
+        this.spinner.hide();
+        this.datosReferencia = data;
+        console.log(data);
+        // this.manzana = data[0].cpostal;
+        this.via = data[0].cdvia;
+        this.haburb = data[0].cpbdo
+        console.log(this.via);
+
+
+        this.dtElementModal.dtInstance.then((dtInstance: DataTables.Api) => {
+          dtInstance.destroy();
+          this.dtTriggerModal.next();
+        });
+
+      },
+      error: (error: any) => {
+        this.spinner.hide();
+        // this.errorSweetAlertCode();
+        console.log(error);
+      },
+    });
+  }
+
   editarInfraccion() {
     let post = {
       id_corrl: this.id_corrl,
@@ -469,6 +530,8 @@ export class EditarMultaComponent implements OnInit {
 
           this.errorSweetAlertCode(icon);
 
+          this.goBackToMultas();
+
         } else {
           // this.errorSweetAlertCode();
         }
@@ -483,120 +546,3 @@ export class EditarMultaComponent implements OnInit {
 
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// registrarInfraccion() {
-//   const dataPost = new FormData();
-
-//   var nnumnot = this.nnumnot;
-
-//   var p_codcon = this.p_codcon; //ccontri
-//   var cpredio = this.cpredio;
-//   var r_codint = this.r_codint; //cmulta
-//   var nmonto = this.nmonto;
-
-
-//   var cofisan = this.cofisan;
-
-
-//   var carea = this.carea;
-//   var p_act_id = this.p_act_id;
-//   var p_ocu_id = this.p_ocu_id;
-//   var p_udi_id = this.noseque;
-//   var p_car_direcc = this.p_car_direcc;
-//   var p_car_correo = this.p_car_correo;
-//   var p_car_fecemi = this.p_car_fecemi;
-//   var p_car_imgfot = this.p_car_imgfot;
-//   var p_tdi_id = this.p_tdi_id;
-//   var p_per_numdoi = this.p_per_numdoi;
-
-//   dataPost.append('p_car_id', p_car_id);
-//   dataPost.append('p_per_id', p_per_id);
-//   dataPost.append('p_act_id', p_act_id);
-//   dataPost.append('p_ocu_id', p_ocu_id);
-//   dataPost.append('p_udi_id', p_udi_id);
-//   dataPost.append('p_car_direcc', p_Fcar_direcc);
-//   dataPost.append('p_car_correo', p_car_correo);
-//   dataPost.append('p_car_manali', p_car_manali.toString());
-//   dataPost.append('p_car_fecemi', p_car_fecemi);
-//   dataPost.append('p_car_numrec', p_car_numrec);
-//   dataPost.append('p_car_imgfot', p_car_imgfot);
-//   dataPost.append('p_car_imgfot_file[]', this.imagenrecort, this.imagenrecort.name);
-//   dataPost.append('p_car_imgext', p_car_imgext);
-//   dataPost.append('p_tdi_id', p_tdi_id.toString());
-//   dataPost.append('p_per_numdoi', p_per_numdoi.toString());
-
-// }
-
-
-
-// @nnumnot --Numero de Notificacion
-// @dfecnot smalldatetime = '01/01/1900 00:00:00', --Fecha de Notificacion
-// @ccontri--Codigo Administrado
-// @cpredio--Pasar en Blanco
-// @cmulta(7) ='', --Codigo Multa o Infraccion
-// @nmonto	 numeric(12, 2) = 0, --Monto Multa o Infraccion
-// @dfecres smalldatetime = '01/01/1900 00:00:00', --Fecha de Resolucion
-// @cnumres--Numero de Resolucion
-// @cofisan(3) ='', --Area propietaria de la multa
-// @dfecrec smalldatetime = '01/01/1900 00:00:00', --Fecha de Recepcion
-// @crefere(80) ='', --Referencia
-// @cusutra(3) ='', --Usuario Transaccion
-// @csancio(2) ='', --Medida Complementaria
-// @mobserv(500) ='', --Observaciones
-// @nreinci int = 0, --Reincidencia
-// @manzana(15) = '', --Manzana
-// @lote(15) = '', --Lote
-// @nro_fiscal(15) = '', --Numero
-// @dpto_int(15) = '', --Departamento o Interior
-// @referencia(150) = '', --Referencia
-// @ins_municipal(250) ='', --Inspector que impone la multa
-// @nro_acta(20) ='', --Numero de Acta
-// @nro_informe(20) ='', --Numero de Informe
-// @giro(8) = '', --Codigo Giro
-// @f_ejecucion smalldatetime = '01/01/1900 00:00:00', --Fecha Ejecucion
-// @f_registro smalldatetime = '01/01/1900 00:00:00', --Fecha Registro
-// @via(250) = '', --Nombre Via o Calle
-// @haburb(250) = '', --Nombre Habilitacion Urbana(Urbanizacion)
-// @nroActaConstatacion(15) = '' -- Numero Acta Constatacion

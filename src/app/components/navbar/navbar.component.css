@@ -1,3 +1,7 @@
 #light-dark-mode a{
     cursor: pointer;
 }
+
+.logOutButton{
+    cursor: pointer;
+}

@@ -7,55 +7,55 @@
             <div class="row">
               <div class="col-4">
                 <div class="mb-3">
-                  <label for="firstNameinput"
-                    class="form-label col-sm-6 col-form-label col-form-label-sm">Codigo</label>
-                  <input #inputCodigoAdm [(ngModel)]="ccontri" (keyup.enter)="obtenerNombrePorCod(inputCodigoAdm.value)"
+                  <label for="firstNameinput" class="form-label col-sm-6 col-form-label col-form-label-sm">Código
+                    Administrado</label>
+                  <input #inputCodigoAdm [(ngModel)]="ccontri" (keydown.tab)="obtenerNombrePorCod(inputCodigoAdm.value)"
+                    (keyup.enter)="obtenerNombrePorCod(inputCodigoAdm.value)"
                     oninput="this.value = this.value.toUpperCase()" maxlength="6" type="text"
                     class="form-control form-control-sm" placeholder="Codigo..." id="firstNameinput" />
+                    <div *ngIf="error === 'Codigo Administrado, Invalido'" class="text-danger">El Código Administrado, Invalido.</div>
                 </div>
               </div>
               <div class="col-8">
                 <div class="mb-3">
-                  <label for="lastNameinput" class="form-label col-sm-10 col-form-label col-form-label-sm">Propietario -
+                  <label for="" class="form-label col-sm-10 col-form-label col-form-label-sm">Propietario -
                     Nombre o Razón del Infractor</label>
-                  <div class="" style="display: flex; align-items: center">
-                    <input disabled="cnombre" [(ngModel)]="cnombre" oninput="this.value = this.value.toUpperCase()"
-                      type="text" class="form-control form-control-sm" placeholder="" id="lastNameinput"
-                      style="background-color: #e1e1e1" />
+                  <div style="display: flex; align-items: center">
+                    <input disabled="" ngClass="disabled-color" [(ngModel)]="cnombre"
+                      oninput="this.value = this.value.toUpperCase()" type="text" class="form-control form-control-sm"
+                      placeholder="" id="" />
                     <button type="button" title="Buscar" (click)="asignarPerfil(template)"
                       class="btn btn-primary btn-sm" style="margin-left: 5px">
                       <i class="ri-search-line"></i>
                     </button>
                   </div>
                   <!-- <input disabled="cnombre" [(ngModel)]="cnombre" oninput="this.value = this.value.toUpperCase()"
-                    type="text" class="form-control form-control-sm" placeholder="" id="lastNameinput"
-                    style="background-color: #e1e1e1" /> -->
+                    type="text" class="form-control form-control-sm" placeholder="" id=""
+                    ngClass="disabled-color" /> -->
                 </div>
               </div>
               <div class="col-12">
                 <div class="mb-3">
-                  <label for="compnayNameinput" class="form-label col-sm-6 col-form-label col-form-label-sm">Dirección :
+                  <label for="" class="form-label col-sm-6 col-form-label col-form-label-sm">Dirección :
                     Avenida / Jiron/Calle/Pasaje</label>
                   <input disabled="dpredio" [(ngModel)]="dpredio" oninput="this.value = this.value.toUpperCase()"
-                    type="text" class="form-control form-control-sm" placeholder="" id="compnayNameinput"
-                    style="background-color: #e1e1e1" />
+                    type="text" class="form-control form-control-sm" placeholder="" id="" ngClass="disabled-color" />
                 </div>
               </div>
               <div class="col-12">
                 <div class="mb-3">
-                  <label for="compnayNameinput" class="form-label col-sm-6 col-form-label col-form-label-sm">Referencia
+                  <label for="" class="form-label col-sm-6 col-form-label col-form-label-sm">Referencia
                     donde se cometió la infracción</label>
                   <div class="" style="display: flex; align-items: center">
-                    <input [(ngModel)]="p_desubi" oninput="this.value = this.value.toUpperCase()" type="text"
-                      class="form-control form-control-sm" placeholder="" id="compnayNameinput"
-                      style="background-color: #e1e1e1" />
+                    <input disabled="" [(ngModel)]="p_desubi" oninput="this.value = this.value.toUpperCase()" type="text"
+                      class="form-control form-control-sm" placeholder="" id="" ngClass="disabled-color" />
                     <button type="button" title="Buscar" (click)="asignarPerfil(templateRefere)"
                       class="btn btn-primary btn-sm" style="margin-left: 5px">
                       <i class="ri-search-line"></i>
                     </button>
                   </div>
                   <!-- <input [(ngModel)]="crefere" oninput="this.value = this.value.toUpperCase()" type="text"
-                    class="form-control form-control-sm" placeholder="" id="compnayNameinput" /> -->
+                    class="form-control form-control-sm" placeholder="" id="" /> -->
                 </div>
               </div>
               <div class="col-2">
@@ -97,36 +97,36 @@
           </div>
           <div class="col-lg-3" style="margin-top: 10px">
             <div class="mb-2-5">
-              <label for="employeeName" class="form-label col-sm-8 col-form-label-sm mt-label-notificacion">Nro. Notif.
-                de Cargo</label>
+              <label for="employeeName" class="form-label col-sm-8 col-form-label-sm mt-label-notificacion">Nro. Notifificación</label>
               <input [(ngModel)]="nnumnot" type="text" maxlength="6"
                 class="form-control form-control-sm mt-input-notificacion" id="employeeName" placeholder="" />
+              <div *ngIf="error === 'Numero de Notificacion, Invalido'" class="text-danger">El número de notificación es
+                inválido.</div>
             </div>
             <div class="mb-2-5">
               <label for="employeeUrl" class="form-label col-sm-8 col-form-label-sm mt-label-notificacion">Nro. Acta
                 Const.</label>
-              <input [(ngModel)]="nroActaConstatacion" type="url"
+              <input [(ngModel)]="nroActaConstatacion" (keypress)="validarNumero($event)" type="url"
                 class="form-control form-control-sm mt-input-notificacion" id="employeeUrl" placeholder="" />
             </div>
             <div class="mb-2-5">
               <label for="StartleaveDate" class="form-label col-sm-6 col-form-label-sm mt-label-notificacion">Fecha
                 Multa</label>
-              <input (blur)="validarFechaMulta()" [max]="ahora" [(ngModel)]="p_anypro" type="date"
+              <input (blur)="validarFechaMulta()" [max]="p_anypro" [(ngModel)]="p_anypro" type="date"
                 class="form-control form-control-sm mt-input-notificacion" id="StartleaveDate" />
+              <div *ngIf="error === 'Fecha de Notificacion, Invalido'" class="text-danger">La Fecha de Notificacion es Invalido.</div>
             </div>
             <div class="mb-2-5">
               <label for="EndleaveDate"
                 class="form-label col-sm-6 col-form-label-sm mt-label-notificacion">Nro.Res.Sanción</label>
               <input [(ngModel)]="cnumres" disabled="" type="number"
-                class="form-control form-control-sm mt-input-notificacion" id="EndleaveDate"
-                style="background-color: #e1e1e1" />
+                class="form-control form-control-sm mt-input-notificacion" id="EndleaveDate" ngClass="disabled-color" />
             </div>
             <div class="mb-2-5">
               <label for="EndleaveDate" class="form-label col-sm-6 col-form-label-sm mt-label-notificacion">Fecha
                 Resolución</label>
               <input disabled="" [(ngModel)]="dfecres" type="date"
-                class="form-control form-control-sm mt-input-notificacion" id="EndleaveDate"
-                style="background-color: #e1e1e1" />
+                class="form-control form-control-sm mt-input-notificacion" id="EndleaveDate" ngClass="disabled-color" />
             </div>
           </div>
         </div>
@@ -137,9 +137,10 @@
         <div class="col-7">
           <div class="mb-3">
             <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Medida Complementaria</label>
-            <ng-select placeholder="Selecciona..." (input)="onInputChange($event)" [items]="datosMedidaComp"
-              (change)="onSelectionChangeMedida($event)" [closeOnSelect]="true" [searchable]="true" bindVaFlue="CCODTIP"
-              bindLabel="DCODTIP" name="" class="form-control custom" style="border: 1px solid #b9b9b9 !important">
+            <ng-select placeholder="Selecciona..." [(ngModel)]="dsancio" (input)="onInputChange($event)"
+              [items]="datosMedidaComp" (change)="onSelectionChangeMedida($event)" [closeOnSelect]="true"
+              [searchable]="true" bindVaFlue="CCODTIP" bindLabel="DCODTIP" name="" class="form-control custom"
+              style="border: 1px solid #b9b9b9 !important">
             </ng-select>
           </div>
         </div>
@@ -152,10 +153,10 @@
         </div>
         <div class="col-2">
           <div class="mb-3">
-            <label for="compnayNameinput" class="form-label col-sm-6 col-form-label col-form-label-sm">Nº de
+            <label for="" class="form-label col-sm-6 col-form-label col-form-label-sm">Nº de
               acta</label>
-            <input [value]="nro_acta" [disabled]="!chkact" type="text" class="form-control form-control-sm"
-              id="compnayNameinput" [style.background-color]="chkact ? '' : '#e1e1e1'" />
+            <input [value]="nro_acta" [disabled]="!chkact" type="text" class="form-control form-control-sm" id=""
+              [style.background-color]="chkact ? '' : '#e1e1e1'" />
           </div>
         </div>
         <div class="col-2">
@@ -175,9 +176,10 @@
           <!-- <input [(ngModel)]="giro" type="email" oninput="this.value = this.value.toUpperCase()"
               class="form-control form-control-sm" id="colFormLabelSm" /> -->
 
-          <ng-select (input)="onInputChange($event)" [ngModel]="giro" [items]="datosGiroEstablecimiento"
-            (change)="onSelectionChangeGiro($event)" [closeOnSelect]="true" [searchable]="true" bindValue="ccodgir"
-            bindLabel="ddesgir" name="" class="form-control custom" style="border: 1px solid #b9b9b9 !important">
+          <ng-select placeholder="Selecciona..." (input)="onInputChange($event)" [ngModel]="giro"
+            [items]="datosGiroEstablecimiento" (change)="onSelectionChangeGiro($event)" [closeOnSelect]="true"
+            [searchable]="true" bindValue="ccodgir" bindLabel="ddesgir" name="" class="form-control custom"
+            style="border: 1px solid #b9b9b9 !important">
           </ng-select>
         </div>
       </div>
@@ -193,27 +195,30 @@
         </div>
         <div class="row" style="display: flex; justify-content: center; align-items: center">
           <div class="mb-3 col-sm-2">
-            <label for="" class="form-label col-form-label-sm">Código infracción</label>
-            <input #inputCodInfra (keyup.enter)="obtenerAreaPorCod(inputCodInfra.value)" [(ngModel)]="cmulta"
-              (keypress)="validarNumero($event)" type="text" maxlength="7" class="form-control form-control-sm"
-              id="employeeUrl" placeholder="" />
+            <label for="" class="form-label col-form-label-sm">Código Multa</label>
+            <input #inputCodInfra (keydown.tab)="obtenerAreaPorCod(inputCodInfra.value)"
+              (keyup.enter)="obtenerAreaPorCod(inputCodInfra.value)" [(ngModel)]="p_codinf"
+              (keypress)="validarNumero($event)" (blur)="validarCodInfra()" type="text" maxlength="7"
+              class="form-control form-control-sm" id="employeeUrl" placeholder="" />
+            <div *ngIf="error === 'Codigo de Multa, Invalido'" class="text-danger">Codigo de Multa es Invalido.</div>
           </div>
           <div class="mb-3 col-sm-2">
-            <label for="StartleaveDate" class="form-label col-sm-6 col-form-label-sm">Monto infracción</label>
+            <label for="" class="form-label col-sm-6 col-form-label-sm">Monto</label>
             <input disabled="" [value]="nmonto | number:'1.2-2'" type="text" class="form-control form-control-sm"
-              id="StartleaveDate" style="background-color: #e1e1e1" />
+              id="montoinfra" ngClass="disabled-color" />
+              <div *ngIf="error === 'Monto Infraccion no puede ser CERO'" class="text-danger" >El Monto de Infraccion no puede ser CERO</div>
           </div>
           <div class="mb-3 col-sm-8">
             <label for="" class="form-label col-form-label-sm">Oficina</label>
             <input disabled="" [(ngModel)]="dareas" type="text" class="form-control form-control-sm" id=""
-              placeholder="" style="background-color: #e1e1e1" />
+              placeholder="" ngClass="disabled-color" />
           </div>
         </div>
         <div class="mb-3 col-sm-12">
           <label for="EndleaveDate" class="form-label col-sm-6 col-form-label-sm mt-label-notificacion">Concepto
             infracción</label>
           <input disabled="" [(ngModel)]="r_descri" type="text" class="form-control form-control-sm" id=""
-            placeholder="" style="background-color: #e1e1e1" />
+            placeholder="" ngClass="disabled-color" />
         </div>
       </div>
     </div>
@@ -230,8 +235,8 @@
       <div class="row">
         <div class="mb-3 col-sm-4">
           <label for="" class="form-label col-form-label-sm">Inspector Municipal</label>
-          <input [(ngModel)]="ins_municipal" [value]="ins_municipal" oninput="this.value = this.value.toUpperCase()" type="text" class="form-control form-control-sm"
-            id="employeeUrl" placeholder="" />
+          <input [(ngModel)]="ins_municipal" [value]="ins_municipal" oninput="this.value = this.value.toUpperCase()"
+            type="text" class="form-control form-control-sm" id="employeeUrl" placeholder="" />
         </div>
         <div class="mb-3 col-sm-2">
           <label for="" class="form-label col-form-label-sm">Nº de Informes</label>
@@ -261,8 +266,9 @@
     <div class="row">
       <div class="col-lg-12">
         <div class="card">
-          <div class="card-header">
+          <div class="card-header" style="display: flex; justify-content: space-between;">
             <h4 class="card-title mb-0">Buscar</h4>
+            <a class="" style="cursor: pointer;" > <i style="font-size: 1.50rem; " class=" ri-close-fill"></i></a>
           </div>
           <div class="card-body">
             <app-listar-administrado (confirmClicked)="confirmClick($event)"></app-listar-administrado>
@@ -276,8 +282,9 @@
     <div class="row">
       <div class="col-lg-12">
         <div class="card">
-          <div class="card-header">
+          <div class="card-header" style="display: flex; justify-content: space-between;">
             <h4 class="card-title mb-0">Buscar</h4>
+            <a class="" style="cursor: pointer;" > <i style="font-size: 1.50rem; " class=" ri-close-fill"></i></a>
           </div>
           <div class="card-body">
             <app-listar-referencia (confirmClicked)="confirmClickRefere($event)"></app-listar-referencia>

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 // import { AdministracionService } from 'src/app/services/administracion.service';
 
 @Component({
@@ -10,7 +11,9 @@ export class NavbarComponent implements OnInit {
   layoutModeIcon: string = 'sun';
   dataEmpresas: any = [];
 
-  constructor() { }
+  constructor(
+    private router: Router
+  ) { }
 
   ngOnInit(){
     // this.companyList();
@@ -65,6 +68,12 @@ export class NavbarComponent implements OnInit {
 
   setDefaultCompany(id: number){
 
+  }
+
+  logOut(){
+    localStorage.removeItem('session-dashboard')
+    // console.log("session closed");
+    this.router.navigateByUrl('/login')
   }
 
 }

@@ -41,6 +41,8 @@ import { ListarAdministradoComponent } from './components/listar-administrado/li
 import { ListarDescripcionComponent } from './components/listar-descripcion/listar-descripcion.component';
 import { ListarReferenciaComponent } from './components/listar-referencia/listar-referencia.component';
 import { CrearAdministradoComponent } from './components/crear-administrado/crear-administrado.component';
+import { VerMultaComponent } from './pages/ver-multa/ver-multa.component';
+import { LoginGuard } from './guards/login.guard';
 
 @NgModule({
   declarations: [
@@ -68,6 +70,7 @@ import { CrearAdministradoComponent } from './components/crear-administrado/crea
     ListarDescripcionComponent,
     ListarReferenciaComponent,
     CrearAdministradoComponent,
+    VerMultaComponent,
   ],
   imports: [
     BrowserModule,
@@ -94,7 +97,9 @@ import { CrearAdministradoComponent } from './components/crear-administrado/crea
   providers: [
     ToastComponent,
     DataTableDirective,
-    TooltipModule
+    TooltipModule,
+    LoginGuard,
+    LoginComponent
   ],
   bootstrap: [AppComponent]
 })

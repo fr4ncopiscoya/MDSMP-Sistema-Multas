@@ -12,6 +12,8 @@ import { CertificadoComponent } from './pages/certificado/certificado.component'
 import { MultasComponent } from './pages/multas/multas.component';
 import { CrearMultaComponent } from './pages/crear-multa/crear-multa.component';
 import { EditarMultaComponent } from './pages/editar-multa/editar-multa.component';
+import { VerMultaComponent } from './pages/ver-multa/ver-multa.component';
+import { LoginGuard } from './guards/login.guard';
 
 
 export const ROUTES: Routes = [
@@ -27,9 +29,10 @@ export const ROUTES: Routes = [
     path: 'certificado/crear-certificado',
     component: CrearCertificadoComponent,
   },
-  { path: 'multas', component: MultasComponent },
-  { path: 'multas/crear-multa', component: CrearMultaComponent },
-  { path: 'multas/editar-multa/:id', component: EditarMultaComponent },
+  { path: 'multas', component: MultasComponent, canActivate: [AuthGuard] },
+  { path: 'multas/crear-multa', component: CrearMultaComponent, canActivate: [AuthGuard] },
+  { path: 'multas/editar-multa/:id', component: EditarMultaComponent, canActivate: [AuthGuard] },
+  { path: 'multas/ver-multa/:id', component: VerMultaComponent, canActivate: [AuthGuard] },
   { path: '', pathMatch: 'full', redirectTo: 'login' },
   { path: '**', pathMatch: 'full', redirectTo: 'login' },
 ];

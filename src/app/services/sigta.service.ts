@@ -60,18 +60,8 @@ export class SigtaService {
     return this.httpClientUtils
       .postQuery('sigta/contribuyente-nombre/listar', data)
       .pipe(
-        catchError((error: any) => {
-          // Manejo del error aquí
-          Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Something went wrong!',
-            footer: '<a href="#">Why do I have this issue?</a>',
-          });
-          console.log(error);
-
-          // Puedes reenviar el error para que lo maneje el componente si es necesario
-          throw error;
+        map((data) => {
+          return data
         })
       );
   }
@@ -149,6 +139,35 @@ export class SigtaService {
           return data;
         })
       );
+  }
+
+  listarUsuario(data: any) {
+    return this.httpClientUtils
+      .postQuery('sigta/usuario/listar', data)
+      .pipe(
+        map((data) => {
+          return data;
+        })
+      );
+  }
+  ingresarUsuario(data: any) {
+    return this.httpClientUtils
+      .postQuery('sigta/usuario/ingresar', data)
+      .pipe(
+        map((data) => {
+          return data;
+        })
+      );
+  }
+
+  getIp(){
+    return this.httpClientUtils
+    .getQueryIp()
+    .pipe(
+      map((data)=>{
+        return data
+      })
+    )
   }
 
 

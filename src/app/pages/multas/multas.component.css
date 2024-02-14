@@ -1,6 +1,11 @@
 table#tablaAplicacion {
   font-size: 12px; /* Ajusta el tamaño de la fuente según tus preferencias */
 }
+
+tbody td{
+  border: 1px solid #cecece;
+}
+
 .tddirecciondatatable {
   font-size: 12px;
 }
@@ -69,3 +74,4 @@ ng-select.form-control.input-sm.ng-select-searchable.ng-select-clearable.ng-sele
   display: flex;
   justify-content: space-between;
 }
+

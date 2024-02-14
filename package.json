@@ -47,6 +47,7 @@
     "ngx-spinner": "^16.0.2",
     "ngx-toastr": "^17.0.2",
     "ngx-treeview": "^10.0.2",
+    "os-browserify": "^0.3.0",
     "pdfmake": "^0.2.8",
     "rxjs": "~7.5.0",
     "save": "^2.9.0",

@@ -11,11 +11,17 @@ export class HttpClientUtils{
     urlApi: string = environment.apiBackEndURL;
     urlPide : string = environment.apiUtilitarios;
     urlApiMaster: string = environment.apiMaster;
+    urlApiIp: string = environment.apiGetIp;
 
     constructor(private httpClient: HttpClient, private router: Router){}
 
     getQuery(query: string){
         const url = `${this.urlApi + query}`;
+        return this.httpClient.get(url);
+    }
+
+    getQueryIp(){
+        const url = `${this.urlApiIp}`;
         return this.httpClient.get(url);
     }
 

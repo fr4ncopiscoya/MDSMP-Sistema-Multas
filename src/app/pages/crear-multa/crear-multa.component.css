@@ -93,3 +93,11 @@ textarea {
 .modal-bc{
   background-color: rgba(0, 0, 0, 0.473);
 }
+
+.background-none{
+  background-color: #e1e1e1;
+}
+
+.disabled-color{
+  background-color: #e1e1e1;
+}

@@ -9,6 +9,7 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { Subject } from 'rxjs';
 import { NgxSpinnerService } from 'ngx-spinner';
 import Swal from 'sweetalert2';
+import { HammerGestureConfig } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-crear-multa',
@@ -17,8 +18,8 @@ import Swal from 'sweetalert2';
 })
 export class CrearMultaComponent implements OnInit {
   @ViewChild(DataTableDirective, { static: false })
-  dtTriggerModal:any;
-  dtElementModal:any;
+  dtTriggerModal: any;
+  dtElementModal: any;
   modalRef?: BsModalRef;
   // dtElement: any;
   dtTrigger: Subject<void> = new Subject<void>();
@@ -51,7 +52,7 @@ export class CrearMultaComponent implements OnInit {
   datosAreaOficina: any;
   datosMedidaComp: any;
   datosGiroEstablecimiento: any;
-  datosReferencia:any;
+  datosReferencia: any;
   datosTipoEspecie: any;
 
   tieneActa = false;
@@ -75,7 +76,7 @@ export class CrearMultaComponent implements OnInit {
 
   ahora: any;
 
-  error:string = '';
+  error: string = '';
 
 
 
@@ -131,8 +132,10 @@ export class CrearMultaComponent implements OnInit {
     this.listarGiroEstablecimiento();
 
     const fechaActual = new Date().toISOString().split('T')[0];
-
+    console.log(fechaActual);
+    
     this.p_anypro = fechaActual
+    
   }
 
   ngOnDestroy(): void {
@@ -184,7 +187,7 @@ export class CrearMultaComponent implements OnInit {
   private errorSweetAlertDate() {
     Swal.fire({
       icon: 'info',
-      text: 'Por favor ingrese la Fecha Multa',
+      text: 'Por favor asegurese de ingresar Fecha Multa o digitar Código Infracción válido',
     });
   }
 
@@ -197,7 +200,6 @@ export class CrearMultaComponent implements OnInit {
   //   }
   // }
 
-  
   confirmClick(value: string) {
     this.ccontri = value;
     this.obtenerNombrePorCod(value);
@@ -211,7 +213,7 @@ export class CrearMultaComponent implements OnInit {
   }
 
   asignarPerfil(template: TemplateRef<any>) {
-    this.modalRef = this.modalService.show(template, { id: 1 , class: 'modal-lg'});
+    this.modalRef = this.modalService.show(template, { id: 1, class: 'modal-lg' });
   }
 
   onSelectionChangeGiro(event: any) {
@@ -302,25 +304,58 @@ export class CrearMultaComponent implements OnInit {
 
     }
   }
+  validarCodInfra() {
+    if (this.p_codinf == '') {
+      // this.errorSweetAlertDate();
+      // this.p_codinf = '';
+      this.dareas = '';
+      this.nmonto = '';
+      this.r_descri = '';
 
-  obtenerAreaPorCod(value:any) {
+    } else {
+      console.log("no hagas nada");
+
+    }
+  }
+  
+  goBackToMultas(){
+    setTimeout(() => {
+      
+    }, 4000);
+    if(this.error = "Notificacion Actualizada Correctamente" ){
+      this.router.navigateByUrl('/multas')
+    }
+  }
+
+  removerClase() {
+    const nmontoAsNumber = parseFloat(this.nmonto);
+    const disabledColor = document.getElementById("montoinfra") as HTMLInputElement
+    if (nmontoAsNumber <= 0) {
+      disabledColor.classList.remove('disabled-color');
+      disabledColor.removeAttribute('disabled')
+      disabledColor.focus();
+
+    }
+  }
+
+  obtenerAreaPorCod(value: any) {
     const p_anyproDate = new Date(this.p_anypro).getFullYear();
 
     let post = {
       p_anypro: p_anyproDate.toString(),
       p_codinf: this.p_codinf,
-      r_descri: this.r_descri,
-      p_arecod: this.carea
+      // r_descri: this.r_descri,
+      // p_arecod: this.carea
     };
 
     console.log(post);
 
     this.spinner.show();
-
     this.sigtaService.obtenerDescripcionPorCod(post).subscribe({
       next: (data: any) => {
         this.spinner.hide();
-        if (this.p_anypro == '') {
+
+        if (this.p_anypro == '' || this.p_codinf == '') {
           this.errorSweetAlertDate();
           this.p_codinf = '';
           this.dareas = '';
@@ -333,7 +368,9 @@ export class CrearMultaComponent implements OnInit {
             this.carea = data[0].carea;
             this.nmonto = data[0].nmontot;
             this.r_descri = data[0].r_descri;
-            this.r_codint = data[0].r_codint;
+            this.p_codinf = data[0].r_codint;
+            this.removerClase();
+            this.validarCodInfra();
           } else {
             this.errorSweetAlertCode();
           }
@@ -353,7 +390,7 @@ export class CrearMultaComponent implements OnInit {
   obtenerNombrePorCod(value: any) {
     let post = {
       p_codcon: this.ccontri,
-      cnombre: this.cnombre
+      // cnombre: this.cnombre
     };
 
     this.spinner.show();
@@ -361,23 +398,22 @@ export class CrearMultaComponent implements OnInit {
     this.sigtaService.obtenerNombrePorCod(post).subscribe({
       next: (data: any) => {
         this.spinner.hide();
-        console.log(data);
 
-        if (this.ccontri = '') {
-          console.log("Esta vacio: " + this.ccontri);
+        if (this.ccontri == '') {
+          console.log("nombrePorCod");
+
+          this.errorSweetAlertDate();
 
         } else {
           if (data && data.length > 0 && data[0].cnombre) {
             this.cnombre = data[0].cnombre;
             this.dpredio = data[0].dfiscal;
             this.ccontri = data[0].ccontri;
-
-            console.log(this.dpredio);
-
           } else {
             this.errorSweetAlertCode();
           }
         }
+        console.log(data);
 
       },
       error: (error: any) => {
@@ -457,14 +493,14 @@ export class CrearMultaComponent implements OnInit {
   haburb: string = '' //  --Nombre Habilitacion Urbana(Urbanizacion)
   nroActaConstatacion: string = '' // -- Numero Acta Constatacion ===
   chkact = 0;
-  
-  registrarInfraccion(){
+
+  registrarInfraccion() {
     let post = {
       nnumnot: this.nnumnot,
       dfecnot: this.p_anypro,
       ccontri: this.ccontri,
-      cmulta: this.cmulta,
-      crefere: this.crefere,
+      cmulta: this.p_codinf,
+      crefere: this.p_desubi,
       cusutra: this.cusutra,
       csancio: this.csancio,
       mobserv: this.mobserv,
@@ -481,7 +517,7 @@ export class CrearMultaComponent implements OnInit {
       desgiro: this.desgiro,
       f_ejecucion: this.f_ejecucion,
       via: this.via,
-      haburb: this.haburb,
+      haburb: this.p_desubi,
       nroActaConstatacion: this.nroActaConstatacion
     };
 
@@ -497,12 +533,14 @@ export class CrearMultaComponent implements OnInit {
           this.error = data[0].mensa;
           const errorCode = data[0].error;
           console.log(this.error);
-  
+
           // Selecciona el icono según el código de error
           const icon = this.getIconByErrorCode(errorCode);
-  
+
           // Muestra el SweetAlert con el icono y el mensaje de error
           this.errorSweetAlertCode(icon);
+          this.goBackToMultas()
+
           // window.location.reload();
         } else {
           this.errorSweetAlertCode();

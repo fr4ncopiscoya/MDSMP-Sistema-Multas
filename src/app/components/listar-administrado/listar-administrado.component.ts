@@ -12,6 +12,7 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 })
 export class ListarAdministradoComponent implements OnInit, AfterViewInit, OnDestroy {
 
+  modalRefs: { [key: string]: BsModalRef } = {}; // Objeto para almacenar los modalRefs
   modalRef?: BsModalRef;
 
   //parámetros de búsqueda
@@ -20,6 +21,7 @@ export class ListarAdministradoComponent implements OnInit, AfterViewInit, OnDes
   datosContribuyente: any;
 
   @ViewChild(DataTableDirective, { static: false }) dtElementModal!: DataTableDirective;
+
 
   @Output() confirmClicked = new EventEmitter<any>();
 
@@ -46,7 +48,7 @@ export class ListarAdministradoComponent implements OnInit, AfterViewInit, OnDes
 
   confirmClick(value: string) {
     this.p_nomcontri = value;
-    this.busContribuyente();
+    this.busContribuyente(value);
     this.modalService.hide(1);
   }
 
@@ -61,12 +63,18 @@ export class ListarAdministradoComponent implements OnInit, AfterViewInit, OnDes
     this.confirmClicked.emit(id);
   }
 
+  cerrarModal(modalKey: string) {
+    if (this.modalRefs[modalKey]) {
+      this.modalRefs[modalKey].hide(); // Cierra el modal si está definido
+    }
+  }
+
   modalDescri(template: TemplateRef<any>) {
-    this.modalRef = this.modalService.show(template, { id: 2 , class: 'modal-xl'});
+    this.modalRefs['listar-descri'] = this.modalService.show(template, { id: 2, class: 'modal-xl',backdrop: 'static', keyboard: false });
     this.modalService.hide(1);
   }
 
-  busContribuyente() {
+  busContribuyente(value:any) {
     let post = {
       p_nomcontri: this.p_nomcontri,
       p_mensaje: this.p_mensaje,
