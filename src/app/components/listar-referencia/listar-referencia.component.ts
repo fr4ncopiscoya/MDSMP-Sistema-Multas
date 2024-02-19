@@ -56,40 +56,11 @@ export class ListarReferenciaComponent implements OnInit, AfterViewInit, OnDestr
     this.dtTriggerModal.next();
   }
 
-  emitir(data:any): void {
+  emitir(data: any): void {
     this.confirmClicked.emit(data);
   }
 
-  // busContribuyente() {
-  //   let post = {
-  //     p_nomcontri: this.p_nomcontri,
-  //     p_mensaje: this.p_mensaje,
-  //   };
-
-  //   this.spinner.show();
-
-  //   console.log(post);
-  //   this.sigtaService.busContribuyente(post).subscribe({
-  //     next: (data: any) => {
-  //       this.spinner.hide();
-  //       console.log();
-
-  //       this.datosDescripcion = data;
-  //       console.log("entra")
-  //       this.dtElementModal.dtInstance.then((dtInstance: DataTables.Api) => {
-  //         dtInstance.destroy();
-  //         this.dtTriggerModal.next();
-  //       });
-  //     },
-  //     error: (error: any) => {
-  //       console.log(error);
-  //       this.spinner.hide();
-  //     },
-  //   });
-  // }
-
-
-  obtenerReferencia() {
+  obtenerReferencia(value: any) {
 
     let post = {
       p_desubi: this.p_desubi,
@@ -97,40 +68,46 @@ export class ListarReferenciaComponent implements OnInit, AfterViewInit, OnDestr
 
     console.log(post);
 
-    this.spinner.show();
+    if (this.p_desubi.length > 2) {
 
-    this.sigtaService.listarReferencia(post).subscribe({
-      next: (data: any) => {
-        this.spinner.hide();
-        console.log(data);
-        this.datosReferencia = data;
-        this.via = data[0].cdvia;
-        this.haburb = data[0].cpbdo;
+      this.spinner.show();
 
-        this.ccodurb = data[0].cpoblad;
-        this.dtipurb = data[0].dtippob;
-        // this.dnomurb = data[0].dpoblad;
-        this.ccodvia = data[0].v_codi;
-        this.dtipvia = data[0].v_tipo;
-        // this.dnomvia= data[0].cdvia;
-        console.log(this.ccodurb);
-        console.log(this.dtipurb);
-        console.log(this.ccodvia);
-        console.log(this.dtipvia);
-        
+      this.sigtaService.listarReferencia(post).subscribe({
+        next: (data: any) => {
+          this.spinner.hide();
+          console.log(data);
+          this.datosReferencia = data;
+          this.via = data[0].cdvia;
+          this.haburb = data[0].cpbdo;
 
-        this.dtElementModal.dtInstance.then((dtInstance: DataTables.Api) => {
-          dtInstance.destroy();
-          this.dtTriggerModal.next();
-        });
+          this.ccodurb = data[0].cpoblad;
+          this.dtipurb = data[0].dtippob;
+          // this.dnomurb = data[0].dpoblad;
+          this.ccodvia = data[0].v_codi;
+          this.dtipvia = data[0].v_tipo;
+          // this.dnomvia= data[0].cdvia;
+          console.log(this.ccodurb);
+          console.log(this.dtipurb);
+          console.log(this.ccodvia);
+          console.log(this.dtipvia);
 
-      },
-      error: (error: any) => {
-        this.spinner.hide();
-        // this.errorSweetAlertCode();
-        console.log(error);
-      },
-    });
+
+          this.dtElementModal.dtInstance.then((dtInstance: DataTables.Api) => {
+            dtInstance.destroy();
+            this.dtTriggerModal.next();
+          });
+
+        },
+        error: (error: any) => {
+          this.spinner.hide();
+          // this.errorSweetAlertCode();
+          console.log(error);
+        },
+      });
+    } else {
+      console.log("cantidad-caracteres");
+
+    }
   }
 
 }

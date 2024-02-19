@@ -17,7 +17,11 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
   styleUrls: ['./editar-multa.component.css']
 })
 export class EditarMultaComponent implements OnInit {
+
   @ViewChild(DataTableDirective, { static: false })
+
+  modalRefs: { [key: string]: BsModalRef } = {}; // Objeto para almacenar los modalRefs
+
   dtTriggerModal: any;
   dtElementModal: any;
   modalRef?: BsModalRef;
@@ -159,8 +163,15 @@ export class EditarMultaComponent implements OnInit {
     this.dtTrigger.next();
   }
 
-  asignarPerfil(template: TemplateRef<any>) {
-    this.modalRef = this.modalService.show(template, { id: 1, class: 'modal-lg' });
+
+  cerrarModal(modalKey: string) {
+    if (this.modalRefs[modalKey]) {
+      this.modalRefs[modalKey].hide(); // Cierra el modal si está definido
+    }
+  }
+
+  modalRefere(templateRefere: TemplateRef<any>) {
+    this.modalRefs['listar-descri'] = this.modalService.show(templateRefere, { id: 3, class: 'modal-lg', backdrop: 'static' });
   }
 
   descargaExcel() {
@@ -177,13 +188,31 @@ export class EditarMultaComponent implements OnInit {
     }
   }
 
-  goBackToMultas(){
-    setTimeout(() => {
-      
-    }, 4000);
-    if(this.error = "Notificacion Actualizada Correctamente" ){
-      this.router.navigateByUrl('/multas')
+  removerClase() {
+    const nmontoAsNumber = parseFloat(this.nmonto);
+    const disabledColor = document.getElementById("montoinfra") as HTMLInputElement
+    if (nmontoAsNumber <= 0) {
+      disabledColor.classList.remove('disabled-color');
+      disabledColor.removeAttribute('disabled')
+      disabledColor.focus();
+    }else{
+      disabledColor.classList.add('disabled-color');
+      disabledColor.setAttribute('disabled', 'disabled')
     }
+  }
+
+  goBackToMultas() {
+    setTimeout(() => {
+      switch (this.error) {
+        case 'Notificacion Grabada Correctamente':
+        case 'Notificacion Actualizada Correctamente':
+          this.router.navigateByUrl('/multas');
+          break;
+        default:
+          // Handle other cases if needed
+          break;
+      }
+    }, 1000);
   }
 
   private getIconByErrorCode(errorCode: string): 'error' | 'warning' | 'info' | 'success' {
@@ -282,10 +311,10 @@ export class EditarMultaComponent implements OnInit {
           this.dfecres = data[0].dfectra
           this.dsancio = data[0].dsancio
           this.chkact = data[0].chkact
-          this.nroActaConstatacion = data [0].ACTA_CONSTATACION 
+          this.nroActaConstatacion = data[0].ACTA_CONSTATACION
           this.f_ejecucion = data[0].f_ejecucion
-          this.giro = data [0].giro
-          this.desgiro= data [0].OTROS_GIROS
+          this.giro = data[0].giro
+          this.desgiro = data[0].OTROS_GIROS
           this.cmulta = data[0].cmulta
           this.nmonto = data[0].nmonto
           this.dareas = data[0].dareas
@@ -353,9 +382,9 @@ export class EditarMultaComponent implements OnInit {
   }
 
   validarFechaMulta() {
-    if (this.p_anypro == '') {
+    if (this.p_anypro === '') {
       // this.errorSweetAlertDate();
-      this.p_codinf = '';
+      this.cmulta = '';
       this.dareas = '';
       this.nmonto = '';
       this.dmulta = '';
@@ -363,7 +392,7 @@ export class EditarMultaComponent implements OnInit {
     }
   }
 
-  obtenerAreaPorCod(value:any) {
+  obtenerAreaPorCod(value: any) {
     const p_anyproDate = new Date(this.p_anypro).getFullYear();
 
     let post = {
@@ -394,6 +423,7 @@ export class EditarMultaComponent implements OnInit {
             this.nmonto = data[0].nmontot;
             this.dmulta = data[0].r_descri;
             this.r_codint = data[0].r_codint;
+            this.removerClase();
           } else {
             this.errorSweetAlertCode();
           }
@@ -509,9 +539,10 @@ export class EditarMultaComponent implements OnInit {
       via: this.via,
       haburb: this.haburb,
       nroActaConstatacion: this.nroActaConstatacion
-      
+
     };
     console.log(post);
+    console.log(this.nmonto);
 
     this.spinner.show();
 

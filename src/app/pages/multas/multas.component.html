@@ -33,7 +33,7 @@
             <div class="" style="display: flex; align-items: center">
               <input id="cnombre" disabled="" [(ngModel)]="cnombre" oninput="this.value = this.value.toUpperCase()"
                 type="text" class="form-control form-control-sm" style="background-color: #e1e1e1" />
-              <button type="button" title="Buscar" (click)="asignarPerfil(template)" class="btn btn-primary btn-sm"
+              <button type="button" title="Buscar" (click)="listarAdm(template)" class="btn btn-primary btn-sm"
                 style="margin-left: 5px">
                 <i class="ri-search-line"></i>
               </button>
@@ -83,12 +83,6 @@
               </button>
             </div>
             <div class="col-sm-auto mb-2-5">
-              <button (click)="limpiarCampos()" type="button" class="btn btn-info btn-label btn-sm">
-                <i class=" ri-brush-2-line label-icon align-middle fs-16 me-2"></i>
-                Limpiar
-              </button>
-            </div>
-            <div class="col-sm-auto mb-2-5">
               <button type="button" [routerLink]="['/multas/crear-multa']" class="btn btn-primary btn-label btn-sm">
                 <i class="ri-file-2-fill label-icon align-middle fs-16 me-2"></i>
                 Nuevo
@@ -98,6 +92,12 @@
               <button type="button" class="btn btn-success btn-label btn-sm" id="ExportarExcel"
                 (click)="descargaExcel()">
                 <i class="ri-file-excel-2-fill label-icon align-middle fs-16 me-2"></i>Excel
+              </button>
+            </div>
+            <div class="col-sm-auto mb-2-5">
+              <button (click)="limpiarCampos()" type="button" class="btn btn-info btn-label btn-sm">
+                <i class=" ri-brush-2-line label-icon align-middle fs-16 me-2"></i>
+                Limpiar
               </button>
             </div>
             <!-- <div class="col-sm-auto mb-2-5">
@@ -167,11 +167,11 @@
                             class="btn btn-sm btn-outline-primary btn-icon" data-bs-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false">M</button>
                           <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">Registrar</a>
+                            <!-- <a class="dropdown-item" href="#">Registrar</a> -->
                             <a class="dropdown-item" (click)="editarDatosMulta(data.id_corrl)">Editar</a>
                             <a class="dropdown-item" (click)="verDatosMulta(data.id_corrl)">Ver</a>
-                            <a class="dropdown-item" href="#">Anular</a>
-                            <a class="dropdown-item" href="#">Informe final</a>
+                            <a class="dropdown-item" >Anular</a>
+                            <a class="dropdown-item" >Informe final</a>
                           </div>
 
                           <button type="button" class="btn btn-sm btn-outline-danger btn-icon" data-bs-toggle="dropdown"
@@ -289,7 +289,7 @@
         <div class="card">
           <div class="card-header" style="display: flex; justify-content: space-between;">
             <h4 class="card-title mb-0">Registrar Resolución</h4>
-            <a class="" style="cursor: pointer;"> <i style="font-size: 1.50rem; " class=" ri-close-fill"></i></a>
+            <a class="" (click)="cerrarModal('modalRegistrarRes')" style="cursor: pointer;"> <i style="font-size: 1.50rem; " class=" ri-close-fill"></i></a>
           </div>
           <div class="card-body">
             <div class="row">
@@ -358,9 +358,9 @@
     <form [formGroup]="formAnularResolucion" (ngSubmit)="submitAnularResolucion()">
       <div class="col-lg-12">
         <div class="card">
-          <div class="card-header">
-            <h4 class="card-title mb-0" style="display: flex; justify-content: space-between;">Anular Resolución</h4>
-            <a class="" style="cursor: pointer;"> <i style="font-size: 1.50rem; " class=" ri-close-fill"></i></a>
+          <div class="card-header" style="display: flex; justify-content: space-between;">
+            <h4 class="card-title mb-0" >Anular Resolución</h4>
+            <a class="" (click)="cerrarModal('modalAnularRes')" style="cursor: pointer;"> <i style="font-size: 1.50rem; " class=" ri-close-fill"></i></a>
           </div>
           <div class="card-body">
             <div class="row">

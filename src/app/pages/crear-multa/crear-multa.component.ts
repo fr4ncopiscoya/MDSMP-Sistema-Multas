@@ -21,6 +21,7 @@ export class CrearMultaComponent implements OnInit {
   dtTriggerModal: any;
   dtElementModal: any;
   modalRef?: BsModalRef;
+  modalRefs: { [key: string]: BsModalRef } = {}; // Objeto para almacenar los modalRefs
   // dtElement: any;
   dtTrigger: Subject<void> = new Subject<void>();
   dtOptions: any = {
@@ -78,40 +79,6 @@ export class CrearMultaComponent implements OnInit {
 
   error: string = '';
 
-
-
-  // @nnumnot --Numero de Notificacion
-  // @dfecnot smalldatetime = '01/01/1900 00:00:00', --Fecha de Notificacion
-  // @ccontri--Codigo Administrado
-  // @cpredio--Pasar en Blanco
-  // @cmulta(7) ='', --Codigo Multa o Infraccion
-  // @nmonto	 numeric(12, 2) = 0, --Monto Multa o Infraccion
-  // @dfecres smalldatetime = '01/01/1900 00:00:00', --Fecha de Resolucion
-  // @cnumres--Numero de Resolucion
-  // @cofisan(3) ='', --Area propietaria de la multa
-  // @dfecrec smalldatetime = '01/01/1900 00:00:00', --Fecha de Recepcion
-  // @crefere(80) ='', --Referencia
-  // @cusutra(3) ='', --Usuario Transaccion
-  // @csancio(2) ='', --Medida Complementaria
-  // @mobserv(500) ='', --Observaciones
-  // @nreinci int = 0, --Reincidencia
-  // @manzana(15) = '', --Manzana
-  // @lote(15) = '', --Lote
-  // @nro_fiscal(15) = '', --Numero
-  // @dpto_int(15) = '', --Departamento o Interior
-  // @referencia(150) = '', --Referencia
-  // @ins_municipal(250) ='', --Inspector que impone la multa
-  // @nro_acta(20) ='', --Numero de Acta
-  // @nro_informe(20) ='', --Numero de Informe
-  // @giro(8) = '', --Codigo Giro
-  // @f_ejecucion smalldatetime = '01/01/1900 00:00:00', --Fecha Ejecucion
-  // @f_registro smalldatetime = '01/01/1900 00:00:00', --Fecha Registro
-  // @via(250) = '', --Nombre Via o Calle
-  // @haburb(250) = '', --Nombre Habilitacion Urbana(Urbanizacion)
-  // @nroActaConstatacion(15) = '' -- Numero Acta Constatacion
-
-
-
   constructor(
     private appComponent: AppComponent,
     private serviceMaster: MasterService,
@@ -133,9 +100,9 @@ export class CrearMultaComponent implements OnInit {
 
     const fechaActual = new Date().toISOString().split('T')[0];
     console.log(fechaActual);
-    
+
     this.p_anypro = fechaActual
-    
+
   }
 
   ngOnDestroy(): void {
@@ -151,6 +118,12 @@ export class CrearMultaComponent implements OnInit {
       '#tablaAplicacion_wrapper .dt-buttons .dt-button.buttons-excel.buttons-html5'
     ) as HTMLButtonElement;
     btnExcel.click();
+  }
+
+  cerrarModal(modalKey: string) {
+    if (this.modalRefs[modalKey]) {
+      this.modalRefs[modalKey].hide(); // Cierra el modal si está definido
+    }
   }
 
   validarNumero(event: any): void {
@@ -177,10 +150,17 @@ export class CrearMultaComponent implements OnInit {
     }
   }
 
-  private errorSweetAlertCode(icon: 'error' | 'warning' | 'info' | 'success' = 'error') {
+  private errorSweetAlert(icon: 'error' | 'warning' | 'info' | 'success' = 'error') {
     Swal.fire({
       icon: icon,
       text: this.error || 'Hubo un error al procesar la solicitud',
+    });
+  }
+
+  private errorSweetAlertCode() {
+    Swal.fire({
+      icon: 'error',
+      text: 'Por favor ingrese un código válido',
     });
   }
 
@@ -190,15 +170,6 @@ export class CrearMultaComponent implements OnInit {
       text: 'Por favor asegurese de ingresar Fecha Multa o digitar Código Infracción válido',
     });
   }
-
-  // changeDate() {
-  //   if (this.p_anypro = '') {
-  //     this.p_codinf = '';
-  //     this.dareas = '';
-  //     this.nmonto = '';
-  //     this.r_descri = '';
-  //   }
-  // }
 
   confirmClick(value: string) {
     this.ccontri = value;
@@ -213,7 +184,11 @@ export class CrearMultaComponent implements OnInit {
   }
 
   asignarPerfil(template: TemplateRef<any>) {
-    this.modalRef = this.modalService.show(template, { id: 1, class: 'modal-lg' });
+    this.modalRefs['listar-persona'] = this.modalService.show(template, { id: 1, class: 'modal-lg', backdrop: 'static', keyboard: false });
+  }
+
+  modalRefere(template: TemplateRef<any>) {
+    this.modalRefs['listar-descri'] = this.modalService.show(template, { id: 2, class: 'modal-lg', backdrop: 'static', keyboard: false });
   }
 
   onSelectionChangeGiro(event: any) {
@@ -234,23 +209,6 @@ export class CrearMultaComponent implements OnInit {
   getMaxDate(): string {
     return new Date().toISOString().split('T')[0];
   }
-
-  // listarAreaOficina() {
-  //   let post = {
-
-  //   };
-
-  //   this.sigtaService.listarAreaOficina(post).subscribe({
-  //     next: (data: any) => {
-  //       console.log(data);
-
-  //       this.datosAreaOficina = data;
-  //     },
-  //     error: (error: any) => {
-  //       console.log(error);
-  //     },
-  //   });
-  // }
 
   listarGiroEstablecimiento() {
     let post = {
@@ -317,15 +275,21 @@ export class CrearMultaComponent implements OnInit {
 
     }
   }
-  
-  goBackToMultas(){
+
+  goBackToMultas() {
     setTimeout(() => {
-      
-    }, 4000);
-    if(this.error = "Notificacion Actualizada Correctamente" ){
-      this.router.navigateByUrl('/multas')
-    }
+      switch (this.error) {
+        case 'Notificacion Grabada Correctamente':
+        case 'Notificacion Actualizada Correctamente':
+          this.router.navigateByUrl('/multas');
+          break;
+        default:
+          // Handle other cases if needed
+          break;
+      }
+    }, 1000);
   }
+
 
   removerClase() {
     const nmontoAsNumber = parseFloat(this.nmonto);
@@ -334,7 +298,9 @@ export class CrearMultaComponent implements OnInit {
       disabledColor.classList.remove('disabled-color');
       disabledColor.removeAttribute('disabled')
       disabledColor.focus();
-
+    } else {
+      disabledColor.classList.add('disabled-color');
+      disabledColor.setAttribute('disabled', 'disabled')
     }
   }
 
@@ -348,43 +314,47 @@ export class CrearMultaComponent implements OnInit {
       // p_arecod: this.carea
     };
 
-    console.log(post);
+    if(this.p_codinf != ''){
 
-    this.spinner.show();
-    this.sigtaService.obtenerDescripcionPorCod(post).subscribe({
-      next: (data: any) => {
-        this.spinner.hide();
+      console.log(post);
+  
+      this.spinner.show();
+      this.sigtaService.obtenerDescripcionPorCod(post).subscribe({
+        next: (data: any) => {
+          this.spinner.hide();
+  
+          // if (this.p_anypro == '' || this.p_codinf == '') {
+          //   this.errorSweetAlertDate();
+          //   this.p_codinf = '';
+          //   this.dareas = '';
+          //   this.nmonto = '';
+          //   this.r_descri = '';
+  
+          // } else {
+            if (data && data.length > 0) {
+              this.dareas = data[0].dareas;
+              this.carea = data[0].carea;
+              this.nmonto = data[0].nmontot;
+              this.r_descri = data[0].r_descri;
+              this.p_codinf = data[0].r_codint;
+              this.removerClase();
+              this.validarCodInfra();
+            } else {
+              this.errorSweetAlertCode();
+            }
+          // }
+  
+  
+          console.log(data);
+        },
+        error: (error: any) => {
+          this.spinner.hide();
+          this.errorSweetAlertCode();
+          console.log(error);
+        },
+      });
+    }
 
-        if (this.p_anypro == '' || this.p_codinf == '') {
-          this.errorSweetAlertDate();
-          this.p_codinf = '';
-          this.dareas = '';
-          this.nmonto = '';
-          this.r_descri = '';
-
-        } else {
-          if (data && data.length > 0 && data[0].dareas) {
-            this.dareas = data[0].dareas;
-            this.carea = data[0].carea;
-            this.nmonto = data[0].nmontot;
-            this.r_descri = data[0].r_descri;
-            this.p_codinf = data[0].r_codint;
-            this.removerClase();
-            this.validarCodInfra();
-          } else {
-            this.errorSweetAlertCode();
-          }
-        }
-
-
-        console.log(data);
-      },
-      error: (error: any) => {
-        this.spinner.hide();
-        this.errorSweetAlertCode();
-        console.log(error);
-      },
-    });
   }
 
   obtenerNombrePorCod(value: any) {
@@ -393,18 +363,15 @@ export class CrearMultaComponent implements OnInit {
       // cnombre: this.cnombre
     };
 
-    this.spinner.show();
+    if (this.ccontri != '') {
 
-    this.sigtaService.obtenerNombrePorCod(post).subscribe({
-      next: (data: any) => {
-        this.spinner.hide();
+      this.spinner.show();
 
-        if (this.ccontri == '') {
-          console.log("nombrePorCod");
+      this.sigtaService.obtenerNombrePorCod(post).subscribe({
+        next: (data: any) => {
+          this.spinner.hide();
 
-          this.errorSweetAlertDate();
 
-        } else {
           if (data && data.length > 0 && data[0].cnombre) {
             this.cnombre = data[0].cnombre;
             this.dpredio = data[0].dfiscal;
@@ -412,16 +379,18 @@ export class CrearMultaComponent implements OnInit {
           } else {
             this.errorSweetAlertCode();
           }
-        }
-        console.log(data);
 
-      },
-      error: (error: any) => {
-        this.spinner.hide();
-        this.errorSweetAlertCode();
-        console.log(error);
-      },
-    });
+          console.log(data);
+
+        },
+        error: (error: any) => {
+          this.spinner.hide();
+          this.errorSweetAlertCode();
+          console.log(error);
+        },
+      });
+    }
+
   }
 
   obtenerReferencia() {
@@ -431,31 +400,35 @@ export class CrearMultaComponent implements OnInit {
 
     console.log(post);
 
-    this.spinner.show();
+    if(this.p_desubi != ''){
 
-    this.sigtaService.listarReferencia(post).subscribe({
-      next: (data: any) => {
-        this.spinner.hide();
-        this.datosReferencia = data;
-        console.log(data);
-        // this.manzana = data[0].cpostal;
-        this.via = data[0].cdvia;
-        this.haburb = data[0].cpbdo
-        console.log(this.via);
+      this.spinner.show();
+  
+      this.sigtaService.listarReferencia(post).subscribe({
+        next: (data: any) => {
+          this.spinner.hide();
+          this.datosReferencia = data;
+          console.log(data);
+          // this.manzana = data[0].cpostal;
+          this.via = data[0].cdvia;
+          this.haburb = data[0].cpbdo
+          console.log(this.via);
+  
+  
+          this.dtElementModal.dtInstance.then((dtInstance: DataTables.Api) => {
+            dtInstance.destroy();
+            this.dtTriggerModal.next();
+          });
+  
+        },
+        error: (error: any) => {
+          this.spinner.hide();
+          // this.errorSweetAlert();
+          console.log(error);
+        },
+      });
+    }
 
-
-        this.dtElementModal.dtInstance.then((dtInstance: DataTables.Api) => {
-          dtInstance.destroy();
-          this.dtTriggerModal.next();
-        });
-
-      },
-      error: (error: any) => {
-        this.spinner.hide();
-        // this.errorSweetAlertCode();
-        console.log(error);
-      },
-    });
   }
 
   //Registrar multa
@@ -518,7 +491,8 @@ export class CrearMultaComponent implements OnInit {
       f_ejecucion: this.f_ejecucion,
       via: this.via,
       haburb: this.p_desubi,
-      nroActaConstatacion: this.nroActaConstatacion
+      nroActaConstatacion: this.nroActaConstatacion,
+      nmonto: this.nmonto
     };
 
     this.spinner.show();
@@ -538,17 +512,17 @@ export class CrearMultaComponent implements OnInit {
           const icon = this.getIconByErrorCode(errorCode);
 
           // Muestra el SweetAlert con el icono y el mensaje de error
-          this.errorSweetAlertCode(icon);
+          this.errorSweetAlert(icon);
           this.goBackToMultas()
 
           // window.location.reload();
         } else {
-          this.errorSweetAlertCode();
+          this.errorSweetAlert();
         }
       },
       error: (error: any) => {
         this.spinner.hide();
-        this.errorSweetAlertCode();
+        this.errorSweetAlert();
         console.log(error);
       },
     });

@@ -3,9 +3,9 @@
         <div class="mb-2-5 col-lg-12">
             <label for="" class="form-label col-form-label-sm">Descripción</label>
             <div class="" style="display: flex; align-items: center">
-                <input [(ngModel)]="p_desubi" type="text" class="form-control form-control-sm" id="employeeUrl"
+                <input #inputReferencia [(ngModel)]="p_desubi" (keydown.tab)="obtenerReferencia(inputReferencia.value)" (keyup.enter)="obtenerReferencia(inputReferencia.value)"  type="text" class="form-control form-control-sm" id="employeeUrl"
                     oninput="this.value = this.value.toUpperCase()" style="margin-right: 5px" />
-                <button type="button" class="btn btn-primary btn-label btn-sm" (click)="obtenerReferencia()">
+                <button type="button" class="btn btn-primary btn-label btn-sm" (click)="obtenerReferencia(inputReferencia.value)">
                     <i class="ri-search-line label-icon align-middle fs-16 me-2"></i>
                     Consultar
                 </button>

@@ -5,6 +5,7 @@ import { DataTableDirective } from 'angular-datatables';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import Swal from 'sweetalert2';
+import { ListarAdministradoComponent } from '../listar-administrado/listar-administrado.component';
 
 @Component({
   selector: 'app-crear-administrado',
@@ -163,14 +164,20 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
     }
   }
 
+  confirmClick(value: string) {
+    // this.p_codcon = value;
+    // this.obtenerNombrePorCod(value);
+    // this.modalService.hide(1);
+  }
+
   modalDescri(template: TemplateRef<any>) {
     this.modalRefs['listar-urba'] = this.modalService.show(template, { id: 1, class: ' modal-lg second', backdrop: 'static', keyboard: false });
     const secondModalBackdrop = document.getElementsByClassName('second')[0]?.parentElement;
     if (secondModalBackdrop) {
-        secondModalBackdrop.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+      secondModalBackdrop.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
     }
     console.log("modal-descri-ubi");
-}
+  }
 
 
   ChangeTipoDoc(event: any) {
@@ -187,6 +194,20 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
   ChangeTipoDistrito(event: any) {
     this.cpostal = event.CPOSTAL
     console.log(this.cpostal)
+  }
+
+  OnChangeNumberToString(event: any): void {
+    switch (event.dcodtip) {
+      case "DNI":
+        this.validarNumero(event);
+        break;
+      case "RUC":
+        this.validarNumero(event);
+        break;
+      default:
+        // En caso de otros tipos de documento
+        break;
+    }
   }
 
 
@@ -303,6 +324,8 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
     });
   }
 
+  template: any
+
   registrarAdministrado() {
     let post = {
       ccontri: this.ccontri,
@@ -356,6 +379,18 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
         } else {
           this.errorSweetAlertCode();
         }
+
+        if (this.error === "Registrado correctamente") {
+          if (this.modalService) {
+            setTimeout(() => {
+              this.modalService.hide(2);
+            }, 1000);
+          }
+          // Assuming 'template' is a valid reference to a template
+          // this.modalRefs['listar-administrado'] = this.modalService.show(this.template, { id: 1, class: ' modal-lg second', backdrop: 'static', keyboard: false });
+        }
+
+
       },
       error: (error: any) => {
         this.spinner.hide();
@@ -364,6 +399,7 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
       },
     });
   }
+
 
 
 

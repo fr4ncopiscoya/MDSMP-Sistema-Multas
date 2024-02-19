@@ -42,54 +42,36 @@ export class MultasComponent implements OnInit {
   dtOptionsModal: DataTables.Settings = {};
 
 
-  // dtOptions: any = {
-  //   columnDefs: [
-  //     { width: '1px', targets: 0 },
-  //     { width: '2px', targets: 1 },
-  //     { width: '400px', targets: 2 },
-  //     { width: '2px', targets: 3 },
-  //     { width: '4px', targets: 4 },
-  //     { width: '2px', targets: 5 },
-  //     { width: '2px', targets: 6 },
-  //     { width: '10px', targets: 7 },
-  //     // { width: '2px', targets: 8 },
-  //   ],
-  //   scrollCollapse: true,
-  //   scrollY: '300px',
-  //   dom: 'Bfrtip',
 
-  //   paging: true,
-  //   language: {
-  //     url: '//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json',
-  //   },
+  /// ================== VARIABLES ============================
 
-  // };
-
-  //Variables Globales
-
+  //DATA PARA ALMACENAR
+  data: any;
+  dataMulta: any;
   datosMulta: any;
   datosContribuyente: any;
   datosNombreContribuyente: any = [];
   datosDescripcion: any;
+
+  // BUSQUEDA POR CODIGO CONTRIBUYENTE
   cnombre: string = '';
   r_descri: string = '';
 
-  data: any;
+  //BUSQUEDA POR CODIGO DE INFRACCION
+  p_anypro: string = '';
+  p_codinf: string = '';
 
+  //BUSQUEDA DE CONTRIBUYENTE (MODAL)
+  p_nomcontri: string = '';
+  p_mensaje: string = '';
+
+  //REGISTRO DE MULTA
   p_idcorr: number = 0;
   p_codcon: string = '';
   p_numnot: string = '';
   p_desinf: string = '';
   p_fecini: string = '';
   p_fecfin: string = '';
-
-  p_anypro: string = '';
-  p_codinf: string = '';
-
-  p_nomcontri: string = '';
-  p_mensaje: string = '';
-
-  dataMulta: any;
 
   //FORMULARIO RESOLUCION
   formResolucion!: FormGroup;
@@ -104,6 +86,7 @@ export class MultasComponent implements OnInit {
   formAnularResolucion!: FormGroup;
   p_obsresol_anular: string = '';
   submitted_anular: boolean = false;
+
 
   constructor(
     private appComponent: AppComponent,
@@ -139,7 +122,7 @@ export class MultasComponent implements OnInit {
 
     const fechaActual = new Date().toISOString().split('T')[0];
 
-    // this.p_fecini = fechaActual;
+    this.p_fecini = fechaActual;
     this.p_fecfin = fechaActual;
     this.consultarMulta();
 
@@ -161,13 +144,6 @@ export class MultasComponent implements OnInit {
           { width: '400px', targets: 4 },
         ],
         dom: 'Bfrtip',
-        // buttons: [
-        //   {
-        //     extend: 'excelHtml5',
-        //     text: 'Exportar a Excel',
-        //     filename: 'MULTA', // Nombre personalizado del archivo
-        //   },
-        // ],
         lengthChange: false,
         searching: false,
         lengthMenu: [15],
@@ -185,8 +161,7 @@ export class MultasComponent implements OnInit {
   }
 
 
-  //GLOBAL
-
+  //OBTENGO LOS VALORES DE VARIABLES(MODAL)
   confirmClick(value: string) {
     this.p_codcon = value;
     this.obtenerNombrePorCod(value);
@@ -199,8 +174,8 @@ export class MultasComponent implements OnInit {
     this.modalService.hide(1);
   }
 
-  
-  //Filtros de busqueda Fecha Ini | Fecha Fin
+
+  //DIGITAR UNICAMENTE NUMEROS
   validarNumero(event: any): void {
     const keyCode = event.keyCode;
     if (keyCode < 48 || keyCode > 57) {
@@ -208,12 +183,13 @@ export class MultasComponent implements OnInit {
     }
   }
 
+  //FILTROS DE BUSQUEDA POR FECHA 
   validarFechas() {
     if (this.p_fecini > this.p_fecfin) {
       this.errorSweetAlertFecha()
-    }else{
+    } else {
       console.log("todo bien en las fechas");
-      
+
     }
   }
 
@@ -224,29 +200,29 @@ export class MultasComponent implements OnInit {
     btnExcel.click();
   }
 
+
+
+
+  //=========================== MODALES =============================
   cerrarModal(modalKey: string) {
     if (this.modalRefs[modalKey]) {
       this.modalRefs[modalKey].hide(); // Cierra el modal si está definido
     }
   }
 
-  asignarPerfil(template: TemplateRef<any>) {
+  listarAdm(template: TemplateRef<any>) {
     this.modalRefs['listar-administrado'] = this.modalService.show(template, { id: 1, class: 'modal-lg', backdrop: 'static', keyboard: false });
   }
 
-  modalDescri(template: TemplateRef<any>) {
-    this.modalRefs['listar-descri'] = this.modalService.show(template, { id: 1, class: 'modal-xl', backdrop: 'static', keyboard: false });
+  modalDescri(templateDescri: TemplateRef<any>) {
+    this.modalRefs['listar-descri'] = this.modalService.show(templateDescri, { id: 2, class: 'modal-xl', backdrop: 'static', keyboard: false });
   }
 
-  formatFecha(fechaBD: string): string {
-    const fecha = new Date(fechaBD);
-    const dia = fecha.getDate().toString().padStart(2, '0');
-    const mes = (fecha.getMonth() + 1).toString().padStart(2, '0'); // Nota: en JavaScript, los meses van de 0 a 11
-    const año = fecha.getFullYear();
+  
 
-    return `${dia}/${mes}/${año}`;
-  }
 
+
+  // ================== MENSAJES SWEETALERT =====================
   private getIconByErrorCode(errorCode: string): 'error' | 'warning' | 'info' | 'success' {
     switch (errorCode) {
       case '-100':
@@ -260,7 +236,7 @@ export class MultasComponent implements OnInit {
       case '0':
         return 'success';
       default:
-        return 'error'; // Puedes establecer un icono predeterminado si no hay coincidencia
+        return 'error';
     }
   }
 
@@ -283,25 +259,36 @@ export class MultasComponent implements OnInit {
     });
   }
 
+
+
+
+  // ===================== FUNCIONES =====================
+
+  // Obtener la fecha actual en formato "YYYY-MM-DD"
   getMaxDate(): string {
-    // Obtener la fecha actual en formato "YYYY-MM-DD"
     return new Date().toISOString().split('T')[0];
   }
 
+  formatFecha(fechaBD: string): string {
+    const fecha = new Date(fechaBD);
+    const dia = fecha.getDate().toString().padStart(2, '0');
+    const mes = (fecha.getMonth() + 1).toString().padStart(2, '0');
+    const año = fecha.getFullYear();
 
+    return `${dia}/${mes}/${año}`;
+  }
 
-  //METODOS
 
   limpiarCampos() {
     this.spinner.show()
     setTimeout(() => {
       this.spinner.hide();
     }, 200);
-    
+
     this.p_codcon = '';
     this.cnombre = '';
-    this.p_fecini = '';
-    this.p_fecfin = '';
+    // this.p_fecini = '';
+    // this.p_fecfin = '';
     this.p_codinf = '';
     this.r_descri = '';
     this.p_numnot = '';
@@ -322,6 +309,10 @@ export class MultasComponent implements OnInit {
   }
 
 
+
+
+
+  //====================== CONSULTAR/FILTRAR MULTA =====================
   consultarMulta() {
     let post = {
       p_codcon: this.p_codcon,
@@ -339,7 +330,7 @@ export class MultasComponent implements OnInit {
         this.spinner.hide();
         console.log(data);
 
-        if (data && data.length > 0 && data) {
+        if (data && data.length > 0) {
           this.datosMulta = data;
         } else {
           // this.errorSweetAlertData();
@@ -358,38 +349,50 @@ export class MultasComponent implements OnInit {
     });
   }
 
+
+
+
+  // ==================== ENCUENTRA NOMBRE DIGITANDO CODIGO ==================
   obtenerNombrePorCod(value: any) {
     let post = {
       p_codcon: this.p_codcon,
     };
 
-    this.spinner.show();
+    if (this.p_codcon != '') {
 
-    this.sigtaService.obtenerNombrePorCod(post).subscribe({
-      next: (data: any) => {
-        this.spinner.hide();
-        console.log(data);
+      this.spinner.show();
 
-        if (data && data.length > 0) {
-          this.cnombre = data[0].cnombre;
-        } else {
+      this.sigtaService.obtenerNombrePorCod(post).subscribe({
+        next: (data: any) => {
+          this.spinner.hide();
+          console.log(data);
+
+          if (data && data.length > 0) {
+            this.cnombre = data[0].cnombre;
+          } else {
+            this.errorSweetAlertCode();
+            this.cnombre = '';
+            this.p_codcon = '';
+            console.log("noData");
+
+          }
+        },
+        error: (error: any) => {
+          this.spinner.hide();
           this.errorSweetAlertCode();
           this.cnombre = '';
           this.p_codcon = '';
-          console.log("noData");
+          console.log(error);
+        },
+      });
+    }
 
-        }
-      },
-      error: (error: any) => {
-        this.spinner.hide();
-        this.errorSweetAlertCode();
-        this.cnombre = '';
-        this.p_codcon = '';
-        console.log(error);
-      },
-    });
   }
 
+
+
+
+  //========================= MODAL - BUSCAR DESCRIPCION ====================
   obtenerDescriPorCod(value: any) {
     const añoActual = new Date().getFullYear();
 
@@ -398,41 +401,50 @@ export class MultasComponent implements OnInit {
       p_codinf: this.p_codinf,
     };
 
-    console.log(post);
+    if (this.p_codinf != '') {
 
-    this.spinner.show();
+      console.log(post);
 
-    this.sigtaService.obtenerDescripcionPorCod(post).subscribe({
-      next: (data: any) => {
-        this.spinner.hide();
-        console.log(data);
+      this.spinner.show();
 
-        if (this.p_codinf == '') {
-          console.log("vacio codinf");
-          this.errorSweetAlertCode()
-          this.r_descri = '';
-        } else {
-          if (data && data.length > 0) {
-            this.r_descri = data[0].r_descri;
-          } else {
-            this.errorSweetAlertCode();
+      this.sigtaService.obtenerDescripcionPorCod(post).subscribe({
+        next: (data: any) => {
+          this.spinner.hide();
+          console.log(data);
+
+          if (this.p_codinf == '') {
+            console.log("vacio codinf");
+            this.errorSweetAlertCode()
             this.r_descri = '';
-            this.p_codinf = '';
+          } else {
+            if (data && data.length > 0) {
+              this.r_descri = data[0].r_descri;
+            } else {
+              this.errorSweetAlertCode();
+              this.r_descri = '';
+              this.p_codinf = '';
+            }
           }
-        }
 
 
-      },
-      error: (error: any) => {
-        this.spinner.hide();
-        this.errorSweetAlertCode();
-        this.r_descri = '';
-        this.p_codinf = '';
-        console.log(error);
-      },
-    });
+        },
+        error: (error: any) => {
+          this.spinner.hide();
+          this.errorSweetAlertCode();
+          this.r_descri = '';
+          this.p_codinf = '';
+          console.log(error);
+        },
+      });
+    }
+
   }
 
+
+
+
+
+  // ======================= MODAL - BUSCAR CONTRIBUYENTE ========================
   busContribuyente() {
     let post = {
       p_nomcontri: this.p_nomcontri,
@@ -460,37 +472,12 @@ export class MultasComponent implements OnInit {
     });
   }
 
-  buscarMulta() {
-    let post = {
-      p_codcon: this.p_codcon,
-      p_numnot: this.p_numnot,
-      p_desinf: this.p_desinf,
-      p_fecini: this.p_fecini,
-      p_fecfin: this.p_fecfin,
-    };
 
-    console.log(post);
-    this.sigtaService.buscarMulta(post).subscribe({
-      next: (data: any) => {
-        this.spinner.show();
-        console.log();
 
-        this.datosMulta = data;
 
-        this.dtElementModal.dtInstance.then((dtInstance: DataTables.Api) => {
-          dtInstance.destroy();
-          this.dtTriggerModal.next();
-        });
-        setTimeout(() => {
-          this.spinner.hide();
-        }, 1000);
-      },
-      error: (error: any) => {
-        this.spinner.hide();
-        console.log(error);
-      },
-    });
-  }
+
+
+  //====================== RESOLUCIÓN =====================
 
   setFormResolucion() {
     this.formResolucion = this.fb.group({
@@ -509,7 +496,7 @@ export class MultasComponent implements OnInit {
     this.idcorrl = data.id_corrl;
     this.submitted = false;
     this.setFormResolucion();
-    this.modalRef = this.modalService.show(template, { id: 3, class: 'modal-lg' });
+    this.modalRefs['modalRegistrarRes'] = this.modalService.show(template, { id: 3, class: 'modal-lg', backdrop: 'static', keyboard: false });
   }
 
   guardarResolucion() {
@@ -541,6 +528,12 @@ export class MultasComponent implements OnInit {
     }
   }
 
+
+
+
+
+
+  // ===================== ANULAR RESOLUCION ====================
   setFormAnularResolucion() {
     this.formAnularResolucion = this.fb.group({
       p_obsresol_anular: ['', [Validators.required]],
@@ -551,7 +544,7 @@ export class MultasComponent implements OnInit {
     this.dataMulta = data;
     this.submitted = false;
     this.setFormAnularResolucion();
-    this.modalRef = this.modalService.show(template, { id: 4, class: 'modal-lg' });
+    this.modalRefs['modalAnularRes'] = this.modalService.show(template, { id: 4, class: 'modal-lg', backdrop: 'static', keyboard: false });
   }
 
   submitAnularResolucion() {

@@ -39,6 +39,7 @@ export class ListarAdministradoComponent implements OnInit, AfterViewInit, OnDes
       paging: true,
       pagingType: 'numbers',
       info: false,
+      scrollY: '320px',
       language: {
         url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
       },
@@ -51,6 +52,7 @@ export class ListarAdministradoComponent implements OnInit, AfterViewInit, OnDes
     this.busContribuyente(value);
     this.modalService.hide(1);
   }
+
 
   ngOnDestroy(): void {
     this.dtTriggerModal.unsubscribe();
@@ -70,36 +72,45 @@ export class ListarAdministradoComponent implements OnInit, AfterViewInit, OnDes
   }
 
   modalDescri(template: TemplateRef<any>) {
-    this.modalRefs['listar-descri'] = this.modalService.show(template, { id: 2, class: 'modal-xl',backdrop: 'static', keyboard: false });
+    this.modalRefs['listar-descri'] = this.modalService.show(template, { id: 2, class: 'modal-xl sizeModal', backdrop: 'static', keyboard: false });
+    const sizeModal = document.getElementsByClassName('sizeModal')[0]?.parentElement;
+    if (sizeModal) {
+      sizeModal.style.width = '90%'; // Setting width to 90%
+  }
     this.modalService.hide(1);
   }
 
-  busContribuyente(value:any) {
+  busContribuyente(value: any) {
     let post = {
       p_nomcontri: this.p_nomcontri,
       p_mensaje: this.p_mensaje,
     };
 
-    this.spinner.show();
+    if (this.p_nomcontri.length > 2) {
+      this.spinner.show();
 
-    console.log(post);
-    this.sigtaService.busContribuyente(post).subscribe({
-      next: (data: any) => {
-        this.spinner.hide();
-        console.log();
+      console.log(post);
+      this.sigtaService.busContribuyente(post).subscribe({
+        next: (data: any) => {
+          this.spinner.hide();
+          console.log();
 
-        this.datosContribuyente = data;
-        console.log("entra")
-        this.dtElementModal.dtInstance.then((dtInstance: DataTables.Api) => {
-          dtInstance.destroy();
-          this.dtTriggerModal.next();
-        });
-      },
-      error: (error: any) => {
-        console.log(error);
-        this.spinner.hide();
-      },
-    });
+          this.datosContribuyente = data;
+          console.log("entra")
+          this.dtElementModal.dtInstance.then((dtInstance: DataTables.Api) => {
+            dtInstance.destroy();
+            this.dtTriggerModal.next();
+          });
+        },
+        error: (error: any) => {
+          console.log(error);
+          this.spinner.hide();
+        },
+      });
+    }else{
+      console.log("cantidad");
+      
+    }
   }
 
 }

@@ -89,4 +89,8 @@ table#tablaAplicacion {
     height: 27px !important;
     font-size: 0.8em!important;
   }
+
+  .disabled-color{
+    background-color: #e1e1e1;
+  }
   
