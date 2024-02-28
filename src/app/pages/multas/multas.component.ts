@@ -110,14 +110,12 @@ export class MultasComponent implements OnInit {
       pagingType: 'numbers',
       info: false,
       scrollY: '320px',
+      columnDefs: [
+              { width: '400px', targets: 2 },
+            ],
       language: {
         url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
       },
-    }
-    if (this.platform.isBrowser) {
-      console.log("Nombre de equipo" + navigator.userAgent);
-    } else {
-      // this.equipo = 'Equipo no disponible en este entorno';
     }
 
     const fechaActual = new Date().toISOString().split('T')[0];
@@ -136,28 +134,6 @@ export class MultasComponent implements OnInit {
   ngAfterViewInit() {
     this.dtTrigger.next();
     this.dtTriggerModal.next();
-    console.log('MODL');
-    $(this.miModal.nativeElement).on('shown.bs.modal', () => {
-      this.dtOptionsModal = {
-        columnDefs: [
-          { width: '400px', targets: 3 },
-          { width: '400px', targets: 4 },
-        ],
-        dom: 'Bfrtip',
-        lengthChange: false,
-        searching: false,
-        lengthMenu: [15],
-        paging: true,
-        language: {
-          url: '//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json',
-        },
-        responsive: false,
-      };
-      // Inicializa DataTables en el modal
-      $(this.miModal.nativeElement)
-        .find('tabla')
-        .DataTable(this.dtOptionsModal);
-    });
   }
 
 
@@ -171,7 +147,7 @@ export class MultasComponent implements OnInit {
   confirmClickDescri(value: string) {
     this.p_codinf = value;
     this.obtenerDescriPorCod(value);
-    this.modalService.hide(1);
+    this.modalService.hide(2);
   }
 
 
@@ -270,13 +246,21 @@ export class MultasComponent implements OnInit {
   }
 
   formatFecha(fechaBD: string): string {
+    // Parse the date string
     const fecha = new Date(fechaBD);
+    
+    // Adjust for Peru Standard Time (UTC-5)
+    fecha.setHours(fecha.getHours() - 5); // Assuming Peru is always UTC-5, adjust this if necessary
+
+    // Extract date components
     const dia = fecha.getDate().toString().padStart(2, '0');
     const mes = (fecha.getMonth() + 1).toString().padStart(2, '0');
     const año = fecha.getFullYear();
 
     return `${dia}/${mes}/${año}`;
-  }
+}
+
+
 
 
   limpiarCampos() {
@@ -317,7 +301,7 @@ export class MultasComponent implements OnInit {
     let post = {
       p_codcon: this.p_codcon,
       p_numnot: this.p_numnot,
-      p_codinf: this.r_descri,
+      p_codinf: this.p_codinf,
       p_fecini: this.p_fecini.toString(),
       p_fecfin: this.p_fecfin.toString(),
       p_idcorr: this.p_idcorr,
@@ -330,11 +314,10 @@ export class MultasComponent implements OnInit {
         this.spinner.hide();
         console.log(data);
 
-        if (data && data.length > 0) {
+        // if (data && data.length > 0) {
           this.datosMulta = data;
-        } else {
-          // this.errorSweetAlertData();
-        }
+        // } else {
+        // }
 
         this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
           dtInstance.destroy();

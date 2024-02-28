@@ -1,7 +1,6 @@
 <div class="col-lg-12">
     <div class="row">
         <div class="mb-2-5 col-lg-12">
-            <!-- <label for="" class="form-label col-form-label-sm">Registrar Administrado</label> -->
             <div class="" style="display: flex; align-items: center">
                 <div class="container-administrado" style="display: flex;">
                     <div class="row g-3"
@@ -9,9 +8,9 @@
                         <div class="col-sm-4">
                             <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Tipo
                                 Persona</label>
-                            <ng-select placeholder="Selecciona..." (input)="onInputChange($event)"
+                            <ng-select [(ngModel)]="ctipper" (input)="onInputChange($event)"
                                 [items]="datosTipoPersona" (change)="ChangeTipoPer($event)" [closeOnSelect]="true"
-                                [searchable]="true" bindVaFlue="ccodtip" bindLabel="dcodtip" name=""
+                                [searchable]="true" bindValue="ccodtip" bindLabel="dcodtip" name=""
                                 class="form-control custom" style="border: 1px solid #b9b9b9 !important">
                             </ng-select>
                             <div *ngIf="error === 'Tipo Persona Incorrecto'" class="text-danger">Campo Obligatorio</div>
@@ -19,9 +18,9 @@
                         <div class="col-sm-4">
                             <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Tipo
                                 Documento</label>
-                            <ng-select placeholder="Selecciona..." (input)="onInputChange($event)"
+                            <ng-select [(ngModel)]="ctipdoc" (input)="onInputChange($event)"
                                 [items]="datosTipoDocumento" (change)="ChangeTipoDoc($event)" [closeOnSelect]="true"
-                                [searchable]="true" bindVaFlue="ccodtip" bindLabel="dcodtip" name=""
+                                [searchable]="true" bindValue="ccodtip" bindLabel="dcodtip" name=""
                                 class="form-control custom" style="border: 1px solid #b9b9b9 !important">
                             </ng-select>
                             <div *ngIf="error === 'Tipo Documento Incorrecto'" class="text-danger">Campo Obligatorio
@@ -34,15 +33,14 @@
                                 class="form-control form-control-sm" id="" />
                         </div>
                         <div class="col-sm-6">
-                            <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Apellido
+                            <label for="" class="form-label col-form-label-sm">Apellido
                                 Paterno</label>
                             <input [(ngModel)]="dpatern" oninput="this.value = this.value.toUpperCase()" type="text"
                                 class="form-control form-control-sm" id="" />
                         </div>
-                        <div *ngIf="error === 'Apellido Paterno o Razon Social, Incompleto'" class="text-danger">Campo
-                            Obligatorio</div>
+                        <div *ngIf="error === 'Apellido Paterno o Razon Social, Incompleto'" class="text-danger">Campo Obligatorio</div>
                         <div class="col-sm-6">
-                            <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Apellido
+                            <label for="" class="form-label col-form-label-sm">Apellido
                                 Materno</label>
                             <input [(ngModel)]="dmatern" oninput="this.value = this.value.toUpperCase()" type="text"
                                 class="form-control form-control-sm" id="" />
@@ -59,12 +57,6 @@
                             <input [(ngModel)]="dnumtel" oninput="this.value = this.value.toUpperCase()" type="text"
                                 class="form-control form-control-sm" id="" />
                         </div>
-                        <!-- <div class="col-sm-4">
-                            <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm"> Nro. Fax
-                            </label>
-                            <input [(ngModel)]="" oninput="this.value = this.value.toUpperCase()" type="text"
-                            class="form-control form-control-sm" id="" />
-                        </div> -->
                         <div class="col-sm-6">
                             <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm"> Nro. Celular
                             </label>
@@ -89,7 +81,7 @@
                         <div class="col-sm-12">
                             <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Distrito</label>
                             <div class="" style="display: flex; justify-content: center; ">
-                                <ng-select (input)="onInputChange($event)" [items]="datosDistrito"
+                                <ng-select [(ngModel)]="cpostal" (input)="onInputChange($event)" [items]="datosDistrito"
                                     (change)="ChangeTipoDistrito($event)" [closeOnSelect]="true" [searchable]="true"
                                     bindValue="CPOSTAL" bindLabel="DPOSTAL" name="" class="form-control custom"
                                     style="border: 1px solid #b9b9b9 !important">

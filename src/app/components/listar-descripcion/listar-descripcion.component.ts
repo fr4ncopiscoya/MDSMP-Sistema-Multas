@@ -55,46 +55,6 @@ export class ListarDescripcionComponent implements OnInit, AfterViewInit, OnDest
     this.confirmClicked.emit(id);
   }
 
-
-
-  // obtenerDescriPorCod(value:any) {
-  //   const añoActual = new Date().getFullYear();
-
-  //   let post = {
-  //     p_anypro: añoActual.toString(),
-  //     // p_codinf: this.p_codinf,
-  //     p_desinf: this.p_desinf
-  //   };
-
-  //   console.log(post);
-
-  //   this.spinner.show();
-
-  //   this.sigtaService.obtenerDescripcionPorCod(post).subscribe({
-  //     next: (data: any) => {
-  //       if(data && data.length > 0){
-  //         this.spinner.hide();
-  //         console.log(data);
-  //         this.datosDescripcion = data;
-  //         this.p_codinf = data[0].r_codint;
-  //         console.log("llgaste descri");
-  //       }
-        
-
-  //       this.dtElementModal.dtInstance.then((dtInstance: DataTables.Api) => {
-  //         dtInstance.destroy();
-  //         this.dtTriggerModal.next();
-  //       });
-
-  //     },
-  //     error: (error: any) => {
-  //       this.spinner.hide();
-  //       // this.errorSweetAlertCode();
-  //       console.log(error);
-  //     },
-  //   });
-  // }
-
   obtenerDescriPorCod(value: any) {
     const añoActual = new Date().getFullYear();
   

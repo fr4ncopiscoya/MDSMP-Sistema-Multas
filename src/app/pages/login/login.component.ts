@@ -186,8 +186,7 @@ export class LoginComponent implements OnInit {
         }
       },
       error: (error: any) => {
-        // this.spinner.hide();
-        // this.errorSweetAlertCode();
+
         console.log(error);
       },
     });
@@ -198,9 +197,6 @@ export class LoginComponent implements OnInit {
     let btnLogin = document.getElementById('btnLoginAction') as HTMLButtonElement;
     btnLogin.innerHTML = '<span class="align-items-center"><span class="spinner-border flex-shrink-0" role="status"><span class="visually-hidden">Loading...</span></span><span class="flex-grow-1 ms-2">Ingresando...</span></span>';
     btnLogin.classList.add('pe-none', 'btn-load');
-
-    // const hostname: string = os.hostname();
-    // console.log("Nombre de la PC:", hostname);
 
     let post = {
       p_nomusu: this.p_nomusu,
@@ -237,12 +233,6 @@ export class LoginComponent implements OnInit {
           btnLogin.classList.remove('pe-none', 'btn-load');
           this.toastComponent.showToast(data[0].mensa, 'info');
         }
-
-        // } else {
-
-        // }
-
-
 
       },
       error: (error: any) => {

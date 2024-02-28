@@ -60,6 +60,8 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
   fecnaci: string = ''
   cusuari: string = 'N05'
 
+  // template: any
+
 
   @ViewChild(DataTableDirective, { static: false }) dtElementModal!: DataTableDirective;
 
@@ -100,23 +102,7 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
     this.dtTriggerModal.next();
   }
 
-  emitir(id: string): void {
-    this.confirmClicked.emit(id);
-  }
-
-
-  validarNumero(event: any): void {
-    const keyCode = event.keyCode;
-    if (keyCode < 48 || keyCode > 57) {
-      event.preventDefault();
-    }
-  }
-
-
-  getMaxDate(): string {
-    // Obtener la fecha actual en formato "YYYY-MM-DD"
-    return new Date().toISOString().split('T')[0];
-  }
+  //============================ MENSAJES SWEET ALERT =================================
 
   private getIconByErrorCode(errorCode: string): 'error' | 'warning' | 'info' | 'success' {
     switch (errorCode) {
@@ -142,6 +128,22 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
     });
   }
 
+
+
+
+
+  // =============================== MODALES ====================================
+
+  // confirmClick(value: string) {
+  //   // this.p_codcon = value;
+  //   // this.obtenerNombrePorCod(value);
+  //   // this.modalService.hide(1);
+  // }
+
+  emitir(id: string): void {
+    this.confirmClicked.emit(id);
+  }
+
   confirmClickRefere(value: any) {
     this.dnomvia = value.cdvia;
     this.dnomurb = value.dpoblad;
@@ -154,7 +156,6 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
     console.log(this.ccodvia);
     console.log(this.dtipvia);
 
-    // this.obtenerReferencia();
     this.modalService.hide(1);
   }
 
@@ -164,11 +165,6 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
     }
   }
 
-  confirmClick(value: string) {
-    // this.p_codcon = value;
-    // this.obtenerNombrePorCod(value);
-    // this.modalService.hide(1);
-  }
 
   modalDescri(template: TemplateRef<any>) {
     this.modalRefs['listar-urba'] = this.modalService.show(template, { id: 1, class: ' modal-lg second', backdrop: 'static', keyboard: false });
@@ -180,6 +176,11 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
   }
 
 
+
+
+
+  // ========================== EVENTOS ONCHANGE ===============================
+
   ChangeTipoDoc(event: any) {
     // this.dtipdoc = event.dcodtip
     this.ctipdoc = event.ccodtip
@@ -188,7 +189,6 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
 
   ChangeTipoPer(event: any) {
     this.ctipper = event.ccodtip
-    console.log(this.ctipper)
   }
 
   ChangeTipoDistrito(event: any) {
@@ -196,25 +196,15 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
     console.log(this.cpostal)
   }
 
-  OnChangeNumberToString(event: any): void {
-    switch (event.dcodtip) {
-      case "DNI":
-        this.validarNumero(event);
-        break;
-      case "RUC":
-        this.validarNumero(event);
-        break;
-      default:
-        // En caso de otros tipos de documento
-        break;
-    }
-  }
-
-
-
   onInputChange(event: any) {
     event.target.value = event.target.value.toUpperCase();
   }
+
+
+  
+
+
+  // ============================== METODOS ======================================
 
   obtenerReferencia() {
     let post = {
@@ -264,9 +254,6 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
         console.log();
 
         this.datosTipoDocumento = data;
-        // this.dtipdoc = data[0].dcodtip
-        this.ctipper = data.ccodtip
-        console.log(this.ctipper)
       },
       error: (error: any) => {
         console.log(error);
@@ -289,9 +276,6 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
         console.log();
 
         this.datosTipoPersona = data;
-        // this.d
-        this.ctipdoc = data[0].ccodtip;
-        console.log(this.ctipdoc)
       },
       error: (error: any) => {
         console.log(error);
@@ -302,7 +286,6 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
 
   listarDistrito() {
     let post = {
-      // p_grutip: this.p_grutipPer,
     };
 
     this.spinner.show();
@@ -314,8 +297,6 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
         console.log();
 
         this.datosDistrito = data;
-        this.cpostal = data[0].CPOSTAL
-        console.log(this.cpostal)
       },
       error: (error: any) => {
         console.log(error);
@@ -323,8 +304,6 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
       },
     });
   }
-
-  template: any
 
   registrarAdministrado() {
     let post = {
@@ -368,14 +347,12 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
         if (data && data.length > 0 && data[0].error) {
           this.error = data[0].mensa;
           const errorCode = data[0].error;
-          console.log(this.error);
 
           // Selecciona el icono según el código de error
           const icon = this.getIconByErrorCode(errorCode);
 
           // Muestra el SweetAlert con el icono y el mensaje de error
           this.errorSweetAlertCode(icon);
-          // window.location.reload();
         } else {
           this.errorSweetAlertCode();
         }
@@ -386,8 +363,6 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
               this.modalService.hide(2);
             }, 1000);
           }
-          // Assuming 'template' is a valid reference to a template
-          // this.modalRefs['listar-administrado'] = this.modalService.show(this.template, { id: 1, class: ' modal-lg second', backdrop: 'static', keyboard: false });
         }
 
 
@@ -400,7 +375,20 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
     });
   }
 
+  //---------------------------------------------------------
 
+  validarNumero(event: any): void {
+    const keyCode = event.keyCode;
+    if (keyCode < 48 || keyCode > 57) {
+      event.preventDefault();
+    }
+  }
+
+
+  getMaxDate(): string {
+    // Obtener la fecha actual en formato "YYYY-MM-DD"
+    return new Date().toISOString().split('T')[0];
+  }
 
 
 }

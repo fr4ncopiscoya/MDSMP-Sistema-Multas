@@ -9,7 +9,7 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { Subject } from 'rxjs';
 import { NgxSpinnerService } from 'ngx-spinner';
 import Swal from 'sweetalert2';
-import { HammerGestureConfig } from '@angular/platform-browser';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-crear-multa',
@@ -50,13 +50,13 @@ export class CrearMultaComponent implements OnInit {
     responsive: false,
   };
 
+  //Almaceno la data
   datosAreaOficina: any;
   datosMedidaComp: any;
   datosGiroEstablecimiento: any;
   datosReferencia: any;
   datosTipoEspecie: any;
 
-  tieneActa = false;
 
 
   //Variables
@@ -79,6 +79,46 @@ export class CrearMultaComponent implements OnInit {
 
   error: string = '';
 
+
+  //Registrar multa
+  formInfraccion!: FormGroup;
+  nnumnot: string = '' // --Numero de Notificacion =====
+  // dfecnot: string = '' // --Fecha de Notificacion multa ====
+  ccontri: string = '' // --Codigo Administrado ====
+  cpredio: string = '' // --Pasar en Blanco
+  dpredio: string = '' // --Dirección : Avenida / Jiron/Calle/Pasaje
+  cmulta: string = '' //  --Codigo Multa o Infraccion =====
+  dmulta: string = '' // -- Descripcion Multa
+  nmonto: string = '' // --Monto Multa o Infraccion ======
+  dfecres: string = '' // --Fecha de Resolucion
+  cnumres: string = '' // --Numero de Resolucion
+  cofisan: string = '' // --Area propietaria de la multa
+  // dfecrec: string = '' // --Fecha de Recepcion
+  crefere: string = '' // --Referencia =====
+  cusutra: string = 'N05' // --Usuario Transaccion
+  csancio: string = '' // --Medida Complementaria - code ======
+  dsancio: string = '' // --Medida Complementaria - descri ======
+  mobserv: string = '' // --Observaciones =========
+  nreinci: string = '' // --Reincidencia
+  manzana: string = '' // --Manzana ======
+  lote: string = '' // --Lote ===
+  nro_fiscal: string = '' // --Numero ====
+  dpto_int: string = '' // --Departamento o Interior ======
+  referencia: string = '' // --Referencia ======
+  ins_municipal: string = '' // --Inspector que impone la multa =====
+  nro_acta: string = '' // --Numero de Acta ===
+  nro_informe: string = '' // --Numero de Informe =======
+  giro: string = '' // --Codigo Giro
+  desgiro: string = '' // --Codigo Giro
+  f_ejecucion: string = '' // --Fecha Ejecucion ====
+  // f_registro: string = '' // --Fecha Registro
+  via: string = '' // --Nombre Via o Calle
+  haburb: string = '' //  --Nombre Habilitacion Urbana(Urbanizacion)
+  nroActaConstatacion: string = '' // -- Numero Acta Constatacion ===
+  chkact = 0;
+  submited: boolean = false
+
+
   constructor(
     private appComponent: AppComponent,
     private serviceMaster: MasterService,
@@ -88,16 +128,17 @@ export class CrearMultaComponent implements OnInit {
     private serviceSanidad: SanidadService,
     private sigtaService: SigtaService,
     private sanidadService: SanidadService,
-    private modalService: BsModalService
+    private modalService: BsModalService,
+    private fb: FormBuilder
   ) {
     this.appComponent.login = false;
   }
 
   ngOnInit(): void {
-    // this.listarAreaOficina();
     this.listarMedidaComp();
     this.listarGiroEstablecimiento();
 
+    //Obtengo la fecha actual
     const fechaActual = new Date().toISOString().split('T')[0];
     console.log(fechaActual);
 
@@ -113,25 +154,8 @@ export class CrearMultaComponent implements OnInit {
     this.dtTrigger.next();
   }
 
-  descargaExcel() {
-    let btnExcel = document.querySelector(
-      '#tablaAplicacion_wrapper .dt-buttons .dt-button.buttons-excel.buttons-html5'
-    ) as HTMLButtonElement;
-    btnExcel.click();
-  }
 
-  cerrarModal(modalKey: string) {
-    if (this.modalRefs[modalKey]) {
-      this.modalRefs[modalKey].hide(); // Cierra el modal si está definido
-    }
-  }
-
-  validarNumero(event: any): void {
-    const keyCode = event.keyCode;
-    if (keyCode < 48 || keyCode > 57) {
-      event.preventDefault();
-    }
-  }
+  // ================================== MENSAJES SWEET ALERT ========================================
 
   private getIconByErrorCode(errorCode: string): 'error' | 'warning' | 'info' | 'success' {
     switch (errorCode) {
@@ -171,6 +195,19 @@ export class CrearMultaComponent implements OnInit {
     });
   }
 
+
+
+
+
+  // =================================== MODALES ========================================
+
+  cerrarModal(modalKey: string) {
+    if (this.modalRefs[modalKey]) {
+      this.modalRefs[modalKey].hide(); // Cierra el modal si está definido
+    }
+  }
+
+  //Obtengo el valor seleccionado en el modal
   confirmClick(value: string) {
     this.ccontri = value;
     this.obtenerNombrePorCod(value);
@@ -180,9 +217,12 @@ export class CrearMultaComponent implements OnInit {
   confirmClickRefere(value: any) {
     this.p_desubi = value.viaurb;
     this.obtenerReferencia();
-    this.modalService.hide(1);
+    this.modalService.hide(2);
   }
 
+  //-----------------------------------------
+
+  //Abre los modales
   asignarPerfil(template: TemplateRef<any>) {
     this.modalRefs['listar-persona'] = this.modalService.show(template, { id: 1, class: 'modal-lg', backdrop: 'static', keyboard: false });
   }
@@ -190,6 +230,12 @@ export class CrearMultaComponent implements OnInit {
   modalRefere(template: TemplateRef<any>) {
     this.modalRefs['listar-descri'] = this.modalService.show(template, { id: 2, class: 'modal-lg', backdrop: 'static', keyboard: false });
   }
+
+
+
+
+
+  // =============================== EVENTOS ONCHANGE ===================================
 
   onSelectionChangeGiro(event: any) {
     this.giro = event.ccodgir
@@ -206,9 +252,11 @@ export class CrearMultaComponent implements OnInit {
     event.target.value = event.target.value.toUpperCase();
   }
 
-  getMaxDate(): string {
-    return new Date().toISOString().split('T')[0];
-  }
+
+
+  
+
+  // ============================= METODOS ============================================
 
   listarGiroEstablecimiento() {
     let post = {
@@ -252,58 +300,6 @@ export class CrearMultaComponent implements OnInit {
     });
   }
 
-  validarFechaMulta() {
-    if (this.p_anypro == '') {
-      // this.errorSweetAlertDate();
-      this.p_codinf = '';
-      this.dareas = '';
-      this.nmonto = '';
-      this.r_descri = '';
-
-    }
-  }
-  validarCodInfra() {
-    if (this.p_codinf == '') {
-      // this.errorSweetAlertDate();
-      // this.p_codinf = '';
-      this.dareas = '';
-      this.nmonto = '';
-      this.r_descri = '';
-
-    } else {
-      console.log("no hagas nada");
-
-    }
-  }
-
-  goBackToMultas() {
-    setTimeout(() => {
-      switch (this.error) {
-        case 'Notificacion Grabada Correctamente':
-        case 'Notificacion Actualizada Correctamente':
-          this.router.navigateByUrl('/multas');
-          break;
-        default:
-          // Handle other cases if needed
-          break;
-      }
-    }, 1000);
-  }
-
-
-  removerClase() {
-    const nmontoAsNumber = parseFloat(this.nmonto);
-    const disabledColor = document.getElementById("montoinfra") as HTMLInputElement
-    if (nmontoAsNumber <= 0) {
-      disabledColor.classList.remove('disabled-color');
-      disabledColor.removeAttribute('disabled')
-      disabledColor.focus();
-    } else {
-      disabledColor.classList.add('disabled-color');
-      disabledColor.setAttribute('disabled', 'disabled')
-    }
-  }
-
   obtenerAreaPorCod(value: any) {
     const p_anyproDate = new Date(this.p_anypro).getFullYear();
 
@@ -314,37 +310,37 @@ export class CrearMultaComponent implements OnInit {
       // p_arecod: this.carea
     };
 
-    if(this.p_codinf != ''){
+    if (this.p_codinf != '') {
 
       console.log(post);
-  
+
       this.spinner.show();
       this.sigtaService.obtenerDescripcionPorCod(post).subscribe({
         next: (data: any) => {
           this.spinner.hide();
-  
+
           // if (this.p_anypro == '' || this.p_codinf == '') {
           //   this.errorSweetAlertDate();
           //   this.p_codinf = '';
           //   this.dareas = '';
           //   this.nmonto = '';
           //   this.r_descri = '';
-  
+
           // } else {
-            if (data && data.length > 0) {
-              this.dareas = data[0].dareas;
-              this.carea = data[0].carea;
-              this.nmonto = data[0].nmontot;
-              this.r_descri = data[0].r_descri;
-              this.p_codinf = data[0].r_codint;
-              this.removerClase();
-              this.validarCodInfra();
-            } else {
-              this.errorSweetAlertCode();
-            }
+          if (data && data.length > 0) {
+            this.dareas = data[0].dareas;
+            this.carea = data[0].carea;
+            this.nmonto = data[0].nmontot;
+            this.r_descri = data[0].r_descri;
+            this.p_codinf = data[0].r_codint;
+            this.removerClase();
+            this.validarCodInfra();
+          } else {
+            this.errorSweetAlertCode();
+          }
           // }
-  
-  
+
+
           console.log(data);
         },
         error: (error: any) => {
@@ -400,10 +396,10 @@ export class CrearMultaComponent implements OnInit {
 
     console.log(post);
 
-    if(this.p_desubi != ''){
+    if (this.p_desubi != '') {
 
       this.spinner.show();
-  
+
       this.sigtaService.listarReferencia(post).subscribe({
         next: (data: any) => {
           this.spinner.hide();
@@ -413,13 +409,13 @@ export class CrearMultaComponent implements OnInit {
           this.via = data[0].cdvia;
           this.haburb = data[0].cpbdo
           console.log(this.via);
-  
-  
+
+
           this.dtElementModal.dtInstance.then((dtInstance: DataTables.Api) => {
             dtInstance.destroy();
             this.dtTriggerModal.next();
           });
-  
+
         },
         error: (error: any) => {
           this.spinner.hide();
@@ -429,43 +425,8 @@ export class CrearMultaComponent implements OnInit {
       });
     }
 
-  }
 
-  //Registrar multa
-  nnumnot: string = '' // --Numero de Notificacion =====
-  // dfecnot: string = '' // --Fecha de Notificacion multa ====
-  ccontri: string = '' // --Codigo Administrado ====
-  cpredio: string = '' // --Pasar en Blanco
-  dpredio: string = '' // --Dirección : Avenida / Jiron/Calle/Pasaje
-  cmulta: string = '' //  --Codigo Multa o Infraccion =====
-  dmulta: string = '' // -- Descripcion Multa
-  nmonto: string = '' // --Monto Multa o Infraccion ======
-  dfecres: string = '' // --Fecha de Resolucion
-  cnumres: string = '' // --Numero de Resolucion
-  cofisan: string = '' // --Area propietaria de la multa
-  // dfecrec: string = '' // --Fecha de Recepcion
-  crefere: string = '' // --Referencia =====
-  cusutra: string = 'N05' // --Usuario Transaccion
-  csancio: string = '' // --Medida Complementaria - code ======
-  dsancio: string = '' // --Medida Complementaria - descri ======
-  mobserv: string = '' // --Observaciones =========
-  nreinci: string = '' // --Reincidencia
-  manzana: string = '' // --Manzana ======
-  lote: string = '' // --Lote ===
-  nro_fiscal: string = '' // --Numero ====
-  dpto_int: string = '' // --Departamento o Interior ======
-  referencia: string = '' // --Referencia ======
-  ins_municipal: string = '' // --Inspector que impone la multa =====
-  nro_acta: string = '' // --Numero de Acta ===
-  nro_informe: string = '' // --Numero de Informe =======
-  giro: string = '' // --Codigo Giro
-  desgiro: string = '' // --Codigo Giro
-  f_ejecucion: string = '' // --Fecha Ejecucion ====
-  // f_registro: string = '' // --Fecha Registro
-  via: string = '' // --Nombre Via o Calle
-  haburb: string = '' //  --Nombre Habilitacion Urbana(Urbanizacion)
-  nroActaConstatacion: string = '' // -- Numero Acta Constatacion ===
-  chkact = 0;
+  }
 
   registrarInfraccion() {
     let post = {
@@ -490,7 +451,7 @@ export class CrearMultaComponent implements OnInit {
       desgiro: this.desgiro,
       f_ejecucion: this.f_ejecucion,
       via: this.via,
-      haburb: this.p_desubi,
+      haburb: this.haburb,
       nroActaConstatacion: this.nroActaConstatacion,
       nmonto: this.nmonto
     };
@@ -527,4 +488,88 @@ export class CrearMultaComponent implements OnInit {
       },
     });
   }
+
+  //--------------------------------------
+
+  descargaExcel() {
+    let btnExcel = document.querySelector(
+      '#tablaAplicacion_wrapper .dt-buttons .dt-button.buttons-excel.buttons-html5'
+    ) as HTMLButtonElement;
+    btnExcel.click();
+  }
+
+  validarNumero(event: any): void {
+    const keyCode = event.keyCode;
+    if (keyCode < 48 || keyCode > 57) {
+      event.preventDefault();
+    }
+  }
+
+  validarFechaMulta() {
+    if (this.p_anypro == '') {
+      // this.errorSweetAlertDate();
+      this.p_codinf = '';
+      this.dareas = '';
+      this.nmonto = '';
+      this.r_descri = '';
+
+    }
+  }
+
+  validarCodInfra() {
+    if (this.p_codinf == '') {
+      // this.errorSweetAlertDate();
+      // this.p_codinf = '';
+      this.dareas = '';
+      this.nmonto = '';
+      this.r_descri = '';
+
+    } else {
+      console.log("no hagas nada");
+
+    }
+  }
+
+  setFormInfra() {
+    this.formInfraccion = this.fb.group({
+      ccontri: ['', [Validators.required]],
+      nnumnot: ['', [Validators.required]],
+      p_anypro: ['', [Validators.required]],
+      p_codinf: ['', [Validators.required]],
+      nmonto: ['', [Validators.required]],
+    })
+  }
+
+  getMaxDate(): string {
+    return new Date().toISOString().split('T')[0];
+  }
+
+  goBackToMultas() {
+    setTimeout(() => {
+      switch (this.error) {
+        case 'Notificacion Grabada Correctamente':
+        case 'Notificacion Actualizada Correctamente':
+          this.router.navigateByUrl('/multas');
+          break;
+        default:
+          // Handle other cases if needed
+          break;
+      }
+    }, 1000);
+  }
+
+  removerClase() {
+    const nmontoAsNumber = parseFloat(this.nmonto);
+    const disabledColor = document.getElementById("montoinfra") as HTMLInputElement
+    if (nmontoAsNumber <= 0) {
+      disabledColor.classList.remove('disabled-color');
+      disabledColor.removeAttribute('disabled')
+      disabledColor.focus();
+    } else {
+      disabledColor.classList.add('disabled-color');
+      disabledColor.setAttribute('disabled', 'disabled')
+    }
+  }
+
 }
+

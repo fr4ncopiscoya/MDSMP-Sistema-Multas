@@ -24,9 +24,6 @@
                                     <th scope="col" class="text-center" style="width: 100px">
                                         ID
                                     </th>
-                                    <!-- <th scope="col" class="text-center" style="width: 100px">
-                                        Código
-                                    </th> -->
                                     <th scope="col" class="text-center" style="width: 380px">
                                         Descripción
                                     </th>
@@ -39,7 +36,6 @@
                                 <tr *ngFor="let data of datosReferencia;let idx = index"
                                     class="text-center parentesco-data-row" style="text-align: center">
                                     <td>{{ idx + 1 }}</td>
-                                    <!-- <td>{{ data.r_codint }}</td> -->
                                     <td>{{ data.viaurb }}</td>
                                     <td>
                                         <button type="button" (click)="emitir(data )"

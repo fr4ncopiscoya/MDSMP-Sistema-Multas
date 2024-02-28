@@ -114,13 +114,19 @@ export class VerMultaComponent implements OnInit {
   }
 
 
-
   ngOnDestroy(): void {
     // this.dtTrigger.unsubscribe();
   }
 
   ngAfterViewInit() {
     // this.dtTrigger.next();
+  }
+
+  private errorSweetAlertData() {
+    Swal.fire({
+      icon: 'info',
+      text: 'No se encontraron datos en su busqueda',
+    });
   }
 
   descargaExcel() {
@@ -137,17 +143,8 @@ export class VerMultaComponent implements OnInit {
     }
   }
 
-
   onInputChange(event: any) {
     event.target.value = event.target.value.toUpperCase();
-  }
-
-
-  private errorSweetAlertData() {
-    Swal.fire({
-      icon: 'info',
-      text: 'No se encontraron datos en su busqueda',
-    });
   }
 
   consultarMulta() {

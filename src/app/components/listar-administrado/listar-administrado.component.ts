@@ -47,13 +47,6 @@ export class ListarAdministradoComponent implements OnInit, AfterViewInit, OnDes
     // this.busContribuyente();
   }
 
-  confirmClick(value: string) {
-    this.p_nomcontri = value;
-    this.busContribuyente(value);
-    this.modalService.hide(1);
-  }
-
-
   ngOnDestroy(): void {
     this.dtTriggerModal.unsubscribe();
   }
@@ -65,6 +58,12 @@ export class ListarAdministradoComponent implements OnInit, AfterViewInit, OnDes
     this.confirmClicked.emit(id);
   }
 
+  confirmClick(value: string) {
+    this.p_nomcontri = value;
+    this.busContribuyente(value);
+    this.modalService.hide(1);
+  }
+
   cerrarModal(modalKey: string) {
     if (this.modalRefs[modalKey]) {
       this.modalRefs[modalKey].hide(); // Cierra el modal si está definido
@@ -72,11 +71,7 @@ export class ListarAdministradoComponent implements OnInit, AfterViewInit, OnDes
   }
 
   modalDescri(template: TemplateRef<any>) {
-    this.modalRefs['listar-descri'] = this.modalService.show(template, { id: 2, class: 'modal-xl sizeModal', backdrop: 'static', keyboard: false });
-    const sizeModal = document.getElementsByClassName('sizeModal')[0]?.parentElement;
-    if (sizeModal) {
-      sizeModal.style.width = '90%'; // Setting width to 90%
-  }
+    this.modalRefs['listar-descri'] = this.modalService.show(template, { id: 2, class: 'modal-xl', backdrop: 'static', keyboard: false });
     this.modalService.hide(1);
   }
 
