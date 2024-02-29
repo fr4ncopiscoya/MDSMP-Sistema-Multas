@@ -268,8 +268,8 @@ export class CrearMultaComponent implements OnInit {
         // console.log(data);
 
         this.datosGiroEstablecimiento = data;
-        this.giro = data[0].ccodgir
-        this.desgiro = data[0].ddesgir;
+        // this.giro = data[0].ccodgir
+        // this.desgiro = data[0].ddesgir;
         console.log(this.desgiro);
 
       },
@@ -289,7 +289,7 @@ export class CrearMultaComponent implements OnInit {
         // console.log(data);
 
         this.datosMedidaComp = data;
-        this.dsancio = data[0].DCODTIP
+        // this.dsancio = data[0].DCODTIP
         this.csancio = data[0].CCODTIP;
         console.log(this.csancio);
 

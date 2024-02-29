@@ -60,6 +60,8 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
   fecnaci: string = ''
   cusuari: string = 'N05'
 
+  valor: boolean = false
+
   // template: any
 
 
@@ -200,8 +202,20 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
     event.target.value = event.target.value.toUpperCase();
   }
 
+  ChangeTipoInput(event: any): void {
+    this.dtipdoc = ''
 
-  
+    const tipoDocumentoSeleccionado = event.ccodtip;
+
+    if (tipoDocumentoSeleccionado === '01' || tipoDocumentoSeleccionado === '04') {
+      this.valor = true;
+    } else {
+      this.valor = false;
+    }
+  }
+
+
+
 
 
   // ============================== METODOS ======================================
@@ -220,11 +234,6 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
         this.spinner.hide();
         console.log(data);
         this.datosReferencia = data;
-        // this.ccodurb = data[0].cpoblad;
-        // this.dtipurb = data[0].dtippob;
-        // this.ccodvia = data[0].v_codi;
-        // this.dtipvia = data[0].v_tipo;
-
 
         this.dtElementModal.dtInstance.then((dtInstance: DataTables.Api) => {
           dtInstance.destroy();
@@ -384,6 +393,14 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
     }
   }
 
+  validarDocumento(event: any): void {
+    if (this.valor) {
+      const keyCode = event.keyCode;
+      if (keyCode < 48 || keyCode > 57) {
+        event.preventDefault();
+      }
+    }
+  }
 
   getMaxDate(): string {
     // Obtener la fecha actual en formato "YYYY-MM-DD"

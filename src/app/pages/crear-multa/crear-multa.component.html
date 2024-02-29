@@ -131,9 +131,9 @@
         <div class="col-7">
           <div class="mb-3">
             <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Medida Complementaria</label>
-            <ng-select placeholder="Selecciona..." [(ngModel)]="dsancio" (input)="onInputChange($event)"
+            <ng-select placeholder="Selecciona..." [(ngModel)]="csancio" (input)="onInputChange($event)"
               [items]="datosMedidaComp" (change)="onSelectionChangeMedida($event)" [closeOnSelect]="true"
-              [searchable]="true" bindVaFlue="CCODTIP" bindLabel="DCODTIP" name="" class="form-control custom"
+              [searchable]="true" bindValue="CCODTIP" bindLabel="DCODTIP" name="" class="form-control custom"
               style="border: 1px solid #b9b9b9 !important">
             </ng-select>
           </div>

@@ -19,7 +19,7 @@
                             <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Tipo
                                 Documento</label>
                             <ng-select [(ngModel)]="ctipdoc" (input)="onInputChange($event)"
-                                [items]="datosTipoDocumento" (change)="ChangeTipoDoc($event)" [closeOnSelect]="true"
+                                [items]="datosTipoDocumento" (change)="ChangeTipoDoc($event); ChangeTipoInput($event)" [closeOnSelect]="true"
                                 [searchable]="true" bindValue="ccodtip" bindLabel="dcodtip" name=""
                                 class="form-control custom" style="border: 1px solid #b9b9b9 !important">
                             </ng-select>
@@ -30,7 +30,7 @@
                             <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Nº Doc.
                             </label>
                             <input [(ngModel)]="dtipdoc" oninput="this.value = this.value.toUpperCase()" type="text"
-                                class="form-control form-control-sm" id="" />
+                                class="form-control form-control-sm" id="" (keypress)="validarDocumento($event)"/>
                         </div>
                         <div class="col-sm-6">
                             <label for="" class="form-label col-form-label-sm">Apellido

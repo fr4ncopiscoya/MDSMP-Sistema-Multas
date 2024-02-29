@@ -101,3 +101,7 @@ textarea {
 .modal-lg .modal-bc{
   background-color: black !important;
 }
+
+.ng-dropdown-panel.ng-select-bottom {
+  width: 300px !important;
+}

@@ -111,7 +111,7 @@ export class MultasComponent implements OnInit {
       info: false,
       scrollY: '320px',
       columnDefs: [
-              { width: '400px', targets: 2 },
+              { width: '600px', targets: 2 },
             ],
       language: {
         url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
