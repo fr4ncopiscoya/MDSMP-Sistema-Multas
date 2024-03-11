@@ -33,6 +33,9 @@ import { ListarReferenciaComponent } from './components/listar-referencia/listar
 import { CrearAdministradoComponent } from './components/crear-administrado/crear-administrado.component';
 import { VerMultaComponent } from './pages/ver-multa/ver-multa.component';
 import { LoginGuard } from './guards/login.guard';
+import { VerResolucionComponent } from './components/ver-resolucion/ver-resolucion.component';
+import { CrearInformeFinalComponent } from './components/crear-informe-final/crear-informe-final.component';
+import { AnularResolucionComponent } from './components/anular-resolucion/anular-resolucion.component';
 
 @NgModule({
   declarations: [
@@ -52,6 +55,9 @@ import { LoginGuard } from './guards/login.guard';
     ListarReferenciaComponent,
     CrearAdministradoComponent,
     VerMultaComponent,
+    VerResolucionComponent,
+    CrearInformeFinalComponent,
+    AnularResolucionComponent,
   ],
   imports: [
     BrowserModule,

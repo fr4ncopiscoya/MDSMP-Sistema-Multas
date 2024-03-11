@@ -67,7 +67,7 @@ export class VerMultaComponent implements OnInit {
   cofisan: string = '' // --Area propietaria de la multa
   // dfecrec: string = '' // --Fecha de Recepcion
   crefere: string = '' // --Referencia =====
-  cusutra: string = 'N05' // --Usuario Transaccion
+  // cusutra: string = 'N05' // --Usuario Transaccion
   csancio: string = '' // --Medida Complementaria - code ======
   dsancio: string = '' // --Medida Complementaria - descri ======
   mobserv: string = '' // --Observaciones =========

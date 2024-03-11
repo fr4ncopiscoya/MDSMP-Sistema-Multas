@@ -1,14 +1,16 @@
 table#tablaAplicacion {
-  font-size: 12px; /* Ajusta el tamaño de la fuente según tus preferencias */
+  font-size: 12px;
+  /* Ajusta el tamaño de la fuente según tus preferencias */
 }
 
-tbody td{
+tbody td {
   border: 1px solid #cecece;
 }
 
 .tddirecciondatatable {
   font-size: 12px;
 }
+
 .card-body {
   padding-top: 0px;
   padding-bottom: 0px;
@@ -24,6 +26,7 @@ tbody td{
   width: 794px;
   height: 560px;
 }
+
 .contenedor {
   position: relative;
   display: inline-block;
@@ -43,12 +46,15 @@ thead.table-light {
 input {
   border: 1px solid #b9b9b9;
 }
+
 select {
   border: 1px solid #b9b9b9;
 }
+
 ng-select.form-control.input-sm.ng-select-searchable.ng-select-clearable.ng-select.ng-select-single.ng-pristine.ng-valid.ng-select-bottom.ng-touched {
   border: 1px solid #b9b9b9 !important;
 }
+
 .ng-select-container.ng-has-value {
   border: 1px solid #b9b9b9 !important;
 }
@@ -75,3 +81,14 @@ ng-select.form-control.input-sm.ng-select-searchable.ng-select-clearable.ng-sele
   justify-content: space-between;
 }
 
+#cardsuperior .form-label{
+  margin-bottom: 0.0rem !important;
+}
+
+
+
+@media (max-width: 400px) {
+  #tablaAplicacion {
+    height: 20vh; /* Cambia el tamaño máximo para adaptarse a pantallas más pequeñas */
+  }
+}

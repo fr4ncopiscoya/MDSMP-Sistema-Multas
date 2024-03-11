@@ -8,6 +8,9 @@ import Swal from 'sweetalert2';
   providedIn: 'root',
 })
 export class SigtaService {
+
+  idcorrl: any;
+
   constructor(private httpClientUtils: HttpClientUtils) { }
 
   listarAreaOficina(data: any) {
@@ -95,6 +98,16 @@ export class SigtaService {
         })
       );
   }
+
+  consultarMultaExport(data: any) {
+    return this.httpClientUtils
+      .postQuery('sigta/consultarMulta/listar', data)
+      .pipe(
+        map((data) => {
+          return data;
+        })
+      );
+  }
   registrarMulta(data: any) {
     return this.httpClientUtils
       .postQuery('sigta/infraccion/registrar', data)
@@ -159,16 +172,50 @@ export class SigtaService {
         })
       );
   }
-
-  getIp(){
+  registrarResolucion(data: any) {
     return this.httpClientUtils
-    .getQueryIp()
-    .pipe(
-      map((data)=>{
-        return data
-      })
-    )
+      .postQuery('sigta/resolucion/registrar', data)
+      .pipe(
+        map((data) => {
+          return data;
+        })
+      );
   }
+
+  anularResolucion(data: any) {
+    return this.httpClientUtils
+      .postQuery('sigta/resolucion/anular', data)
+      .pipe(
+        map((data) => {
+          return data;
+        })
+      );
+  }
+
+  getIp() {
+    return this.httpClientUtils
+      .getQueryIp()
+      .pipe(
+        map((data) => {
+          return data
+        })
+      )
+  }
+
+  // exportarExcel(data: any) {
+  //   return this.httpClientUtils
+  //     .postQuery('sigta/excel/exportar', data)
+  //     .pipe(
+  //       map((data) => {
+  //         return data
+  //       })
+  //     )
+  // }
+
+  exportarExcel(p_codcon: any, p_numnot: any, p_codinf: any, p_fecini: any, p_fecfin: any, p_idcorr: any) {
+    console.log(this.httpClientUtils + 'sigta/excel/exportar/' + p_codcon + '/' + p_numnot + '/' + p_codinf + '/' + p_fecini + '/' + p_fecfin + '/' + p_idcorr);
+  }
+
 
 
 

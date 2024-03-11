@@ -29,6 +29,8 @@ export class LoginComponent implements OnInit {
   p_nomusu: string = '';
   p_passwd: string = '';
 
+  dataUsuario: any;
+
 
 
   constructor(
@@ -157,26 +159,31 @@ export class LoginComponent implements OnInit {
       p_nomusu: this.p_nomusu,
     };
 
-    console.log(post);
-
     this.spinner.show();
 
     this.sigtaService.listarUsuario(post).subscribe({
       next: (data: any) => {
         this.spinner.hide();
+
+        localStorage.setItem("dataUsuario", JSON.stringify(data[0]));
+
+        console.log(this.dataUsuario);
+        
+
         if (this.p_nomusu === '') {
           this.errorSweetAlertUsuario();
           this.nomusu = '';
           this.desare = '';
-        }else{
+        } else {
 
           if (data.length > 0) {
-  
+
             this.nomusu = data[0].nomusu;
             this.desare = data[0].desare;
             console.log(data);
-            
-  
+
+            this.dataUsuario = data[0];
+
           } else {
             this.errorSweetAlertUsuario();
             this.nomusu = '';
@@ -193,7 +200,7 @@ export class LoginComponent implements OnInit {
   }
 
 
-  ingresarUsuario() {
+  ingresarUsuario(value:any) {
     let btnLogin = document.getElementById('btnLoginAction') as HTMLButtonElement;
     btnLogin.innerHTML = '<span class="align-items-center"><span class="spinner-border flex-shrink-0" role="status"><span class="visually-hidden">Loading...</span></span><span class="flex-grow-1 ms-2">Ingresando...</span></span>';
     btnLogin.classList.add('pe-none', 'btn-load');
@@ -211,7 +218,7 @@ export class LoginComponent implements OnInit {
     this.sigtaService.ingresarUsuario(post).subscribe({
       next: (data: any) => {
         this.spinner.hide();
-        localStorage.setItem("session-dashboard", data);
+        localStorage.setItem("session-dashboard", data[0]);
 
         // if (data && data.length > 0) {
         this.error = data[0].mensa;
@@ -223,7 +230,6 @@ export class LoginComponent implements OnInit {
           setTimeout(() => {
             btnLogin.innerHTML = 'Ingresar';
             btnLogin.classList.remove('pe-none', 'btn-load');
-            console.log("ruta es el problem");
 
             this.router.navigate(['/multas',]);
           }, 2000);

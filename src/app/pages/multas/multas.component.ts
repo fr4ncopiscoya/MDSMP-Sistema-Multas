@@ -18,6 +18,8 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { Platform } from '@angular/cdk/platform';
+import * as XLSX from 'xlsx';
+
 
 @Component({
   selector: 'app-multas',
@@ -42,7 +44,6 @@ export class MultasComponent implements OnInit {
   dtOptionsModal: DataTables.Settings = {};
 
 
-
   /// ================== VARIABLES ============================
 
   //DATA PARA ALMACENAR
@@ -52,6 +53,7 @@ export class MultasComponent implements OnInit {
   datosContribuyente: any;
   datosNombreContribuyente: any = [];
   datosDescripcion: any;
+  dataUsuario: any;
 
   // BUSQUEDA POR CODIGO CONTRIBUYENTE
   cnombre: string = '';
@@ -87,6 +89,7 @@ export class MultasComponent implements OnInit {
   p_obsresol_anular: string = '';
   submitted_anular: boolean = false;
 
+  error: string = ''
 
   constructor(
     private appComponent: AppComponent,
@@ -99,20 +102,21 @@ export class MultasComponent implements OnInit {
     private sigtaService: SigtaService,
     private modalService: BsModalService,
     private fb: FormBuilder,
-    private platform: Platform
+    private platform: Platform,
   ) {
     this.appComponent.login = false;
+    this.dataUsuario = localStorage.getItem('dataUsuario');
   }
 
   ngOnInit(): void {
     this.dtOptionsModal = {
-      paging: true,
-      pagingType: 'numbers',
+      // paging: true,
+      // pagingType: 'numbers',
       info: false,
-      scrollY: '320px',
+      scrollY: '450px',
       columnDefs: [
-              { width: '600px', targets: 2 },
-            ],
+        { width: '600px', targets: 2 },
+      ],
       language: {
         url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
       },
@@ -123,7 +127,9 @@ export class MultasComponent implements OnInit {
     this.p_fecini = fechaActual;
     this.p_fecfin = fechaActual;
     this.consultarMulta();
-
+    /* setTimeout(() => {
+      (document.querySelector('.dataTables_scrollBody') as HTMLElement).style.height = '100%';
+    }, 1000); */
   }
 
   ngOnDestroy(): void {
@@ -134,7 +140,41 @@ export class MultasComponent implements OnInit {
   ngAfterViewInit() {
     this.dtTrigger.next();
     this.dtTriggerModal.next();
+
+
+    /* (document.querySelector('.dataTables_scrollBody') as HTMLElement).style.top = '150px'; */
   }
+
+  exportarExcel() {
+
+    console.log("Datos Multa:", this.datosMulta);
+
+    let datosMulta = this.datosMulta;
+
+    let array = [
+      { 'Numero noti': datosMulta.nnumnot },
+      { 'Nombre': datosMulta.cnombre },
+      { 'Fecha de Resolución': datosMulta.dfecres },
+      { 'Multa': datosMulta.cmulta }
+    ];
+    console.log("Array de datos:", array);
+
+    const fileName = "Reporte.xlsx";
+    const ws = XLSX.utils.json_to_sheet(array);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Hoja1");
+
+    XLSX.writeFile(wb, fileName);
+  }
+
+
+  // exportarExcel(){
+  //   let url = this.sigtaService.exportarExcel(this.p_codcon,this.p_numnot,this.p_codinf,this.p_fecini,this.p_fecfin,this.p_idcorr);
+  //   console.log(url);
+
+
+  // }
+
 
 
   //OBTENGO LOS VALORES DE VARIABLES(MODAL)
@@ -160,13 +200,32 @@ export class MultasComponent implements OnInit {
   }
 
   //FILTROS DE BUSQUEDA POR FECHA 
-  validarFechas() {
-    if (this.p_fecini > this.p_fecfin) {
-      this.errorSweetAlertFecha()
+  validarFechas(): boolean {
+    let result = false;
+
+    console.log(this.p_fecfin);
+    console.log(this.p_fecini);
+    if (this.p_fecini != '' && this.p_fecfin != '') {
+
+      if (this.p_fecini.length < 7 || this.p_fecfin.length < 7) {
+        this.errorSweetAlertFechaIncompleta()
+        result = true;
+      } else {
+        if (this.p_fecini > this.p_fecfin) {
+          this.errorSweetAlertFecha();
+          result = true;
+
+        } else {
+          console.log("todo bien en las fechas");
+          result = false;
+        }
+      }
     } else {
-      console.log("todo bien en las fechas");
+      console.log('fuera del if');
 
     }
+
+    return result;
   }
 
   descargaExcel() {
@@ -194,7 +253,11 @@ export class MultasComponent implements OnInit {
     this.modalRefs['listar-descri'] = this.modalService.show(templateDescri, { id: 2, class: 'modal-xl', backdrop: 'static', keyboard: false });
   }
 
-  
+  // modalInformeFinal(modalInformeFinal: TemplateRef<any>) {
+  //   this.modalRefs['modalInformeFinal'] = this.modalService.show(modalInformeFinal, { id: 7, class: 'modal-xl', backdrop: 'static', keyboard: false });
+  // }
+
+
 
 
 
@@ -209,11 +272,22 @@ export class MultasComponent implements OnInit {
         return 'error';
       case '-103':
         return 'error';
+      case '-104':
+        return 'error';
+      case '-105':
+        return 'error';
       case '0':
         return 'success';
       default:
         return 'error';
     }
+  }
+
+  private errorSweetAlert(icon: 'error' | 'warning' | 'info' | 'success' = 'error') {
+    Swal.fire({
+      icon: icon,
+      text: this.error || 'Hubo un error al procesar la solicitud',
+    });
   }
 
   private errorSweetAlertCode() {
@@ -235,6 +309,13 @@ export class MultasComponent implements OnInit {
     });
   }
 
+  private errorSweetAlertFechaIncompleta() {
+    Swal.fire({
+      icon: 'info',
+      text: 'Fecha Incompleta',
+    });
+  }
+
 
 
 
@@ -245,22 +326,64 @@ export class MultasComponent implements OnInit {
     return new Date().toISOString().split('T')[0];
   }
 
-  formatFecha(fechaBD: string): string {
-    // Parse the date string
-    const fecha = new Date(fechaBD);
-    
-    // Adjust for Peru Standard Time (UTC-5)
-    fecha.setHours(fecha.getHours() - 5); // Assuming Peru is always UTC-5, adjust this if necessary
+  // formatFecha(fechaBD: string): string {
+  //   const fecha = new Date(fechaBD);
 
-    // Extract date components
-    const dia = fecha.getDate().toString().padStart(2, '0');
-    const mes = (fecha.getMonth() + 1).toString().padStart(2, '0');
-    const año = fecha.getFullYear();
+  //   fecha.setHours(fecha.getHours() - 5); 
 
-    return `${dia}/${mes}/${año}`;
-}
+  //   // Extract date components
+  //   const dia = fecha.getDate().toString().padStart(2, '0');
+  //   const mes = (fecha.getMonth() + 1).toString().padStart(2, '0');
+  //   const año = fecha.getFullYear();
+
+  //   return `${dia}/${mes}/${año}`;
+  // }
 
 
+
+  validarCnumres(data: any) {
+    const verResElements = document.querySelectorAll('.verRes');
+    const anularResElements = document.querySelectorAll('.anularRes');
+    const registrarResElements = document.querySelectorAll('.registrarRes');
+
+    if (data.cnumres === "") {
+      verResElements.forEach((element: Element) => {
+        (element as HTMLElement).style.display = 'none';
+      });
+      anularResElements.forEach((element: Element) => {
+        (element as HTMLElement).style.display = 'none';
+      });
+      registrarResElements.forEach((element: Element) => {
+        (element as HTMLElement).style.display = '';
+      });
+    } else {
+      verResElements.forEach((element: Element) => {
+        (element as HTMLElement).style.display = '';
+      });
+      anularResElements.forEach((element: Element) => {
+        (element as HTMLElement).style.display = '';
+      });
+      registrarResElements.forEach((element: Element) => {
+        (element as HTMLElement).style.display = 'none';
+      });
+    }
+  }
+
+  goBackToMultas() {
+    console.log(this.error);
+    setTimeout(() => {
+      switch (this.error) {
+        case 'Resolucion Registrada Correctamente':
+          this.consultarMulta();
+          this.modalService.hide(3)
+          // location.reload();
+          break;
+        default:
+          //
+          break;
+      }
+    }, 800);
+  }
 
 
   limpiarCampos() {
@@ -279,12 +402,18 @@ export class MultasComponent implements OnInit {
   }
 
   editarDatosMulta(id: string | null) {
-    if (id !== null) {
-      console.log(id);
-      this.router.navigate(['/multas/editar-multa/', id]);
-    }
 
+
+    if (id !== null) {
+      this.router.navigate(['/multas/editar-multa'], { queryParams: { id: id } });
+      console.log(id);
+      // this.router.navigate(['/multas/editar-multa/', id]);
+    } else {
+      console.log('ni pases');
+
+    }
   }
+
   verDatosMulta(id: string | null) {
     if (id !== null) {
       console.log(id);
@@ -298,39 +427,84 @@ export class MultasComponent implements OnInit {
 
   //====================== CONSULTAR/FILTRAR MULTA =====================
   consultarMulta() {
-    let post = {
-      p_codcon: this.p_codcon,
-      p_numnot: this.p_numnot,
-      p_codinf: this.p_codinf,
-      p_fecini: this.p_fecini.toString(),
-      p_fecfin: this.p_fecfin.toString(),
-      p_idcorr: this.p_idcorr,
-    };
-    console.log(post);
-    this.spinner.show();
+    let result;
+    result = this.validarFechas();
+    console.log(result);
 
-    this.sigtaService.consultarMulta(post).subscribe({
-      next: (data: any) => {
-        this.spinner.hide();
-        console.log(data);
+    if (!result) {
 
-        // if (data && data.length > 0) {
+      let post = {
+        p_codcon: this.p_codcon,
+        p_numnot: this.p_numnot,
+        p_codinf: this.p_codinf,
+        p_fecini: this.p_fecini.toString(),
+        p_fecfin: this.p_fecfin.toString(),
+        p_idcorr: this.p_idcorr,
+      };
+      console.log(post);
+      this.spinner.show();
+
+      this.sigtaService.consultarMulta(post).subscribe({
+        next: (data: any) => {
+          this.spinner.hide();
+          console.log(data);
+
+          // if (data && data.length > 0) {
           this.datosMulta = data;
-        // } else {
-        // }
+          // } else {
+          // }
 
-        this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-          dtInstance.destroy();
-          this.dtTrigger.next();
-        });
-      },
-      error: (error: any) => {
-        this.errorSweetAlertData();
-        this.spinner.hide();
-        console.log(error);
-      },
-    });
+          this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+            dtInstance.destroy();
+            this.dtTrigger.next();
+          });
+        },
+        error: (error: any) => {
+          this.errorSweetAlertData();
+          this.spinner.hide();
+          console.log(error);
+        },
+      });
+    }
+    /* setTimeout(() => {
+      (document.querySelector('.dataTables_scrollBody') as HTMLElement).style.height = '100%';
+    }, 1000); */
   }
+
+  consultarMultaExport() {
+    console.log('llegasteebport');
+
+    let result;
+    result = this.validarFechas();
+    console.log(result);
+
+    if (!result) {
+
+      let post = {
+        p_codcon: this.p_codcon,
+        p_numnot: this.p_numnot,
+        p_codinf: this.p_codinf,
+        p_fecini: this.p_fecini.toString(),
+        p_fecfin: this.p_fecfin.toString(),
+        p_idcorr: this.p_idcorr,
+      };
+      console.log(post);
+      this.spinner.show();
+
+      this.sigtaService.consultarMultaExport(post).subscribe({
+        next: (data: any) => {
+          console.log(data);
+
+          this.datosMulta = data;
+
+        },
+        error: (error: any) => {
+          console.log(error);
+        },
+      });
+    }
+  }
+
 
 
 
@@ -482,32 +656,61 @@ export class MultasComponent implements OnInit {
     this.modalRefs['modalRegistrarRes'] = this.modalService.show(template, { id: 3, class: 'modal-lg', backdrop: 'static', keyboard: false });
   }
 
+  modalVerResolucion(template: TemplateRef<any>, data: any) {
+    this.idcorrl = data.id_corrl;
+    console.log(this.idcorrl);
+
+    this.modalRefs['modalVerResolucion'] = this.modalService.show(template, { id: 4, class: 'modal-lg', backdrop: 'static', keyboard: false });
+    this.sigtaService.idcorrl = this.idcorrl;
+  }
+
+  modalInforme(template: TemplateRef<any>, data: any) {
+    this.idcorrl = data.id_corrl;
+    console.log(this.idcorrl);
+
+    this.modalRefs['modalInformeFinal'] = this.modalService.show(template, { id: 7, class: 'modal-lg', backdrop: 'static', keyboard: false });
+    this.sigtaService.idcorrl = this.idcorrl;
+  }
+
   guardarResolucion() {
+    let storedData = localStorage.getItem("dataUsuario");
+    if (storedData !== null) {
+      this.dataUsuario = JSON.parse(storedData);
+    }
+
     this.submitted = true;
     if (this.formResolucion.valid) {
 
       let post = {
         idcorrl: this.idcorrl,
         cnumres: this.cnumres,
+        cusuari: this.dataUsuario.codusu,
         dfecres: this.dfecres,
         dfecnot: this.dfecnot,
-        cusuari: 0,
         observc: this.observc
       }
 
       console.log(post);
 
-      // this.sigtaService.registrarResolucion(post).subscribe({
-      //   next: (data: any) => {
+      this.sigtaService.registrarResolucion(post).subscribe({
+        next: (data: any) => {
+          this.error = data[0].mensa;
+          const errorCode = data[0].error;
+          console.log(this.error);
 
-      //     console.log(data);
+          // Selecciona el icono según el código de error
+          const icon = this.getIconByErrorCode(errorCode);
 
-      //   },
-      //   error: (error: any) => {
-      //     this.spinner.hide();
-      //     console.log(error);
-      //   },
-      // });
+          // Muestra el SweetAlert con el icono y el mensaje de error
+          this.errorSweetAlert(icon);
+          this.goBackToMultas()
+
+        },
+        error: (error: any) => {
+          this.spinner.hide();
+          console.log(error);
+        },
+      });
     }
   }
 
@@ -524,15 +727,22 @@ export class MultasComponent implements OnInit {
   }
 
   modalAnularResolucion(template: TemplateRef<any>, data: any) {
-    this.dataMulta = data;
+    this.idcorrl = data.id_corrl;
+    // this.dataMulta = data;
+    // console.log(data);
+    console.log(this.idcorrl);
+
+
     this.submitted = false;
     this.setFormAnularResolucion();
-    this.modalRefs['modalAnularRes'] = this.modalService.show(template, { id: 4, class: 'modal-lg', backdrop: 'static', keyboard: false });
+    this.modalRefs['modalAnularRes'] = this.modalService.show(template, { id: 5, class: 'modal-lg', backdrop: 'static', keyboard: false });
+    this.sigtaService.idcorrl = this.idcorrl;
   }
 
   submitAnularResolucion() {
     this.submitted = true;
     if (this.formAnularResolucion.valid) {
+
     }
   }
 }

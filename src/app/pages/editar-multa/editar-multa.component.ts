@@ -60,6 +60,7 @@ export class EditarMultaComponent implements OnInit {
   datosMulta: any;
   datosTipoEspecie: any;
   datosReferencia: any;
+  dataUsuario: any;
 
 
 
@@ -105,7 +106,7 @@ export class EditarMultaComponent implements OnInit {
   cofisan: string = '' // --Area propietaria de la multa
   // dfecrec: string = '' // --Fecha de Recepcion
   crefere: string = '' // --Referencia =====
-  cusutra: string = 'N05' // --Usuario Transaccion
+  // cusutra: string = 'N05' // --Usuario Transaccion
   csancio: string = '' // --Medida Complementaria - code ======
   dsancio: string = '' // --Medida Complementaria - descri ======
   mobserv: string = '' // --Observaciones =========
@@ -138,16 +139,28 @@ export class EditarMultaComponent implements OnInit {
     private sanidadService: SanidadService,
     private modalService: BsModalService
   ) {
-    //Obtengo el id del infractor
-    let id = Number(this.route.snapshot.paramMap.get('id'));
 
-    //Almaceno el id en una variable
-    this.id_corrl = id;
+    this.dataUsuario = localStorage.getItem('dataUsuario');
+
+
 
     this.appComponent.login = false;
   }
 
   ngOnInit(): void {
+    
+    this.route.queryParams.subscribe(params => {
+          //Obtengo el id del infractor
+    let id = Number(this.route.snapshot.paramMap.get('id'));
+
+    //Almaceno el id en una variable
+    this.id_corrl = id;
+      console.log("llegaste ruta");
+      
+      this.id_corrl = params['id'];
+      // Utiliza el ID como necesites en este componente
+    });
+
     this.listarMedidaComp();
     this.listarGiroEstablecimiento();
 
@@ -253,13 +266,13 @@ export class EditarMultaComponent implements OnInit {
   onInputChange(event: any) {
     event.target.value = event.target.value.toUpperCase();
   }
-  
 
 
-  
+
+
 
   // ============================= METODOS =============================
-  
+
   //Trae todos los datos del infractor
   consultarMulta() {
     let post = {
@@ -309,6 +322,7 @@ export class EditarMultaComponent implements OnInit {
           this.nro_informe = data[0].nro_informe;
 
           console.log(this.csancio);
+          this.formatNumber();
 
         } else {
           this.errorSweetAlertData();
@@ -401,6 +415,7 @@ export class EditarMultaComponent implements OnInit {
             this.nmonto = data[0].nmontot;
             this.dmulta = data[0].r_descri;
             this.r_codint = data[0].r_codint;
+
             this.removerClase();
           } else {
             this.errorSweetAlertCode();
@@ -491,6 +506,14 @@ export class EditarMultaComponent implements OnInit {
   }
 
   editarInfraccion() {
+
+    const nmontoAsNumber = parseFloat(this.nmonto);
+
+    let storedData = localStorage.getItem("dataUsuario");
+    if (storedData !== null) {
+      this.dataUsuario = JSON.parse(storedData);
+    }
+
     let post = {
       id_corrl: this.id_corrl,
       nnumnot: this.nnumnot,
@@ -498,7 +521,7 @@ export class EditarMultaComponent implements OnInit {
       ccontri: this.ccontri,
       cmulta: this.cmulta,
       crefere: this.p_desubi,
-      cusutra: this.cusutra,
+      cusutra: this.dataUsuario.codusu,
       csancio: this.csancio,
       mobserv: this.mobserv,
       nreinci: this.nreinci,
@@ -516,7 +539,7 @@ export class EditarMultaComponent implements OnInit {
       via: this.via,
       haburb: this.haburb,
       nroActaConstatacion: this.nroActaConstatacion,
-      nmonto: this.nmonto
+      nmonto: nmontoAsNumber,
     };
     console.log(post);
     console.log(this.nmonto);
@@ -568,9 +591,30 @@ export class EditarMultaComponent implements OnInit {
     }
   }
 
+
+  formatNumber(){
+    const nmontoAsNumber = parseFloat(this.nmonto);
+    console.log(nmontoAsNumber);
+    
+
+    let formattedNumber = nmontoAsNumber.toLocaleString('en-US', { maximumFractionDigits: 2 });
+    formattedNumber = formattedNumber.replace('.', ',');
+
+    // Reemplazar comas de los miles con puntos
+    formattedNumber = formattedNumber.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+    console.log(formattedNumber);
+    // return formattedNumber
+    this.nmonto = formattedNumber;
+  }
+
+
+  
   removerClase() {
+    console.log("yaaaaaaaa");
+    
     const nmontoAsNumber = parseFloat(this.nmonto);
     const disabledColor = document.getElementById("montoinfra") as HTMLInputElement
+
     if (nmontoAsNumber <= 0) {
       disabledColor.classList.remove('disabled-color');
       disabledColor.removeAttribute('disabled')
@@ -578,6 +622,7 @@ export class EditarMultaComponent implements OnInit {
     } else {
       disabledColor.classList.add('disabled-color');
       disabledColor.setAttribute('disabled', 'disabled')
+      this.formatNumber();
     }
   }
 

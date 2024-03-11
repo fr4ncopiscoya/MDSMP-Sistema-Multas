@@ -56,6 +56,7 @@ export class CrearMultaComponent implements OnInit {
   datosGiroEstablecimiento: any;
   datosReferencia: any;
   datosTipoEspecie: any;
+  dataUsuario:any;
 
 
 
@@ -95,7 +96,7 @@ export class CrearMultaComponent implements OnInit {
   cofisan: string = '' // --Area propietaria de la multa
   // dfecrec: string = '' // --Fecha de Recepcion
   crefere: string = '' // --Referencia =====
-  cusutra: string = 'N05' // --Usuario Transaccion
+  // cusutra: string = 'N05' // --Usuario Transaccion
   csancio: string = '' // --Medida Complementaria - code ======
   dsancio: string = '' // --Medida Complementaria - descri ======
   mobserv: string = '' // --Observaciones =========
@@ -132,6 +133,7 @@ export class CrearMultaComponent implements OnInit {
     private fb: FormBuilder
   ) {
     this.appComponent.login = false;
+    this.dataUsuario = localStorage.getItem('dataUsuario');
   }
 
   ngOnInit(): void {
@@ -335,10 +337,17 @@ export class CrearMultaComponent implements OnInit {
             this.p_codinf = data[0].r_codint;
             this.removerClase();
             this.validarCodInfra();
+
+            let montoTotal = this.nmonto;
+            montoTotal.toLocaleString();
+            console.log(montoTotal);
+            
+
           } else {
             this.errorSweetAlertCode();
           }
           // }
+
 
 
           console.log(data);
@@ -429,13 +438,21 @@ export class CrearMultaComponent implements OnInit {
   }
 
   registrarInfraccion() {
+
+    const nmontoAsNumber = parseFloat(this.nmonto);
+
+    let storedData = localStorage.getItem("dataUsuario");
+    if (storedData !== null) {
+      this.dataUsuario = JSON.parse(storedData);
+    }
+
     let post = {
       nnumnot: this.nnumnot,
       dfecnot: this.p_anypro,
       ccontri: this.ccontri,
       cmulta: this.p_codinf,
       crefere: this.p_desubi,
-      cusutra: this.cusutra,
+      cusutra: this.dataUsuario.codusu,
       csancio: this.csancio,
       mobserv: this.mobserv,
       nreinci: this.nreinci,
@@ -453,7 +470,7 @@ export class CrearMultaComponent implements OnInit {
       via: this.via,
       haburb: this.haburb,
       nroActaConstatacion: this.nroActaConstatacion,
-      nmonto: this.nmonto
+      nmonto: nmontoAsNumber,
     };
 
     this.spinner.show();
@@ -552,15 +569,33 @@ export class CrearMultaComponent implements OnInit {
           this.router.navigateByUrl('/multas');
           break;
         default:
-          // Handle other cases if needed
+          //
           break;
       }
     }, 1000);
   }
 
+  formatNumber(){
+    const nmontoAsNumber = parseFloat(this.nmonto);
+    console.log(nmontoAsNumber);
+    
+
+    let formattedNumber = nmontoAsNumber.toLocaleString('en-US', { maximumFractionDigits: 2 });
+    formattedNumber = formattedNumber.replace('.', ',');
+
+    // Reemplazar comas de los miles con puntos
+    formattedNumber = formattedNumber.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+    console.log(formattedNumber);
+    // return formattedNumber
+    this.nmonto = formattedNumber;
+  }
+
   removerClase() {
+    console.log("yaaaaaaaa");
+    
     const nmontoAsNumber = parseFloat(this.nmonto);
     const disabledColor = document.getElementById("montoinfra") as HTMLInputElement
+
     if (nmontoAsNumber <= 0) {
       disabledColor.classList.remove('disabled-color');
       disabledColor.removeAttribute('disabled')
@@ -568,6 +603,7 @@ export class CrearMultaComponent implements OnInit {
     } else {
       disabledColor.classList.add('disabled-color');
       disabledColor.setAttribute('disabled', 'disabled')
+      this.formatNumber();
     }
   }
 

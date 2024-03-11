@@ -8,7 +8,7 @@
           </div>
         </div>
       </div>
-      <div class="card container-fluid">
+      <div class="card container-fluid" id="cardsuperior">
         <div class="row">
           <div class="mb-2-5 col-sm-2">
             <label for="" class="form-label col-form-label-sm">Codigo Administrado</label>
@@ -32,12 +32,12 @@
           <div class="mb-2-5 col-sm-2">
             <label for="StartleaveDate" class="form-label col-form-label-sm">Fecha Inicio</label>
             <input [(ngModel)]="p_fecini" type="date" class="form-control form-control-sm" id="StartleaveDate"
-              max="{{getMaxDate()}}" (blur)="validarFechas()" />
+              max="{{getMaxDate()}}" />
           </div>
           <div class="mb-2-5 col-sm-2">
             <label for="StartleaveDate" class="form-label col-form-label-sm">Fecha Fin</label>
             <input [(ngModel)]="p_fecfin" type="date" class="form-control form-control-sm" id="StartleaveDate"
-              max="{{getMaxDate()}}" (blur)="validarFechas()" />
+              max="{{getMaxDate()}}" />
           </div>
         </div>
         <div class="row">
@@ -61,13 +61,14 @@
           </div>
           <div class="mb-2-5 col-sm-2">
             <label for="" class="form-label col-form-label-sm">Nro. Notificación</label>
-            <input [(ngModel)]="p_numnot" maxlength="7" type="text" class="form-control form-control-sm"
+            <input [(ngModel)]="p_numnot" maxlength="6" type="text" class="form-control form-control-sm"
               id="employeeUrl" />
           </div>
 
           <div class="row mb-2">
             <div class="col-sm-auto mb-2-5">
-              <button (click)="consultarMulta()" type="button" class="btn btn-primary btn-label btn-sm">
+              <button (click)="consultarMulta()" type="button"
+                class="btn btn-primary btn-label btn-sm">
                 <i class="ri-search-line label-icon align-middle fs-16 me-2"></i>
                 Consultar
               </button>
@@ -80,7 +81,7 @@
             </div>
             <div class="col-sm-auto mb-2-5">
               <button type="button" class="btn_excel btn btn-success btn-label btn-sm" id="ExportarExcel"
-                (click)="descargaExcel()">
+                (click)="exportarExcel()">
                 <i class="ri-file-excel-2-fill label-icon align-middle fs-16 me-2"></i>Excel
               </button>
             </div>
@@ -97,12 +98,12 @@
       <div class="row">
         <div class="col-12">
           <div class="card card-h-100">
-            <div class="card-body">
+            <div class="card-body" style="height: 67vh;">
               <div>
                 <table id="tablaAplicacion" datatable [dtOptions]="dtOptionsModal" [dtTrigger]="dtTrigger"
-                  class=" align-middle mb-0" style="width: 100%;">
+                  class=" align-middle mb-0 " style="width: 100%;">
                   <thead class="table-light">
-                    <tr>
+                    <tr style="font-size: 12px;">
                       <th class="text-center">Nº Not.</th>
                       <th class="text-center">Código</th>
                       <th class="text-center">Descripción Multa</th>
@@ -110,9 +111,7 @@
                       <th class="text-center">F.Noti</th>
                       <th class="text-center">Monto</th>
                       <th class="text-center">Estado</th>
-                      <th class="text-center">
-
-                      </th>
+                      <th class="text-center">Acciones</th>
                     </tr>
                   </thead>
                   <tbody style="overflow-y: scroll;">
@@ -120,11 +119,11 @@
                       <td>{{ data.nnumnot }}</td>
                       <td>{{ data.ccontri }}</td>
                       <td>{{ data.dmulta }}</td>
-                      <td>{{ data.numrsa }}</td>
-                      <td>{{ formatFecha(data.dfecnot) }}</td>
+                      <td>{{ data.cnumres }}</td>
+                      <td>{{ data.dfecnot | date:'dd/MM/yyyy' }}</td>
                       <td>{{ data.nmonto | number : "1.2-2" }}</td>
-                      <td>
-                        <span style="font-weight: bold" [style.color]="data.colreg">
+                      <td  [style.background-color]="data.colreg">
+                        <span style="font-weight: bold; color: white">
                           {{ data.estreg }}
                         </span>
                       </td>
@@ -135,19 +134,25 @@
                             class="btn btn-sm btn-outline-primary btn-icon" data-bs-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false">M</button>
                           <div class="dropdown-menu">
-                            <a class="dropdown-item" (click)="editarDatosMulta(data.id_corrl)" style="cursor: pointer;">Editar</a>
-                            <a class="dropdown-item" (click)="verDatosMulta(data.id_corrl)" style="cursor: pointer;">Ver</a>
-                            <a class="dropdown-item"  style="cursor: pointer;">Anular</a>
-                            <a class="dropdown-item"  style="cursor: pointer;">Informe final</a>
+                            <a class="dropdown-item" (click)="editarDatosMulta(data.id_corrl)"
+                              style="cursor: pointer;">Editar</a>
+                            <a class="dropdown-item" (click)="verDatosMulta(data.id_corrl)"
+                              style="cursor: pointer;">Ver</a>
+                            <!-- <a class="dropdown-item" style="cursor: pointer;">Anular</a> -->
+                            <!-- <a class="dropdown-item" style="cursor: pointer;" (click)="modalInforme(modalInformeFinal,data)" >Informe final</a> -->
                           </div>
 
                           <button type="button" class="btn btn-sm btn-outline-danger btn-icon" data-bs-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">R</button>
+                            aria-haspopup="true" aria-expanded="false" (click)="validarCnumres(data)">R</button>
                           <div class="dropdown-menu">
-                            <a class="dropdown-item"
-                              (click)="modalRegistrarResolucion(modalResolucion,data)" style="cursor: pointer;">Registrar</a>
-                            <a class="dropdown-item" (click)="verDatosMulta(data.id_corrl)" style="cursor: pointer;">Ver</a>
-                            <a class="dropdown-item" (click)="modalAnularResolucion(anularResolucion,data)" style="cursor: pointer;">Anular</a>
+                            <a class="dropdown-item registrarRes"
+                              (click)="modalRegistrarResolucion(modalResolucion,data)"
+                              style="cursor: pointer;">Registrar</a>
+                            <a class="dropdown-item verRes" (click)="modalVerResolucion(modalResolucionVer, data)"
+                              style="cursor: pointer; display: none;">Ver</a>
+                            <a class="dropdown-item anularRes" (click)="modalAnularResolucion(anularResolucion, data)"
+                              style="cursor: pointer; display: none;"> Anular</a>
+
                           </div>
                         </div>
                       </td>
@@ -204,7 +209,8 @@
         <div class="card">
           <div class="card-header" style="display: flex; justify-content: space-between;">
             <h4 class="card-title mb-0">Registrar Resolución</h4>
-            <a class="" (click)="cerrarModal('modalRegistrarRes')" style="cursor: pointer;"> <i style="font-size: 1.50rem; " class=" ri-close-fill"></i></a>
+            <a class="" (click)="cerrarModal('modalRegistrarRes')" style="cursor: pointer;"> <i
+                style="font-size: 1.50rem; " class=" ri-close-fill"></i></a>
           </div>
           <div class="card-body">
             <div class="row">
@@ -267,40 +273,64 @@
   </div>
 </ng-template>
 
-<ng-template #anularResolucion>
-  <div class="row">
-    <form [formGroup]="formAnularResolucion" (ngSubmit)="submitAnularResolucion()">
-      <div class="col-lg-12">
-        <div class="card">
-          <div class="card-header" style="display: flex; justify-content: space-between;">
-            <h4 class="card-title mb-0" >Anular Resolución</h4>
-            <a class="" (click)="cerrarModal('modalAnularRes')" style="cursor: pointer;"> <i style="font-size: 1.50rem; " class=" ri-close-fill"></i></a>
-          </div>
-          <div class="card-body">
-            <div class="row">
-              <div class="col-md-12">
-                <div class="mb-3">
-                  <label for="compnayNameinput" class="form-label">Observación</label>
-                  <textarea class="form-control" formControlName="p_obsresol_anular"
-                    [(ngModel)]="p_obsresol_anular"></textarea>
-                  <div
-                    *ngIf="formAnularResolucion.get('p_obsresol_anular')?.invalid && (formAnularResolucion.get('p_obsresol_anular')?.dirty || formAnularResolucion.get('p_obsresol_anular')?.touched || submitted)">
-                    <div class="text-danger"
-                      *ngIf="formAnularResolucion.get('p_obsresol_anular')?.hasError('required')">
-                      Campo obligatorio</div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-12">
-                <div class="text-end">
-                  <button type="submit" class="btn btn-primary">Guardar</button>
-                </div>
-              </div>
+<ng-template #modalResolucionVer>
+  <div class="col-lg-12">
+    <div class="row">
+      <form>
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="card-header" style="display: flex; justify-content: space-between;">
+              <h4 class="card-title mb-0">Ver Resolución</h4>
+              <a class="" (click)="cerrarModal('modalVerResolucion')" style="cursor: pointer;"> <i
+                  style="font-size: 1.50rem; " class=" ri-close-fill"></i></a>
+            </div>
+            <div class="card-body">
+              <app-ver-resolucion></app-ver-resolucion>
             </div>
           </div>
         </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #anularResolucion>
+  <div class="row">
+    <!-- <form [formGroup]="formAnularResolucion" (ngSubmit)="submitAnularResolucion()"> -->
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header" style="display: flex; justify-content: space-between;">
+          <h4 class="card-title mb-0">Anular Resolución</h4>
+          <a class="" (click)="cerrarModal('modalAnularRes')" style="cursor: pointer;"> <i style="font-size: 1.50rem; "
+              class=" ri-close-fill"></i></a>
+        </div>
+        <div class="card-body">
+          <app-anular-resolucion></app-anular-resolucion>
+        </div>
       </div>
-    </form>
+    </div>
+    <!-- </form> -->
+  </div>
+</ng-template>
+
+<ng-template #modalInformeFinal>
+  <div class="col-lg-12">
+    <div class="row">
+      <form>
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="card-header" style="display: flex; justify-content: space-between;">
+              <h4 class="card-title mb-0">Registrar Informe Final</h4>
+              <a class="" (click)="cerrarModal('modalInformeFinal')" style="cursor: pointer;"> <i
+                  style="font-size: 1.50rem; " class=" ri-close-fill"></i></a>
+            </div>
+            <div class="card-body">
+              <app-crear-informe-final></app-crear-informe-final>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
   </div>
 </ng-template>
 

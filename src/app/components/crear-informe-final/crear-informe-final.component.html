@@ -1,0 +1,33 @@
+<div class="card-body">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label for="" class="form-label">Número Resolución</label>
+                <input type="text" [(ngModel)]="cnumres" maxlength="8" class="form-control">
+            </div>
+        </div>
+        <!-- <div class="col-md-6">
+        <div class="mb-3">
+          <label for="lastNameinput" class="form-label">Fecha Resolución</label>
+          <input type="date"  class="form-control" [(ngModel)]="dfecres" >
+        </div>
+      </div> -->
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label for="lastNameinput" class="form-label">Fecha Notificación</label>
+                <input type="date" class="form-control" [(ngModel)]="dfecnot">
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="mb-3">
+                <label for="compnayNameinput" class="form-label">Observación</label>
+                <textarea rows="1" class="form-control" [(ngModel)]="observc"></textarea>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <div class="text-end">
+                <button type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>

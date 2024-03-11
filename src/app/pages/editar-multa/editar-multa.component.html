@@ -188,7 +188,7 @@
           </div>
           <div class="mb-3 col-sm-2">
             <label for="" class="form-label col-sm-6 col-form-label-sm">Monto</label>
-            <input disabled [ngModel]="nmonto | number:'3.'" (ngModelChange)="nmonto = $event" type="text" class="form-control form-control-sm"
+            <input disabled [ngModel]="nmonto" (ngModelChange)="nmonto = $event" type="text" class="form-control form-control-sm"
               id="montoinfra" ngClass="disabled-color" />
             <div *ngIf="error === 'Monto Infraccion no puede ser CERO'" class="text-danger">El Monto no
               puede ser CERO</div>

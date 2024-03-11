@@ -16,7 +16,7 @@ export const ROUTES: Routes = [
   { path: 'logout', component: LogoutComponent, canActivate: [AuthGuard] },
   { path: 'multas', component: MultasComponent, canActivate: [AuthGuard] },
   { path: 'multas/crear-multa', component: CrearMultaComponent, canActivate: [AuthGuard] },
-  { path: 'multas/editar-multa/:id', component: EditarMultaComponent, canActivate: [AuthGuard] },
+  { path: 'multas/editar-multa' , component: EditarMultaComponent, canActivate: [AuthGuard] },
   { path: 'multas/ver-multa/:id', component: VerMultaComponent, canActivate: [AuthGuard] },
   { path: '', pathMatch: 'full', redirectTo: 'login' },
   { path: '**', pathMatch: 'full', redirectTo: 'login' },

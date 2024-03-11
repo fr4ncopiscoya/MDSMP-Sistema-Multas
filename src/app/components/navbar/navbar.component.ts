@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AppComponent } from 'src/app/app.component';
 // import { AdministracionService } from 'src/app/services/administracion.service';
 
 @Component({
@@ -8,15 +9,24 @@ import { Router } from '@angular/router';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
+
+  dataUsuario: any;
+
   layoutModeIcon: string = 'sun';
   dataEmpresas: any = [];
 
   constructor(
-    private router: Router
+    private router: Router,
+    // public appComponent:AppComponent
   ) { }
 
   ngOnInit(){
-    // this.companyList();
+    // console.log(this.appComponent.dataUsuario.nomusu);
+    const storedData = localStorage.getItem("dataUsuario");
+    if (storedData !== null) {
+      this.dataUsuario = JSON.parse(storedData);
+    }
+    
   }
 
   changeLayoutMode(mode: string){

@@ -8,7 +8,7 @@
               <div class="col-4">
                 <div class="mb-3">
                   <label for="firstNameinput" class="form-label col-sm-6 col-form-label col-form-label-sm">Código
-                    Administrado</label>
+                    Administrado <span class="obligatorio"> * </span> </label>
                   <input #inputCodigoAdm [(ngModel)]="ccontri" (keydown.tab)="obtenerNombrePorCod(inputCodigoAdm.value)"
                     (keyup.enter)="obtenerNombrePorCod(inputCodigoAdm.value)"
                     oninput="this.value = this.value.toUpperCase()" maxlength="6" type="text"
@@ -92,8 +92,8 @@
           </div>
           <div class="col-lg-3" style="margin-top: 10px">
             <div class="mb-2-5">
-              <label for="employeeName" class="form-label col-sm-8 col-form-label-sm mt-label-notificacion">Nro. Notifificación</label>
-              <input [(ngModel)]="nnumnot" type="text" maxlength="7"
+              <label for="employeeName" class="form-label col-sm-8 col-form-label-sm mt-label-notificacion">Nro. Notifificación <span class="obligatorio"> * </span> </label>
+              <input [(ngModel)]="nnumnot" type="text" maxlength="6"
                 class="form-control form-control-sm mt-input-notificacion" id="employeeName" placeholder="" />
               <div *ngIf="error === 'Numero de Notificacion, Invalido'" class="text-danger">Campo Obligatorio *</div>
             </div>
@@ -105,7 +105,7 @@
             </div>
             <div class="mb-2-5">
               <label for="StartleaveDate" class="form-label col-sm-6 col-form-label-sm mt-label-notificacion">Fecha
-                Multa</label>
+                Notificación <span class="obligatorio"> * </span> </label>
               <input (blur)="validarFechaMulta()" [max]="p_anypro" [(ngModel)]="p_anypro" type="date"
                 class="form-control form-control-sm mt-input-notificacion" id="StartleaveDate" />
               <div *ngIf="error === 'Fecha de Notificacion, Invalido'" class="text-danger">Campo Obligatorio *</div>
@@ -186,7 +186,7 @@
         </div>
         <div class="row" style="display: flex; justify-content: center; align-items: center">
           <div class="mb-3 col-sm-2">
-            <label for="" class="form-label col-form-label-sm">Código Multa</label>
+            <label for="" class="form-label col-form-label-sm">Código Multa <span class="obligatorio"> * </span> </label>
             <input #inputCodInfra (keydown.tab)="obtenerAreaPorCod(inputCodInfra.value)"
               (keyup.enter)="obtenerAreaPorCod(inputCodInfra.value)" [(ngModel)]="p_codinf"
               (keypress)="validarNumero($event)" (blur)="validarCodInfra()" type="text" maxlength="7"
@@ -194,8 +194,8 @@
             <div *ngIf="error === 'Codigo de Multa, Invalido'" class="text-danger">Campo Obligatorio *</div>
           </div>
           <div class="mb-3 col-sm-2">
-            <label for="" class="form-label col-sm-6 col-form-label-sm">Monto</label>
-            <input disabled [ngModel]="nmonto | number:'1.0'" (ngModelChange)="nmonto = $event" type="text" class="form-control form-control-sm"
+            <label for="" class="form-label col-sm-6 col-form-label-sm">Monto </label>
+            <input disabled [ngModel]="nmonto " (ngModelChange)="nmonto = $event" type="text" class="form-control form-control-sm"
               id="montoinfra" ngClass="disabled-color" />
             <div *ngIf="error === 'Monto Infraccion no puede ser CERO'" class="text-danger">Campo Obligatorio *</div>
           </div>

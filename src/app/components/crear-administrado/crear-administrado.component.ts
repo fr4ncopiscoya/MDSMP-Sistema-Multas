@@ -30,6 +30,7 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
   datosTipoDocumento: any;
   datosDistrito: any;
   datosReferencia: any;
+  dataUsuario:any;
 
   //Variables
   ccontri: string = ''
@@ -79,7 +80,9 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
     private sigtaService: SigtaService,
     private spinner: NgxSpinnerService,
     private modalService: BsModalService
-  ) { }
+  ) {
+    this.dataUsuario=localStorage.getItem('dataUsuario')
+   }
 
   ngOnInit(): void {
 
@@ -315,6 +318,12 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
   }
 
   registrarAdministrado() {
+
+    let storedData = localStorage.getItem('dataUsuario')
+    if(storedData != null){
+      this.dataUsuario = JSON.parse(storedData);
+    }
+
     let post = {
       ccontri: this.ccontri,
       ctipper: this.ctipper,
@@ -342,7 +351,7 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
       de_mail: this.de_mail,
       dnumcel: this.dnumcel,
       fecnaci: this.fecnaci,
-      cusuari: this.cusuari,
+      cusuari: this.dataUsuario.codusu,
     };
 
     this.spinner.show();
