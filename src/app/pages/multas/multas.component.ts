@@ -21,6 +21,7 @@ import { Platform } from '@angular/cdk/platform';
 import * as XLSX from 'xlsx';
 
 
+
 @Component({
   selector: 'app-multas',
   templateUrl: './multas.component.html',
@@ -54,6 +55,7 @@ export class MultasComponent implements OnInit {
   datosNombreContribuyente: any = [];
   datosDescripcion: any;
   dataUsuario: any;
+  datosFechas: any;
 
   // BUSQUEDA POR CODIGO CONTRIBUYENTE
   cnombre: string = '';
@@ -91,6 +93,18 @@ export class MultasComponent implements OnInit {
 
   error: string = ''
 
+  //DATOS FECHAS
+  p_tipfec: number = 0;
+  mrf_id: number = 0;
+  mrf_descri: string = '';
+
+  //DATOS USUARIO
+  nomusi: string = '';
+  usumod: string = '';
+  fecins: string = '';
+  fecmod: string = '';
+
+
   constructor(
     private appComponent: AppComponent,
     private serviceMaster: MasterService,
@@ -113,7 +127,7 @@ export class MultasComponent implements OnInit {
       // paging: true,
       // pagingType: 'numbers',
       info: false,
-      scrollY: '450px',
+      scrollY: '400px',
       columnDefs: [
         { width: '600px', targets: 2 },
       ],
@@ -122,11 +136,13 @@ export class MultasComponent implements OnInit {
       },
     }
 
+    this.listarFechas();
+
     const fechaActual = new Date().toISOString().split('T')[0];
 
-    this.p_fecini = fechaActual;
-    this.p_fecfin = fechaActual;
-    this.consultarMulta();
+    // this.p_fecini = fechaActual;
+    // this.p_fecfin = fechaActual;
+    // this.consultarMulta();
     /* setTimeout(() => {
       (document.querySelector('.dataTables_scrollBody') as HTMLElement).style.height = '100%';
     }, 1000); */
@@ -145,19 +161,21 @@ export class MultasComponent implements OnInit {
     /* (document.querySelector('.dataTables_scrollBody') as HTMLElement).style.top = '150px'; */
   }
 
+
   exportarExcel() {
+    let array = [];
 
-    console.log("Datos Multa:", this.datosMulta);
-
-    let datosMulta = this.datosMulta;
-
-    let array = [
-      { 'Numero noti': datosMulta.nnumnot },
-      { 'Nombre': datosMulta.cnombre },
-      { 'Fecha de Resolución': datosMulta.dfecres },
-      { 'Multa': datosMulta.cmulta }
-    ];
-    console.log("Array de datos:", array);
+    for (let i = 0; i < this.datosMulta.length; i++) {
+      array.push({
+        'Nº Notificación': this.datosMulta[i].nnumnot || "",
+        'Código Administrado': this.datosMulta[i].ccontri || "",
+        'Descripción Multa': this.datosMulta[i].dmulta || "",
+        'Nº Resolución': this.datosMulta[i].cnumres || "",
+        'Fecha de Notificiación': this.datosMulta[i].dfecnot || "",
+        'Monto': this.datosMulta[i].nmonto || "",
+        'Estado': this.datosMulta[i].estreg || ""
+      });
+    }
 
     const fileName = "Reporte.xlsx";
     const ws = XLSX.utils.json_to_sheet(array);
@@ -166,15 +184,6 @@ export class MultasComponent implements OnInit {
 
     XLSX.writeFile(wb, fileName);
   }
-
-
-  // exportarExcel(){
-  //   let url = this.sigtaService.exportarExcel(this.p_codcon,this.p_numnot,this.p_codinf,this.p_fecini,this.p_fecfin,this.p_idcorr);
-  //   console.log(url);
-
-
-  // }
-
 
 
   //OBTENGO LOS VALORES DE VARIABLES(MODAL)
@@ -199,13 +208,92 @@ export class MultasComponent implements OnInit {
     }
   }
 
+  onInputChange(event: any) {
+    event.target.value = event.target.value.toUpperCase();
+  }
+
+  onSelectionDate(event: any) {
+    this.mrf_id = event.mrf_id
+    console.log(this.mrf_id)
+  }
+
   //FILTROS DE BUSQUEDA POR FECHA 
+  busquedaTipoFecha() {
+    console.log('llegas');
+
+
+    // const nmontoAsNumber = parseFloat(this.nmonto);
+    // const disabledColor = document.getElementById("montoinfra") as HTMLInputElement
+
+    // if (nmontoAsNumber <= 0) {
+    //   disabledColor.classList.remove('disabled-color');
+    //   disabledColor.removeAttribute('disabled')
+    //   disabledColor.focus();
+    // } else {
+    //   disabledColor.classList.add('disabled-color');
+    //   disabledColor.setAttribute('disabled', 'disabled')
+    // }
+
+
+    const fechaActual = new Date().toISOString().split('T')[0];
+
+    const disabled_fecini = document.getElementById('fecini') as HTMLInputElement
+    const disabled_fecfin = document.getElementById('fecfin') as HTMLInputElement
+
+    if (this.mrf_id != 0) {
+      disabled_fecini.classList.remove('disabled-color');
+      disabled_fecfin.classList.remove('disabled-color');
+      disabled_fecini.removeAttribute('disabled')
+      disabled_fecfin.removeAttribute('disabled')
+      this.p_fecini = fechaActual;
+      this.p_fecfin = fechaActual;
+
+    } else {
+      disabled_fecini.classList.add('disabled-color')
+      disabled_fecfin.classList.add('disabled-color')
+      disabled_fecini.removeAttribute('disabled')
+      disabled_fecfin.removeAttribute('disabled')
+      this.p_fecini = '';
+      this.p_fecfin = '';
+    }
+  }
+
+
+  // validarFechas(): boolean {
+  //   let result = false;
+
+  //   console.log(this.p_fecfin);
+  //   console.log(this.p_fecini);
+  //   if (this.p_fecini != '' && this.p_fecfin != '') {
+
+  //     if (this.p_fecini.length < 7 || this.p_fecfin.length < 7) {
+  //       this.errorSweetAlertFechaIncompleta()
+  //       result = true;
+  //     } else {
+  //       if (this.p_fecini > this.p_fecfin) {
+  //         this.errorSweetAlertFecha();
+  //         result = true;
+
+  //       } else {
+  //         console.log("todo bien en las fechas");
+  //         result = false;
+  //       }
+  //     }
+  //   } else {
+  //     console.log('fuera del if');
+
+  //   }
+
+  //   return result;
+  // }
+
   validarFechas(): boolean {
     let result = false;
 
     console.log(this.p_fecfin);
     console.log(this.p_fecini);
     if (this.p_fecini != '' && this.p_fecfin != '') {
+      // result = true;
 
       if (this.p_fecini.length < 7 || this.p_fecfin.length < 7) {
         this.errorSweetAlertFechaIncompleta()
@@ -222,11 +310,15 @@ export class MultasComponent implements OnInit {
       }
     } else {
       console.log('fuera del if');
+      // result = false;
+      // this.errorSweetAlertFiltros();
 
     }
 
     return result;
   }
+
+
 
   descargaExcel() {
     let btnExcel = document.querySelector(
@@ -256,6 +348,14 @@ export class MultasComponent implements OnInit {
   // modalInformeFinal(modalInformeFinal: TemplateRef<any>) {
   //   this.modalRefs['modalInformeFinal'] = this.modalService.show(modalInformeFinal, { id: 7, class: 'modal-xl', backdrop: 'static', keyboard: false });
   // }
+
+  modalAnularMulta(template: TemplateRef<any>, data: any) {
+    this.idcorrl = data.id_corrl;
+    console.log(this.idcorrl);
+
+    this.modalRefs['modalAnularMulta'] = this.modalService.show(template, { id: 6, class: '', backdrop: 'static', keyboard: false });
+    this.sigtaService.idcorrl = this.idcorrl;
+  }
 
 
 
@@ -316,6 +416,13 @@ export class MultasComponent implements OnInit {
     });
   }
 
+  private errorSweetAlertFiltros() {
+    Swal.fire({
+      icon: 'info',
+      text: 'Por favor ingrese un filtro de busqueda',
+    });
+  }
+
 
 
 
@@ -339,9 +446,139 @@ export class MultasComponent implements OnInit {
   //   return `${dia}/${mes}/${año}`;
   // }
 
+  getDataUser(event: MouseEvent, data: any) {
+    console.log(data);
+
+    const trs = document.querySelectorAll('tbody tr') as NodeListOf<HTMLTableRowElement>;
+    trs.forEach((tr: HTMLTableRowElement) => {
+      tr.classList.remove('active-color');
+    });
+
+    const target = event.target as HTMLElement;
+    const tr = target.closest('tr') as HTMLTableRowElement | null;
+    if (tr) {
+      tr.classList.add('active-color');
+    }
+
+    this.nomusi = data.nomusi;
+    this.usumod = data.usumod;
+    this.fecins = data.fecins;
+    this.fecmod = data.fecmod;
+
+  }
+
+  validarBotones(data: any) {
+    //Multa / Notificacion
+    const verMultaElements = document.querySelectorAll('.verMulta');
+    const editarMultaElements = document.querySelectorAll('.editarMulta');
+    const anularMultaElements = document.querySelectorAll('.anularMulta');
+
+    //Resolucion
+    const verResElements = document.querySelectorAll('.verRes');
+    const anularResElements = document.querySelectorAll('.anularRes');
+    const registrarResElements = document.querySelectorAll('.registrarRes');
+
+    if (data.estreg === "Registrado" && data.cnumres > 0) {
+      //Multa
+      verMultaElements.forEach((element: Element) => {
+        (element as HTMLElement).style.display = '';
+      });
+      editarMultaElements.forEach((element: Element) => {
+        (element as HTMLElement).style.display = 'none';
+      });
+      anularMultaElements.forEach((element: Element) => {
+        (element as HTMLElement).style.display = 'none';
+      });
+
+      //Resolucion
+      verResElements.forEach((element: Element) => {
+        (element as HTMLElement).style.display = '';
+      });
+      anularResElements.forEach((element: Element) => {
+        (element as HTMLElement).style.display = '';
+      });
+      registrarResElements.forEach((element: Element) => {
+        (element as HTMLElement).style.display = 'none';
+      });
+    } else {
+      verMultaElements.forEach((element: Element) => {
+        (element as HTMLElement).style.display = '';
+      });
+      editarMultaElements.forEach((element: Element) => {
+        (element as HTMLElement).style.display = '';
+      });
+      anularMultaElements.forEach((element: Element) => {
+        (element as HTMLElement).style.display = '';
+      });
+
+      verResElements.forEach((element: Element) => {
+        (element as HTMLElement).style.display = '';
+      });
+      anularResElements.forEach((element: Element) => {
+        (element as HTMLElement).style.display = '';
+      });
+      registrarResElements.forEach((element: Element) => {
+        (element as HTMLElement).style.display = '';
+      });
+    }
+
+    if (data.estreg != 'Registrado') {
+      //Multa
+      verMultaElements.forEach((element: Element) => {
+        (element as HTMLElement).style.display = '';
+      });
+      editarMultaElements.forEach((element: Element) => {
+        (element as HTMLElement).style.display = 'none';
+      });
+      anularMultaElements.forEach((element: Element) => {
+        (element as HTMLElement).style.display = 'none';
+      });
+
+      verResElements.forEach((element: Element) => {
+        (element as HTMLElement).style.display = '';
+      });
+      anularResElements.forEach((element: Element) => {
+        (element as HTMLElement).style.display = 'none';
+      });
+      registrarResElements.forEach((element: Element) => {
+        (element as HTMLElement).style.display = 'none';
+      });
+
+    }
 
 
-  validarCnumres(data: any) {
+  }
+
+
+  validarMultaAnular(data: any) {
+    const verMultaElements = document.querySelectorAll('.verMulta');
+    const editarMultaElements = document.querySelectorAll('.editarMulta');
+    const anularMultaElements = document.querySelectorAll('.anularMulta');
+
+    if (data.estreg != "Registrado") {
+      verMultaElements.forEach((element: Element) => {
+        (element as HTMLElement).style.display = '';
+      });
+      editarMultaElements.forEach((element: Element) => {
+        (element as HTMLElement).style.display = 'none';
+      });
+      anularMultaElements.forEach((element: Element) => {
+        (element as HTMLElement).style.display = 'none';
+      });
+    } else {
+      verMultaElements.forEach((element: Element) => {
+        (element as HTMLElement).style.display = '';
+      });
+      editarMultaElements.forEach((element: Element) => {
+        (element as HTMLElement).style.display = '';
+      });
+      anularMultaElements.forEach((element: Element) => {
+        (element as HTMLElement).style.display = '';
+      });
+    }
+  }
+
+  validarReso(data: any) {
     const verResElements = document.querySelectorAll('.verRes');
     const anularResElements = document.querySelectorAll('.anularRes');
     const registrarResElements = document.querySelectorAll('.registrarRes');
@@ -427,21 +664,26 @@ export class MultasComponent implements OnInit {
 
   //====================== CONSULTAR/FILTRAR MULTA =====================
   consultarMulta() {
-    let result;
-    result = this.validarFechas();
-    console.log(result);
+    // let result;
+    // result = this.validarFechas();
+    // console.log(result);
 
-    if (!result) {
 
-      let post = {
-        p_codcon: this.p_codcon,
-        p_numnot: this.p_numnot,
-        p_codinf: this.p_codinf,
-        p_fecini: this.p_fecini.toString(),
-        p_fecfin: this.p_fecfin.toString(),
-        p_idcorr: this.p_idcorr,
-      };
-      console.log(post);
+    // if (!result) {
+
+    let post = {
+      p_codcon: this.p_codcon,
+      p_numnot: this.p_numnot,
+      p_codinf: this.p_codinf,
+      p_tipfec: Number(this.mrf_id),
+      p_fecini: this.p_fecini.toString(),
+      p_fecfin: this.p_fecfin.toString(),
+      p_idcorr: this.p_idcorr,
+    };
+    console.log(post);
+
+    // if (this.p_codcon === '' || this.p_codinf === '' || this.p_numnot === '') {
+    if (this.mrf_id > 0 || this.p_codcon != '' || this.p_codinf != '' || this.p_numnot != '') {
       this.spinner.show();
 
       this.sigtaService.consultarMulta(post).subscribe({
@@ -449,10 +691,7 @@ export class MultasComponent implements OnInit {
           this.spinner.hide();
           console.log(data);
 
-          // if (data && data.length > 0) {
           this.datosMulta = data;
-          // } else {
-          // }
 
           this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
             dtInstance.destroy();
@@ -465,10 +704,18 @@ export class MultasComponent implements OnInit {
           console.log(error);
         },
       });
+    } else {
+      this.spinner.hide();
+      this.errorSweetAlertFiltros();
     }
-    /* setTimeout(() => {
-      (document.querySelector('.dataTables_scrollBody') as HTMLElement).style.height = '100%';
-    }, 1000); */
+    // } 
+    // else {
+    //   this.spinner.hide();
+    //   // console.log(error);
+    //   this.errorSweetAlertFiltros();
+    // }
+
+    // }
   }
 
   consultarMultaExport() {
@@ -503,6 +750,28 @@ export class MultasComponent implements OnInit {
         },
       });
     }
+  }
+
+  listarFechas() {
+    let post = {
+
+    };
+
+    this.sigtaService.listarFechas(post).subscribe({
+      next: (data: any) => {
+        console.log(data);
+
+        this.datosFechas = data;
+        // this.mrf_descri = data[0].mrf_descri;
+        // this.mrf_id = data[0].mrf_id;
+
+
+
+      },
+      error: (error: any) => {
+        console.log(error);
+      },
+    });
   }
 
 

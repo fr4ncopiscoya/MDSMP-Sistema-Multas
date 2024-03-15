@@ -144,6 +144,17 @@ export class SigtaService {
         })
       );
   }
+
+  listarFechas(data: any) {
+    return this.httpClientUtils
+      .postQuery('sigta/fechas/listar', data)
+      .pipe(
+        map((data) => {
+          return data;
+        })
+      );
+  }
+
   registrarAdministrado(data: any) {
     return this.httpClientUtils
       .postQuery('sigta/administrado/registrar', data)
@@ -185,6 +196,16 @@ export class SigtaService {
   anularResolucion(data: any) {
     return this.httpClientUtils
       .postQuery('sigta/resolucion/anular', data)
+      .pipe(
+        map((data) => {
+          return data;
+        })
+      );
+  }
+
+  anularMulta(data: any) {
+    return this.httpClientUtils
+      .postQuery('sigta/multa/anular', data)
       .pipe(
         map((data) => {
           return data;

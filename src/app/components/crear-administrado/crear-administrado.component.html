@@ -7,7 +7,7 @@
                         style="padding: 0px 2px 16px 2px; margin: 5px; border: 0.5px ridge #e1e1e1; width: 50%; ">
                         <div class="col-sm-4">
                             <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Tipo
-                                Persona</label>
+                                Persona <span style="color: red;">*</span> </label>
                             <ng-select [(ngModel)]="ctipper" (input)="onInputChange($event)"
                                 [items]="datosTipoPersona" (change)="ChangeTipoPer($event)" [closeOnSelect]="true"
                                 [searchable]="true" bindValue="ccodtip" bindLabel="dcodtip" name=""
@@ -17,7 +17,7 @@
                         </div>
                         <div class="col-sm-4">
                             <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Tipo
-                                Documento</label>
+                                Documento <span style="color: red;">*</span> </label>
                             <ng-select [(ngModel)]="ctipdoc" (input)="onInputChange($event)"
                                 [items]="datosTipoDocumento" (change)="ChangeTipoDoc($event); ChangeTipoInput($event)" [closeOnSelect]="true"
                                 [searchable]="true" bindValue="ccodtip" bindLabel="dcodtip" name=""
@@ -27,14 +27,14 @@
                             </div>
                         </div>
                         <div class="col-sm-4">
-                            <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Nº Doc.
+                            <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Nº Doc. <span style="color: red;">*</span>
                             </label>
                             <input [(ngModel)]="dtipdoc" oninput="this.value = this.value.toUpperCase()" type="text"
                                 class="form-control form-control-sm" id="" (keypress)="validarDocumento($event)"/>
                         </div>
                         <div class="col-sm-6">
                             <label for="" class="form-label col-form-label-sm">Apellido
-                                Paterno</label>
+                                Paterno <span style="color: red;">*</span> </label>
                             <input [(ngModel)]="dpatern" oninput="this.value = this.value.toUpperCase()" type="text"
                                 class="form-control form-control-sm" id="" />
                         </div>
@@ -46,7 +46,7 @@
                                 class="form-control form-control-sm" id="" />
                         </div>
                         <div class="col-sm-12">
-                            <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm"> Nombres </label>
+                            <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm"> Nombres <span style="color: red;">*</span> </label>
                             <input [(ngModel)]="dnombre" oninput="this.value = this.value.toUpperCase()" type="text"
                                 class="form-control form-control-sm" id="" />
                         </div>
@@ -79,7 +79,7 @@
                     <div class="row g-3"
                         style=" padding: 0px 2px 16px 2px; margin: 5px; border: 0.5px ridge #e1e1e1; width: 50%; ">
                         <div class="col-sm-12">
-                            <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Distrito</label>
+                            <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Distrito <span style="color: red;">*</span> </label>
                             <div class="" style="display: flex; justify-content: center; ">
                                 <ng-select [(ngModel)]="cpostal" (input)="onInputChange($event)" [items]="datosDistrito"
                                     (change)="ChangeTipoDistrito($event)" [closeOnSelect]="true" [searchable]="true"

@@ -56,7 +56,7 @@ export class CrearMultaComponent implements OnInit {
   datosGiroEstablecimiento: any;
   datosReferencia: any;
   datosTipoEspecie: any;
-  dataUsuario:any;
+  dataUsuario: any;
 
 
 
@@ -256,7 +256,7 @@ export class CrearMultaComponent implements OnInit {
 
 
 
-  
+
 
   // ============================= METODOS ============================================
 
@@ -320,15 +320,6 @@ export class CrearMultaComponent implements OnInit {
       this.sigtaService.obtenerDescripcionPorCod(post).subscribe({
         next: (data: any) => {
           this.spinner.hide();
-
-          // if (this.p_anypro == '' || this.p_codinf == '') {
-          //   this.errorSweetAlertDate();
-          //   this.p_codinf = '';
-          //   this.dareas = '';
-          //   this.nmonto = '';
-          //   this.r_descri = '';
-
-          // } else {
           if (data && data.length > 0) {
             this.dareas = data[0].dareas;
             this.carea = data[0].carea;
@@ -336,20 +327,18 @@ export class CrearMultaComponent implements OnInit {
             this.r_descri = data[0].r_descri;
             this.p_codinf = data[0].r_codint;
             this.removerClase();
+            this.formatNumber();
             this.validarCodInfra();
 
-            let montoTotal = this.nmonto;
-            montoTotal.toLocaleString();
-            console.log(montoTotal);
-            
+            // let montoTotal = this.nmonto;
+            // montoTotal.toLocaleString();
+            // console.log(montoTotal);
+
 
           } else {
             this.errorSweetAlertCode();
+
           }
-          // }
-
-
-
           console.log(data);
         },
         error: (error: any) => {
@@ -575,24 +564,23 @@ export class CrearMultaComponent implements OnInit {
     }, 1000);
   }
 
-  formatNumber(){
+  formatNumber() {
     const nmontoAsNumber = parseFloat(this.nmonto);
-    console.log(nmontoAsNumber);
-    
 
-    let formattedNumber = nmontoAsNumber.toLocaleString('en-US', { maximumFractionDigits: 2 });
-    formattedNumber = formattedNumber.replace('.', ',');
+    let formattedNumber = nmontoAsNumber.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    formattedNumber = formattedNumber.replace('.', '.');
 
-    // Reemplazar comas de los miles con puntos
     formattedNumber = formattedNumber.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
-    console.log(formattedNumber);
-    // return formattedNumber
-    this.nmonto = formattedNumber;
+
+    if (nmontoAsNumber >= 0) {
+      this.nmonto = formattedNumber;
+    } else {
+      this.nmonto = '0.00';
+    }
   }
 
+
   removerClase() {
-    console.log("yaaaaaaaa");
-    
     const nmontoAsNumber = parseFloat(this.nmonto);
     const disabledColor = document.getElementById("montoinfra") as HTMLInputElement
 
@@ -603,7 +591,6 @@ export class CrearMultaComponent implements OnInit {
     } else {
       disabledColor.classList.add('disabled-color');
       disabledColor.setAttribute('disabled', 'disabled')
-      this.formatNumber();
     }
   }
 

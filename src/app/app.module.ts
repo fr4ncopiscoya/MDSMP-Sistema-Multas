@@ -36,6 +36,7 @@ import { LoginGuard } from './guards/login.guard';
 import { VerResolucionComponent } from './components/ver-resolucion/ver-resolucion.component';
 import { CrearInformeFinalComponent } from './components/crear-informe-final/crear-informe-final.component';
 import { AnularResolucionComponent } from './components/anular-resolucion/anular-resolucion.component';
+import { AnularMultaComponent } from './components/anular-multa/anular-multa.component';
 
 @NgModule({
   declarations: [
@@ -58,6 +59,7 @@ import { AnularResolucionComponent } from './components/anular-resolucion/anular
     VerResolucionComponent,
     CrearInformeFinalComponent,
     AnularResolucionComponent,
+    AnularMultaComponent,
   ],
   imports: [
     BrowserModule,

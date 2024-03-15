@@ -610,7 +610,6 @@ export class EditarMultaComponent implements OnInit {
 
   
   removerClase() {
-    console.log("yaaaaaaaa");
     
     const nmontoAsNumber = parseFloat(this.nmonto);
     const disabledColor = document.getElementById("montoinfra") as HTMLInputElement

@@ -18,7 +18,7 @@
                 oninput="this.value = this.value.toUpperCase()" type="text" class="form-control form-control-sm" />
             </div>
           </div>
-          <div class="mb-2-5 col-sm-6">
+          <div class="mb-2-5 col-sm-4 ">
             <label for="" class="form-label col-form-label-sm">Nombre Administrado</label>
             <div class="" style="display: flex; align-items: center">
               <input id="cnombre" disabled="" [(ngModel)]="cnombre" oninput="this.value = this.value.toUpperCase()"
@@ -30,14 +30,24 @@
             </div>
           </div>
           <div class="mb-2-5 col-sm-2">
-            <label for="StartleaveDate" class="form-label col-form-label-sm">Fecha Inicio</label>
-            <input [(ngModel)]="p_fecini" type="date" class="form-control form-control-sm" id="StartleaveDate"
-              max="{{getMaxDate()}}" />
+            <label for="" class="form-label col-form-label col-form-label-sm">Filtro Fechas</label>
+            <select id="mrf_id" class="form-select form-select-sm" [(ngModel)]="mrf_id" (change)="busquedaTipoFecha()">
+              <option [value]="0">Seleccionar</option>
+              <option *ngFor="let data of datosFechas" [value]="data.mrf_id">
+                {{data.mrf_descri}}
+              </option>
+            </select>
+          </div>
+
+          <div class="mb-2-5 col-sm-2">
+            <label for="" class="form-label col-form-label col-form-label-sm">Fecha Inicio</label>
+            <input disabled="" id="fecini" [(ngModel)]="p_fecini" type="date"
+              class="disabled-color form-control form-control-sm" max="{{getMaxDate()}}" />
           </div>
           <div class="mb-2-5 col-sm-2">
-            <label for="StartleaveDate" class="form-label col-form-label-sm">Fecha Fin</label>
-            <input [(ngModel)]="p_fecfin" type="date" class="form-control form-control-sm" id="StartleaveDate"
-              max="{{getMaxDate()}}" />
+            <label for="" class="form-label col-form-label-sm">Fecha Fin</label>
+            <input disabled="" id="fecfin" [(ngModel)]="p_fecfin" type="date"
+              class="disabled-color form-control form-control-sm" max="{{getMaxDate()}}" />
           </div>
         </div>
         <div class="row">
@@ -48,7 +58,7 @@
               oninput="this.value = this.value.toUpperCase()" type="text" class="form-control form-control-sm"
               id="employeeUrl" style="margin-right: 5px" />
           </div>
-          <div class="mb-2-5 col-sm-6">
+          <div class="mb-2-5 col-sm-8">
             <label for="" class="form-label col-form-label-sm">Descripción infracción</label>
             <div class="" style="display: flex; align-items: center">
               <input disabled="" [(ngModel)]="r_descri" oninput="this.value = this.value.toUpperCase()" type="text"
@@ -67,8 +77,7 @@
 
           <div class="row mb-2">
             <div class="col-sm-auto mb-2-5">
-              <button (click)="consultarMulta()" type="button"
-                class="btn btn-primary btn-label btn-sm">
+              <button (click)="consultarMulta()" type="button" class="btn btn-primary btn-label btn-sm">
                 <i class="ri-search-line label-icon align-middle fs-16 me-2"></i>
                 Consultar
               </button>
@@ -98,7 +107,7 @@
       <div class="row">
         <div class="col-12">
           <div class="card card-h-100">
-            <div class="card-body" style="height: 67vh;">
+            <div class="card-body">
               <div>
                 <table id="tablaAplicacion" datatable [dtOptions]="dtOptionsModal" [dtTrigger]="dtTrigger"
                   class=" align-middle mb-0 " style="width: 100%;">
@@ -115,35 +124,43 @@
                     </tr>
                   </thead>
                   <tbody style="overflow-y: scroll;">
-                    <tr *ngFor="let data of datosMulta; let i = index" class="text-center">
+                    <tr ngClass="" *ngFor="let data of datosMulta; let i = index" (click)="getDataUser($event,data)"
+                      class="text-center tr_hover">
                       <td>{{ data.nnumnot }}</td>
                       <td>{{ data.ccontri }}</td>
                       <td>{{ data.dmulta }}</td>
                       <td>{{ data.cnumres }}</td>
                       <td>{{ data.dfecnot | date:'dd/MM/yyyy' }}</td>
                       <td>{{ data.nmonto | number : "1.2-2" }}</td>
-                      <td  [style.background-color]="data.colreg">
-                        <span style="font-weight: bold; color: white">
+                      <td>
+                        <span style="font-weight: bold" [style.color]="data.colreg">
                           {{ data.estreg }}
                         </span>
                       </td>
+                      <!-- <td  [style.background-color]="data.colreg">
+                        <span style="font-weight: bold; color: white">
+                          {{ data.estreg }}
+                        </span>
+                      </td> -->
                       <td>
 
                         <div class="d-flex center">
                           <button type="button" style="margin-right: 2px;"
                             class="btn btn-sm btn-outline-primary btn-icon" data-bs-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">M</button>
+                            aria-haspopup="true" aria-expanded="false" (click)="validarBotones(data)">M</button>
                           <div class="dropdown-menu">
-                            <a class="dropdown-item" (click)="editarDatosMulta(data.id_corrl)"
-                              style="cursor: pointer;">Editar</a>
-                            <a class="dropdown-item" (click)="verDatosMulta(data.id_corrl)"
+                            <a class="dropdown-item verMulta" (click)="verDatosMulta(data.id_corrl)"
                               style="cursor: pointer;">Ver</a>
+                            <a class="dropdown-item editarMulta" (click)="editarDatosMulta(data.id_corrl)"
+                              style="cursor: pointer;">Editar</a>
+                            <a class="dropdown-item anularMulta" (click)="modalAnularMulta(anularMulta,data)"
+                              style="cursor: pointer;">Anular</a>
                             <!-- <a class="dropdown-item" style="cursor: pointer;">Anular</a> -->
                             <!-- <a class="dropdown-item" style="cursor: pointer;" (click)="modalInforme(modalInformeFinal,data)" >Informe final</a> -->
                           </div>
 
                           <button type="button" class="btn btn-sm btn-outline-danger btn-icon" data-bs-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false" (click)="validarCnumres(data)">R</button>
+                            aria-haspopup="true" aria-expanded="false" (click)="validarBotones(data)">R</button>
                           <div class="dropdown-menu">
                             <a class="dropdown-item registrarRes"
                               (click)="modalRegistrarResolucion(modalResolucion,data)"
@@ -161,10 +178,78 @@
                 </table>
               </div>
             </div>
+            <!-- <div class="col-12">
+              <div class="row"
+                style="display:flex; align-items:center; justify-content: center; text-align: center; width: 100%; ">
+                <div class="mt-3" style="width: 30%">
+                  <label for="" class="form-label col-form-label col-form-label-sm">Usuario:</label>
+                  <p>{{nomusu}}</p>
+                </div>
+      
+      
+                <div class="mt-3" style="width: 30%">
+                  <label for="" class="form-label col-form-label col-form-label-sm">Modificado:</label>
+                  <p> <span style="font-weight: bold;">{{nomusu}}</span></p>
+                </div>
+      
+      
+                <div class="mt-3" style="width: 20%">
+                  <label for="" class="form-label col-form-label col-form-label-sm">Fecha creación: {{p_anypro}}</label>
+                  <p> <span style="font-weight: bold;">{{feccre}}</span></p>
+                </div>
+      
+      
+                <div class="mt-3" style="width: 20%">
+                  <label for="" class="form-label col-form-label col-form-label-sm">Fecha modificación: {{p_anypro}}</label>
+                  <p> <span style="font-weight: bold;">{{feccre}}</span></p>
+                </div>
+      
+              </div>
+            </div> -->
           </div>
         </div>
       </div>
+
+      <div class="row">
+        <div class="datos-container">
+          <div class="col-12 datos-body">
+            <div class="col-4">
+              <div class="datos-creacion">
+                <div class="dato-usuario">
+                  <label for=""> <span class="datos-spancolor"> Usuario: &nbsp; </span> </label>
+                  <label for=""> {{nomusi}} </label>
+                  <!-- <p> </p> -->
+                </div>
+                <div class="dato-fechacre">
+                  <label for=""> <span class="datos-spancolor"> Fecha Creación: &nbsp; </span> </label>
+                  <label for=""> {{fecins}} </label>
+                  <!-- <p> </p> -->
+                </div>
+              </div>
+            </div>
+            <div class="col-4">
+            </div>
+            <div class="col-4">
+              <div class="datos-modificados">
+                <div class="dato-modificado">
+                  <label for=""> <span class="datos-spancolor"> Modificado: &nbsp; </span></label>
+                  <label for=""> {{usumod}}</label>
+                  <!-- <p></p> -->
+                </div>
+                <div class="dato-fecmod">
+                  <label for=""> <span class="datos-spancolor">Fecha Modificado: &nbsp; </span></label>
+                  <label for=""> {{fecmod}}</label>
+                  <!-- <p> </p> -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
+
+
   </div>
 </div>
 
@@ -306,6 +391,25 @@
         </div>
         <div class="card-body">
           <app-anular-resolucion></app-anular-resolucion>
+        </div>
+      </div>
+    </div>
+    <!-- </form> -->
+  </div>
+</ng-template>
+
+<ng-template #anularMulta>
+  <div class="row">
+    <!-- <form [formGroup]="formAnularResolucion" (ngSubmit)="submitAnularResolucion()"> -->
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header" style="display: flex; justify-content: space-between;">
+          <h4 class="card-title mb-0">Anular Multa</h4>
+          <a class="" (click)="cerrarModal('modalAnularMulta')" style="cursor: pointer;"> <i
+              style="font-size: 1.50rem; " class=" ri-close-fill"></i></a>
+        </div>
+        <div class="card-body">
+          <app-anular-multa></app-anular-multa>
         </div>
       </div>
     </div>
