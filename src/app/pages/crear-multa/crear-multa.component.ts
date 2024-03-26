@@ -536,6 +536,14 @@ export class CrearMultaComponent implements OnInit {
     }
   }
 
+  validarMonto(event: any): void {
+    const keyCode = event.keyCode;
+    // Permitir números del 0 al 9 (48-57) y el punto (46)
+    if ((keyCode < 48 || keyCode > 57) && keyCode !== 46) {
+      event.preventDefault();
+    }
+  }
+
   setFormInfra() {
     this.formInfraccion = this.fb.group({
       ccontri: ['', [Validators.required]],

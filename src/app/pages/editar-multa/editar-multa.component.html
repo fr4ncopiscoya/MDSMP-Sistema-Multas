@@ -37,8 +37,8 @@
                   <label for="" class="form-label col-sm-6 col-form-label col-form-label-sm">Referencia
                     donde se cometió la infracción</label>
                   <div class="" style="display: flex; align-items: center">
-                    <input disabled="" [(ngModel)]="p_desubi" oninput="this.value = this.value.toUpperCase()" type="text"
-                      class="form-control form-control-sm " ngClass="disabled-color" placeholder="" id="" />
+                    <input disabled="" [(ngModel)]="p_desubi" oninput="this.value = this.value.toUpperCase()"
+                      type="text" class="form-control form-control-sm " ngClass="disabled-color" placeholder="" id="" />
                     <button type="button" title="Buscar" (click)="modalRefere(templateRefere)"
                       class="btn btn-primary btn-sm" style="margin-left: 5px">
                       <i class="ri-search-line"></i>
@@ -89,7 +89,8 @@
                 de Cargo</label>
               <input [(ngModel)]="nnumnot" type="text" maxlength="6"
                 class="form-control form-control-sm mt-input-notificacion" id="employeeName" placeholder="" />
-                <div *ngIf="error === 'Numero de Notificacion, Invalido'" class="text-danger">Ingrese Número de Notificación </div>
+              <div *ngIf="error === 'Numero de Notificacion, Invalido'" class="text-danger">Ingrese Número de
+                Notificación </div>
             </div>
             <div class="mb-2-5">
               <label for="employeeUrl" class="form-label col-sm-8 col-form-label-sm mt-label-notificacion">Nro. Acta
@@ -102,7 +103,8 @@
                 Multa</label>
               <input (blur)="validarFechaMulta()" [max]="ahora" [(ngModel)]="p_anypro" type="date"
                 class="form-control form-control-sm mt-input-notificacion" id="StartleaveDate" />
-                <div *ngIf="error === 'Fecha de Notificacion, Invalido'" class="text-danger">Ingrese Fecha de Notificación </div>
+              <div *ngIf="error === 'Fecha de Notificacion, Invalido'" class="text-danger">Ingrese Fecha de Notificación
+              </div>
             </div>
             <div class="mb-2-5">
               <label for="EndleaveDate"
@@ -127,9 +129,10 @@
         <div class="col-7">
           <div class="mb-3">
             <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Medida Complementaria</label>
-            <ng-select placeholder="Selecciona..." (input)="onInputChange($event)" [ngModel]="csancio" [items]="datosMedidaComp"
-              (change)="onSelectionChangeMedida($event)" [closeOnSelect]="true" [searchable]="true" bindValue="CCODTIP"
-              bindLabel="DCODTIP" name="" class="form-control custom" style="border: 1px solid #b9b9b9 !important">
+            <ng-select placeholder="Selecciona..." (input)="onInputChange($event)" [ngModel]="csancio"
+              [items]="datosMedidaComp" (change)="onSelectionChangeMedida($event)" [closeOnSelect]="true"
+              [searchable]="true" bindValue="CCODTIP" bindLabel="DCODTIP" name="" class="form-control custom"
+              style="border: 1px solid #b9b9b9 !important">
             </ng-select>
           </div>
         </div>
@@ -162,9 +165,10 @@
       <div class="row" style="align-items: center; padding: 15px">
         <label for="" class="col-sm-2 col-form-label col-form-label-sm">Giro de Establecimiento</label>
         <div class="col-sm-10">
-          <ng-select (input)="onInputChange($event)" [ngModel]="giro" [items]="datosGiroEstablecimiento"
-            (change)="onSelectionChangeGiro($event)" [closeOnSelect]="true" [searchable]="true" bindValue="ccodgir"
-            bindLabel="ddesgir" name="" class="form-control custom" style="border: 1px solid #b9b9b9 !important">
+          <ng-select placeholder="Selecciona..." (input)="onInputChange($event)" [ngModel]="giro"
+            [items]="datosGiroEstablecimiento" (change)="onSelectionChangeGiro($event)" [closeOnSelect]="true"
+            [searchable]="true" bindValue="ccodgir" bindLabel="ddesgir" name="" class="form-control custom"
+            style="border: 1px solid #b9b9b9 !important">
           </ng-select>
         </div>
       </div>
@@ -187,11 +191,10 @@
               id="employeeUrl" placeholder="" />
           </div>
           <div class="mb-3 col-sm-2">
-            <label for="" class="form-label col-sm-6 col-form-label-sm">Monto</label>
-            <input disabled [ngModel]="nmonto" (ngModelChange)="nmonto = $event" type="text" class="form-control form-control-sm"
-              id="montoinfra" ngClass="disabled-color" />
-            <div *ngIf="error === 'Monto Infraccion no puede ser CERO'" class="text-danger">El Monto no
-              puede ser CERO</div>
+            <label for="" class="form-label col-sm-6 col-form-label-sm">Monto </label>
+            <input disabled [ngModel]="nmonto " (keypress)="validarMonto($event)" (ngModelChange)="nmonto = $event"
+              type="text" class="form-control form-control-sm" id="montoinfra" ngClass="disabled-color" />
+            <div *ngIf="error === 'Monto Infraccion no puede ser CERO'" class="text-danger">Campo Obligatorio *</div>
           </div>
           <div class="mb-3 col-sm-8">
             <label for="" class="form-label col-form-label-sm">Oficina</label>
@@ -253,7 +256,8 @@
         <div class="card">
           <div class="card-header" style="display: flex; justify-content: space-between;">
             <h4 class="card-title mb-0">Buscar</h4>
-            <a class="" style="cursor: pointer;" (click)="cerrarModal('listar-refere')" > <i style="font-size: 1.50rem; " class=" ri-close-fill"></i></a>
+            <a class="" style="cursor: pointer;" (click)="cerrarModal('listar-refere')"> <i style="font-size: 1.50rem; "
+                class=" ri-close-fill"></i></a>
           </div>
           <div class="card-body">
             <app-listar-referencia (confirmClicked)="confirmClickRefere($event)"></app-listar-referencia>

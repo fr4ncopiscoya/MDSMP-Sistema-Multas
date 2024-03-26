@@ -3,5 +3,5 @@ export const environment = {
   apiBackEndURL: 'http://webapp.mdsmp.gob.pe/sigtabackend/public/v1/',
   apiUtilitarios: 'http://webapp.mdsmp.gob.pe/pide/public/',
   apiMaster: 'http://webapp.mdsmp.gob.pe/masterbackend/public/v1/',
-  apiGetIp: 'http://webapp.mdsmp.gob.pe:3000/ip',
+  apiGetIp: 'http://172.17.1.90:3000/ip',
 };

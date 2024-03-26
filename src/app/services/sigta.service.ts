@@ -3,6 +3,8 @@ import { BehaviorSubject, Observable, map, firstValueFrom } from 'rxjs';
 import { HttpClientUtils } from '../utils/http-client.utils';
 import { catchError } from 'rxjs/operators';
 import Swal from 'sweetalert2';
+import { HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +13,7 @@ export class SigtaService {
 
   idcorrl: any;
 
-  constructor(private httpClientUtils: HttpClientUtils) { }
+  constructor(private httpClientUtils: HttpClientUtils, private http: HttpClient) { }
 
   listarAreaOficina(data: any) {
     return this.httpClientUtils
@@ -155,6 +157,26 @@ export class SigtaService {
       );
   }
 
+  listarCuentaCorriente(data: any) {
+    return this.httpClientUtils
+      .postQuery('sigta/cuentacorriente/listar', data)
+      .pipe(
+        map((data) => {
+          return data;
+        })
+      );
+  }
+
+  listarExpediente(data: any) {
+    return this.httpClientUtils
+      .postQuery('sigta/expediente/listar', data)
+      .pipe(
+        map((data) => {
+          return data;
+        })
+      );
+  }
+
   registrarAdministrado(data: any) {
     return this.httpClientUtils
       .postQuery('sigta/administrado/registrar', data)
@@ -213,6 +235,16 @@ export class SigtaService {
       );
   }
 
+  registrarInformeFinal(data: any) {
+    return this.httpClientUtils
+      .postQuery('sigta/informe/registrar', data)
+      .pipe(
+        map((data) => {
+          return data;
+        })
+      );
+  }
+
   getIp() {
     return this.httpClientUtils
       .getQueryIp()
@@ -223,15 +255,21 @@ export class SigtaService {
       )
   }
 
-  // exportarExcel(data: any) {
-  //   return this.httpClientUtils
-  //     .postQuery('sigta/excel/exportar', data)
-  //     .pipe(
-  //       map((data) => {
-  //         return data
-  //       })
-  //     )
-  // }
+  exportarccPDF(data: any) {
+    const url = 'http://webapp.mdsmp.gob.pe/sigtabackend/public/v1/sigta/cuentacorriente/exportar';
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    // Opciones para la solicitud HTTP
+    const options = {
+      responseType: 'blob' as 'json', // Indica que esperamos un Blob como respuesta
+      headers: headers
+    };
+
+    return this.http.post(url, data, options);
+  }
 
   exportarExcel(p_codcon: any, p_numnot: any, p_codinf: any, p_fecini: any, p_fecfin: any, p_idcorr: any) {
     console.log(this.httpClientUtils + 'sigta/excel/exportar/' + p_codcon + '/' + p_numnot + '/' + p_codinf + '/' + p_fecini + '/' + p_fecfin + '/' + p_idcorr);

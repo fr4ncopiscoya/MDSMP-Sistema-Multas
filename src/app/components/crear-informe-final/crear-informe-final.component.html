@@ -2,31 +2,29 @@
     <div class="row">
         <div class="col-md-6">
             <div class="mb-3">
-                <label for="" class="form-label">Número Resolución</label>
-                <input type="text" [(ngModel)]="cnumres" maxlength="8" class="form-control">
+                <label for="" class="form-label">Número Informe Final</label>
+                <input disabled="" id="input-cnuinfi" type="text" [(ngModel)]="cnuinfi" maxlength="8"
+                    class="form-control disabled-color">
             </div>
+            <div *ngIf="error === 'Numero de Informe Final Invalido'" class="text-danger">Campo obligatorio *</div>
         </div>
-        <!-- <div class="col-md-6">
-        <div class="mb-3">
-          <label for="lastNameinput" class="form-label">Fecha Resolución</label>
-          <input type="date"  class="form-control" [(ngModel)]="dfecres" >
-        </div>
-      </div> -->
         <div class="col-md-6">
             <div class="mb-3">
-                <label for="lastNameinput" class="form-label">Fecha Notificación</label>
-                <input type="date" class="form-control" [(ngModel)]="dfecnot">
+                <label for="lastNameinput" class="form-label">Fecha Informe Final</label>
+                <input disabled="" id="input-dfeinfi" type="date" class="form-control disabled-color"
+                    max="{{getMaxDate()}}" [(ngModel)]="dfeinfi">
             </div>
-        </div>
-        <div class="col-md-12">
-            <div class="mb-3">
-                <label for="compnayNameinput" class="form-label">Observación</label>
-                <textarea rows="1" class="form-control" [(ngModel)]="observc"></textarea>
-            </div>
+            <div *ngIf="error === 'Fecha Informe Final, Invalida'" class="text-danger">Campo obligatorio *</div>
+
         </div>
         <div class="col-lg-12">
             <div class="text-end">
-                <button type="submit" class="btn btn-primary">Guardar</button>
+                <button id="btn-anular" type="button" (click)="anularInformeFinal()"
+                    class="btn btn-danger show-hide">Anular</button>
+            </div>
+            <div class="text-end">
+                <button id="btn-guardar" type="button" (click)="registrarInformeFinal()"
+                    class="btn btn-primary show-hide">Guardar</button>
             </div>
         </div>
     </div>

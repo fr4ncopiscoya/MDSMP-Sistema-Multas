@@ -148,15 +148,15 @@ export class EditarMultaComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    
-    this.route.queryParams.subscribe(params => {
-          //Obtengo el id del infractor
-    let id = Number(this.route.snapshot.paramMap.get('id'));
 
-    //Almaceno el id en una variable
-    this.id_corrl = id;
+    this.route.queryParams.subscribe(params => {
+      //Obtengo el id del infractor
+      let id = Number(this.route.snapshot.paramMap.get('id'));
+
+      //Almaceno el id en una variable
+      this.id_corrl = id;
       console.log("llegaste ruta");
-      
+
       this.id_corrl = params['id'];
       // Utiliza el ID como necesites en este componente
     });
@@ -255,7 +255,7 @@ export class EditarMultaComponent implements OnInit {
 
   onSelectionChangeGiro(event: any) {
     this.giro = event.ccodgir
-    this.desgiro = event.ddesgir
+    // this.desgiro = event.ddesgir
   }
 
   onSelectionChangeMedida(event: any) {
@@ -322,7 +322,7 @@ export class EditarMultaComponent implements OnInit {
           this.nro_informe = data[0].nro_informe;
 
           console.log(this.csancio);
-          this.formatNumber();
+          // this.formatNumber();
 
         } else {
           this.errorSweetAlertData();
@@ -346,7 +346,7 @@ export class EditarMultaComponent implements OnInit {
 
         this.datosGiroEstablecimiento = data;
         // this.desgiro = data[0].ddesgir
-        this.giro = data[0].ccodgir;
+        // this.giro = data[0].ccodgir;
         console.log(this.giro);
 
       },
@@ -417,6 +417,7 @@ export class EditarMultaComponent implements OnInit {
             this.r_codint = data[0].r_codint;
 
             this.removerClase();
+            this.formatNumber();
           } else {
             this.errorSweetAlertCode();
           }
@@ -542,7 +543,7 @@ export class EditarMultaComponent implements OnInit {
       nmonto: nmontoAsNumber,
     };
     console.log(post);
-    console.log(this.nmonto);
+    console.log(this.csancio);
 
     this.spinner.show();
 
@@ -591,26 +592,45 @@ export class EditarMultaComponent implements OnInit {
     }
   }
 
+  validarMonto(event: any): void {
+    const keyCode = event.keyCode;
+    // Permitir números del 0 al 9 (48-57) y el punto (46)
+    if ((keyCode < 48 || keyCode > 57) && keyCode !== 46) {
+      event.preventDefault();
+    }
+  }
 
-  formatNumber(){
-    const nmontoAsNumber = parseFloat(this.nmonto);
-    console.log(nmontoAsNumber);
-    
+  validarCodInfra() {
+    if (this.p_codinf == '') {
+      // this.errorSweetAlertDate();
+      // this.p_codinf = '';
+      this.dareas = '';
+      this.nmonto = '';
+      this.r_descri = '';
 
-    let formattedNumber = nmontoAsNumber.toLocaleString('en-US', { maximumFractionDigits: 2 });
-    formattedNumber = formattedNumber.replace('.', ',');
-
-    // Reemplazar comas de los miles con puntos
-    formattedNumber = formattedNumber.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
-    console.log(formattedNumber);
-    // return formattedNumber
-    this.nmonto = formattedNumber;
+    } else {
+      console.log("no hagas nada");
+    }
   }
 
 
-  
+  formatNumber() {
+    const nmontoAsNumber = parseFloat(this.nmonto);
+
+    let formattedNumber = nmontoAsNumber.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    formattedNumber = formattedNumber.replace('.', '.');
+
+    formattedNumber = formattedNumber.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+
+    if (nmontoAsNumber >= 0) {
+      this.nmonto = formattedNumber;
+    } else {
+      this.nmonto = '0.00';
+    }
+  }
+
+
   removerClase() {
-    
     const nmontoAsNumber = parseFloat(this.nmonto);
     const disabledColor = document.getElementById("montoinfra") as HTMLInputElement
 
@@ -621,7 +641,6 @@ export class EditarMultaComponent implements OnInit {
     } else {
       disabledColor.classList.add('disabled-color');
       disabledColor.setAttribute('disabled', 'disabled')
-      this.formatNumber();
     }
   }
 

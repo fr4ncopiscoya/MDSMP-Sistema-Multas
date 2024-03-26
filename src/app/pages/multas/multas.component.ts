@@ -100,7 +100,7 @@ export class MultasComponent implements OnInit {
 
   //DATOS USUARIO
   nomusi: string = '';
-  usumod: string = '';
+  nomusm: string = '';
   fecins: string = '';
   fecmod: string = '';
 
@@ -220,21 +220,6 @@ export class MultasComponent implements OnInit {
   //FILTROS DE BUSQUEDA POR FECHA 
   busquedaTipoFecha() {
     console.log('llegas');
-
-
-    // const nmontoAsNumber = parseFloat(this.nmonto);
-    // const disabledColor = document.getElementById("montoinfra") as HTMLInputElement
-
-    // if (nmontoAsNumber <= 0) {
-    //   disabledColor.classList.remove('disabled-color');
-    //   disabledColor.removeAttribute('disabled')
-    //   disabledColor.focus();
-    // } else {
-    //   disabledColor.classList.add('disabled-color');
-    //   disabledColor.setAttribute('disabled', 'disabled')
-    // }
-
-
     const fechaActual = new Date().toISOString().split('T')[0];
 
     const disabled_fecini = document.getElementById('fecini') as HTMLInputElement
@@ -461,7 +446,7 @@ export class MultasComponent implements OnInit {
     }
 
     this.nomusi = data.nomusi;
-    this.usumod = data.usumod;
+    this.nomusm = data.nomusm;
     this.fecins = data.fecins;
     this.fecmod = data.fecmod;
 
@@ -472,6 +457,7 @@ export class MultasComponent implements OnInit {
     const verMultaElements = document.querySelectorAll('.verMulta');
     const editarMultaElements = document.querySelectorAll('.editarMulta');
     const anularMultaElements = document.querySelectorAll('.anularMulta');
+    const reganuMultaElements = document.querySelectorAll('.registraranularInfo');
 
     //Resolucion
     const verResElements = document.querySelectorAll('.verRes');
@@ -487,6 +473,9 @@ export class MultasComponent implements OnInit {
         (element as HTMLElement).style.display = 'none';
       });
       anularMultaElements.forEach((element: Element) => {
+        (element as HTMLElement).style.display = 'none';
+      });
+      reganuMultaElements.forEach((element: Element) => {
         (element as HTMLElement).style.display = 'none';
       });
 
@@ -508,6 +497,9 @@ export class MultasComponent implements OnInit {
         (element as HTMLElement).style.display = '';
       });
       anularMultaElements.forEach((element: Element) => {
+        (element as HTMLElement).style.display = '';
+      });
+      reganuMultaElements.forEach((element: Element) => {
         (element as HTMLElement).style.display = '';
       });
 
@@ -533,6 +525,9 @@ export class MultasComponent implements OnInit {
       anularMultaElements.forEach((element: Element) => {
         (element as HTMLElement).style.display = 'none';
       });
+      reganuMultaElements.forEach((element: Element) => {
+        (element as HTMLElement).style.display = 'none';
+      });
 
       verResElements.forEach((element: Element) => {
         (element as HTMLElement).style.display = '';
@@ -541,6 +536,9 @@ export class MultasComponent implements OnInit {
         (element as HTMLElement).style.display = 'none';
       });
       registrarResElements.forEach((element: Element) => {
+        (element as HTMLElement).style.display = 'none';
+      });
+      reganuMultaElements.forEach((element: Element) => {
         (element as HTMLElement).style.display = 'none';
       });
 
@@ -937,7 +935,7 @@ export class MultasComponent implements OnInit {
     this.idcorrl = data.id_corrl;
     console.log(this.idcorrl);
 
-    this.modalRefs['modalInformeFinal'] = this.modalService.show(template, { id: 7, class: 'modal-lg', backdrop: 'static', keyboard: false });
+    this.modalRefs['modalInformeFinal'] = this.modalService.show(template, { id: 7, class: '', backdrop: 'static', keyboard: false });
     this.sigtaService.idcorrl = this.idcorrl;
   }
 

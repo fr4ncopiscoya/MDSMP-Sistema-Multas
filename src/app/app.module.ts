@@ -37,6 +37,9 @@ import { VerResolucionComponent } from './components/ver-resolucion/ver-resoluci
 import { CrearInformeFinalComponent } from './components/crear-informe-final/crear-informe-final.component';
 import { AnularResolucionComponent } from './components/anular-resolucion/anular-resolucion.component';
 import { AnularMultaComponent } from './components/anular-multa/anular-multa.component';
+import { CuentacorrienteComponent } from './pages/cuentacorriente/cuentacorriente.component';
+import { CoactivoComponent } from './pages/coactivo/coactivo.component';
+import { CoactivoCrearComponent } from './pages/coactivo-crear/coactivo-crear.component';
 
 @NgModule({
   declarations: [
@@ -60,6 +63,9 @@ import { AnularMultaComponent } from './components/anular-multa/anular-multa.com
     CrearInformeFinalComponent,
     AnularResolucionComponent,
     AnularMultaComponent,
+    CuentacorrienteComponent,
+    CoactivoComponent,
+    CoactivoCrearComponent,
   ],
   imports: [
     BrowserModule,

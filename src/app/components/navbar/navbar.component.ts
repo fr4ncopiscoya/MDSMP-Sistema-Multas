@@ -18,7 +18,9 @@ export class NavbarComponent implements OnInit {
   constructor(
     private router: Router,
     // public appComponent:AppComponent
-  ) { }
+  ) { 
+    // this.dataUsuario = localStorage.getItem('dataUsuario');
+  }
 
   ngOnInit(){
     // console.log(this.appComponent.dataUsuario.nomusu);
@@ -82,8 +84,11 @@ export class NavbarComponent implements OnInit {
 
   logOut(){
     localStorage.removeItem('session-dashboard')
+    localStorage.removeItem('dataUsuario')
     // console.log("session closed");
     this.router.navigateByUrl('/login')
+
+    // this.dataUsuario.removeItem('dataUsuario')
   }
 
 }
