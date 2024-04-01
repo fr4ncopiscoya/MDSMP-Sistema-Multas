@@ -680,7 +680,6 @@ export class MultasComponent implements OnInit {
     };
     console.log(post);
 
-    // if (this.p_codcon === '' || this.p_codinf === '' || this.p_numnot === '') {
     if (this.mrf_id > 0 || this.p_codcon != '' || this.p_codinf != '' || this.p_numnot != '') {
       this.spinner.show();
 
@@ -706,14 +705,7 @@ export class MultasComponent implements OnInit {
       this.spinner.hide();
       this.errorSweetAlertFiltros();
     }
-    // } 
-    // else {
-    //   this.spinner.hide();
-    //   // console.log(error);
-    //   this.errorSweetAlertFiltros();
-    // }
 
-    // }
   }
 
   consultarMultaExport() {

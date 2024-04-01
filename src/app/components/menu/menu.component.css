@@ -1,14 +1,18 @@
-#scrollbar::-webkit-scrollbar{
+#scrollbar::-webkit-scrollbar {
     display: none;
 }
-  
-#scrollbar{
+
+#scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
 }
 
-@media (min-width:1025px){
-    .logo logo-dark{
+.active {
+    color: #438eff
+}
+
+@media (min-width:1025px) {
+    .logo logo-dark {
         display: none;
     }
 }

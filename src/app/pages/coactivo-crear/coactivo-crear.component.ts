@@ -19,8 +19,6 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { Platform } from '@angular/cdk/platform';
 import * as XLSX from 'xlsx';
-import { Observable } from 'rxjs';
-
 
 
 @Component({
@@ -51,7 +49,7 @@ export class CoactivoCrearComponent implements OnInit {
   //DATA PARA ALMACENAR
   data: any;
   dataMulta: any;
-  datosExpediente: any;
+  datosMulta: any;
   datosContribuyente: any;
   datosNombreContribuyente: any = [];
   datosDescripcion: any;
@@ -71,7 +69,8 @@ export class CoactivoCrearComponent implements OnInit {
   p_mensaje: string = '';
 
   //REGISTRO DE MULTA
-  p_idcorr: number = 0;
+  // p_idcorr: number = 0;
+  p_idcorr: string[] = [];
   p_codcon: string = '';
   p_numnot: string = '';
   p_desinf: string = '';
@@ -117,8 +116,6 @@ export class CoactivoCrearComponent implements OnInit {
 
   ngOnInit(): void {
     this.dtOptionsModal = {
-      // paging: true,
-      // pagingType: 'numbers',
       info: false,
       scrollY: '400px',
       columnDefs: [
@@ -143,9 +140,6 @@ export class CoactivoCrearComponent implements OnInit {
   ngAfterViewInit() {
     this.dtTrigger.next();
     this.dtTriggerModal.next();
-
-
-    /* (document.querySelector('.dataTables_scrollBody') as HTMLElement).style.top = '150px'; */
   }
 
   exportarccPDF() {
@@ -188,18 +182,18 @@ export class CoactivoCrearComponent implements OnInit {
   exportarExcel() {
     let array = [];
 
-    for (let i = 0; i < this.datosExpediente.length; i++) {
+    for (let i = 0; i < this.datosMulta.length; i++) {
       array.push({
-        'Descri. Concepto': this.datosExpediente[i].nnumnot || "",
-        'Año Deuda': this.datosExpediente[i].ccontri || "",
-        'Monto': this.datosExpediente[i].dmulta || "",
-        'Monto Pendiente': this.datosExpediente[i].cnumres || "",
-        'Num. Notificación': this.datosExpediente[i].dfecnot || "",
-        'Fec. Notificación': this.datosExpediente[i].nmonto || "",
-        'Num. Resolución': this.datosExpediente[i].estreg || "",
-        'Fec. Resolucion': this.datosExpediente[i].estreg || "",
-        'Fec. Pago': this.datosExpediente[i].estreg || "",
-        'Num. Recibo': this.datosExpediente[i].estreg || ""
+        'Descri. Concepto': this.datosMulta[i].nnumnot || "",
+        'Año Deuda': this.datosMulta[i].ccontri || "",
+        'Monto': this.datosMulta[i].dmulta || "",
+        'Monto Pendiente': this.datosMulta[i].cnumres || "",
+        'Num. Notificación': this.datosMulta[i].dfecnot || "",
+        'Fec. Notificación': this.datosMulta[i].nmonto || "",
+        'Num. Resolución': this.datosMulta[i].estreg || "",
+        'Fec. Resolucion': this.datosMulta[i].estreg || "",
+        'Fec. Pago': this.datosMulta[i].estreg || "",
+        'Num. Recibo': this.datosMulta[i].estreg || ""
       });
     }
 
@@ -219,7 +213,7 @@ export class CoactivoCrearComponent implements OnInit {
     this.modalService.hide(1);
   }
 
-  busquedaTipoFecha() {
+  busquedaTipoFecha() { 
     console.log('llegas');
     const fechaActual = new Date().toISOString().split('T')[0];
 
@@ -354,26 +348,59 @@ export class CoactivoCrearComponent implements OnInit {
     return new Date().toISOString().split('T')[0];
   }
 
+  // getDataUser(event: MouseEvent, data: any) {
+  //   // console.log(data);
+
+  //   this.p_idcorr = data.idcorrl;
+  //   console.log(this.p_idcorr);
+
+
+  //   const trs = document.querySelectorAll('tbody tr') as NodeListOf<HTMLTableRowElement>;
+  //   trs.forEach((tr: HTMLTableRowElement) => {
+  //     tr.classList.remove('active-color');
+  //   });
+
+  //   const target = event.target as HTMLElement;
+  //   const tr = target.closest('tr') as HTMLTableRowElement | null;
+  //   if (tr) {
+  //     tr.classList.add('active-color');
+  //   }
+
+  //   this.nomusi = data.nomusi;
+  //   this.nomusm = data.nomusm;
+  //   this.fecins = data.fecins;
+  //   this.fecmod = data.fecmod;
+
+  // }
+
   getDataUser(event: MouseEvent, data: any) {
-    console.log(data);
-
-    const trs = document.querySelectorAll('tbody tr') as NodeListOf<HTMLTableRowElement>;
-    trs.forEach((tr: HTMLTableRowElement) => {
-      tr.classList.remove('active-color');
-    });
-
-    const target = event.target as HTMLElement;
+    const target = event.target as HTMLInputElement;
     const tr = target.closest('tr') as HTMLTableRowElement | null;
+
     if (tr) {
-      tr.classList.add('active-color');
+      if (target.checked) {
+        tr.classList.add('active-color');
+
+        // Almacena el id de la casilla seleccionada en 'p_idcorrl'
+        if (!this.p_idcorr.includes(data.id_corrl)) {
+          this.p_idcorr.push(data.id_corrl);
+        }
+      } else {
+        tr.classList.remove('active-color');
+
+        // Elimina el id de la casilla deseleccionada de 'p_idcorrl'
+        const index = this.p_idcorr.indexOf(data.id_corrl);
+        if (index !== -1) {
+          this.p_idcorr.splice(index, 1);
+        }
+      }
+      console.log(this.p_idcorr);
+      
     }
 
-    this.nomusi = data.nomusi;
-    this.nomusm = data.nomusm;
-    this.fecins = data.fecins;
-    this.fecmod = data.fecmod;
-
+    // Resto de tu código aquí
   }
+
 
 
   goBackToMultas() {
@@ -381,7 +408,7 @@ export class CoactivoCrearComponent implements OnInit {
     setTimeout(() => {
       switch (this.error) {
         case 'Resolucion Registrada Correctamente':
-          this.consultarExpediente();
+          this.consultarMulta();
           this.modalService.hide(3)
           // location.reload();
           break;
@@ -433,24 +460,27 @@ export class CoactivoCrearComponent implements OnInit {
 
 
   //====================== CONSULTAR/FILTRAR MULTA =====================
-  consultarExpediente() {
+  consultarMulta() {
 
     let post = {
-      p_numexp: Number(this.mrf_id),
+      p_codcon: this.p_codcon,
+      p_numnot: this.p_numnot,
+      p_codinf: this.p_codinf,
+      p_tipfec: Number(this.mrf_id),
       p_fecini: this.p_fecini.toString(),
       p_fecfin: this.p_fecfin.toString(),
-      p_codadm: this.p_idcorr,
+      p_idcorr: this.p_idcorr,
     };
     console.log(post);
 
     this.spinner.show();
 
-    this.sigtaService.listarExpediente(post).subscribe({
+    this.sigtaService.consultarMulta(post).subscribe({
       next: (data: any) => {
         this.spinner.hide();
         console.log(data);
 
-        this.datosExpediente = data;
+        this.datosMulta = data;
 
         this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
           dtInstance.destroy();
