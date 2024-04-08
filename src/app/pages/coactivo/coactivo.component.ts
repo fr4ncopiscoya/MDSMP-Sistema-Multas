@@ -122,7 +122,7 @@ export class CoactivoComponent implements OnInit {
       info: false,
       scrollY: '400px',
       columnDefs: [
-        { width: '500px', targets: 3 },
+        { width: '500px', targets: 2 },
       ],
       language: {
         url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
@@ -421,10 +421,10 @@ export class CoactivoComponent implements OnInit {
     }
   }
 
-  verDatosMulta(id: string | null) {
+  verDatosExpediente(id: string | null) {
     if (id !== null) {
       console.log(id);
-      this.router.navigate(['/multas/ver-multa/', id]);
+      this.router.navigate(['/coactivo/ver', id]);
     }
   }
 
@@ -439,30 +439,32 @@ export class CoactivoComponent implements OnInit {
       p_numexp: this.p_numexp,
       p_fecini: this.p_fecini.toString(),
       p_fecfin: this.p_fecfin.toString(),
-      p_codadm: this.p_codadm,
+      p_codadm: this.p_codcon,
     };
     console.log(post);
 
-    this.spinner.show();
-
-    this.sigtaService.listarExpediente(post).subscribe({
-      next: (data: any) => {
-        this.spinner.hide();
-        console.log(data);
-
-        this.datosExpediente = data;
-
-        this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-          dtInstance.destroy();
-          this.dtTrigger.next();
-        });
-      },
-      error: (error: any) => {
-        this.errorSweetAlertData();
-        this.spinner.hide();
-        console.log(error);
-      },
-    });
+    
+    if(this.p_numexp.length > 0 || this.p_fecfin.length > 0 || this.p_fecini.length > 0 || this.p_codcon.length > 0 ){
+      this.spinner.show();
+      this.sigtaService.listarExpediente(post).subscribe({
+        next: (data: any) => {
+          this.spinner.hide();
+          console.log(data);
+  
+          this.datosExpediente = data;
+  
+          this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+            dtInstance.destroy();
+            this.dtTrigger.next();
+          });
+        },
+        error: (error: any) => {
+          this.errorSweetAlertData();
+          this.spinner.hide();
+          console.log(error);
+        },
+      });
+    }
 
   }
 

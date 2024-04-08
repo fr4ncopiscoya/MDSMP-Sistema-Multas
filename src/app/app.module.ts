@@ -40,6 +40,7 @@ import { AnularMultaComponent } from './components/anular-multa/anular-multa.com
 import { CuentacorrienteComponent } from './pages/cuentacorriente/cuentacorriente.component';
 import { CoactivoComponent } from './pages/coactivo/coactivo.component';
 import { CoactivoCrearComponent } from './pages/coactivo-crear/coactivo-crear.component';
+import { CoactivoVerComponent } from './pages/coactivo-ver/coactivo-ver.component';
 
 @NgModule({
   declarations: [
@@ -66,6 +67,7 @@ import { CoactivoCrearComponent } from './pages/coactivo-crear/coactivo-crear.co
     CuentacorrienteComponent,
     CoactivoComponent,
     CoactivoCrearComponent,
+    CoactivoVerComponent,
   ],
   imports: [
     BrowserModule,

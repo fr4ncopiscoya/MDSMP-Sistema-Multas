@@ -20,14 +20,14 @@ export class NavbarComponent implements OnInit {
     // public appComponent:AppComponent
   ) { 
     // this.dataUsuario = localStorage.getItem('dataUsuario');
-  }
-
-  ngOnInit(){
-    // console.log(this.appComponent.dataUsuario.nomusu);
     const storedData = localStorage.getItem("dataUsuario");
     if (storedData !== null) {
       this.dataUsuario = JSON.parse(storedData);
     }
+    console.log(this.dataUsuario);
+  }
+
+  ngOnInit(){
     
   }
 

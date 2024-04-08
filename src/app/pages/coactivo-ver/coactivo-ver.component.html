@@ -4,7 +4,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">FILTROS DE BUSQUEDA - EXPEDIENTE </h4>
+                        <h4 class="mb-sm-0">EXPEDIENTE - VER </h4>
                     </div>
                 </div>
             </div>
@@ -14,13 +14,13 @@
                     <div class="mb-3 col-sm-2">
                         <label for="" class="form-label col-form-label-sm">Codigo Administrado</label>
                         <div class="" style="display: flex">
-                            <input #inputCodigoAdm (keydown.tab)="obtenerNombrePorCod(inputCodigoAdm.value)"
+                            <input disabled="" #inputCodigoAdm (keydown.tab)="obtenerNombrePorCod(inputCodigoAdm.value)"
                                 (keyup.enter)="obtenerNombrePorCod(inputCodigoAdm.value)" maxlength="6"
                                 [(ngModel)]="p_codcon" oninput="this.value = this.value.toUpperCase()" type="text"
-                                class="form-control form-control-sm" />
+                                class="form-control form-control-sm disabled-color" />
                         </div>
                     </div>
-                    <div class="mb-3 col-sm-4 ">
+                    <div class="mb-3 col-sm-6 ">
                         <label for="" class="form-label col-form-label-sm">Nombre Administrado</label>
                         <div class="" style="display: flex; align-items: center">
                             <input id="cnombre" disabled="" [(ngModel)]="cnombre"
@@ -32,59 +32,22 @@
                             </button>
                         </div>
                     </div>
-                    <div class="mb-2-5 col-sm-2">
-                        <label for="" class="form-label col-form-label col-form-label-sm">Fecha Inicio</label>
-                        <input id="fecini" [(ngModel)]="p_fecini" type="date" class=" form-control form-control-sm"
-                            max="{{getMaxDate()}}" />
-                    </div>
-                    <div class="mb-2-5 col-sm-2">
-                        <label for="" class="form-label col-form-label-sm">Fecha Fin</label>
-                        <input id="fecfin" [(ngModel)]="p_fecfin" type="date" class=" form-control form-control-sm"
-                            max="{{getMaxDate()}}" />
+                    <div class="mb-3 col-sm-2">
+                        <label for="" class="form-label col-form-label-sm">Número Exp.</label>
+                        <div class="" style="display: flex">
+                            <input disabled="" id="numexp" #inputCodigoAdm (keydown.tab)="obtenerNombrePorCod(inputCodigoAdm.value)"
+                                (keyup.enter)="obtenerNombrePorCod(inputCodigoAdm.value)" maxlength="6"
+                                [(ngModel)]="p_numexp" (keypress)="validarNumero($event)"  type="text"
+                                class="form-control form-control-sm disabled-color" />
+                        </div>
                     </div>
                     <div class="mb-3 col-sm-2">
-                        <label for="" class="form-label col-form-label-sm">Nro. Expediente</label>
+                        <label for="" class="form-label col-form-label-sm">Fecha Exp.</label>
                         <div class="" style="display: flex">
-                            <input #inputCodigoAdm (keydown.tab)="obtenerNombrePorCod(inputCodigoAdm.value)"
+                            <input disabled="" id="fecexp" #inputCodigoAdm (keydown.tab)="obtenerNombrePorCod(inputCodigoAdm.value)"
                                 (keyup.enter)="obtenerNombrePorCod(inputCodigoAdm.value)" maxlength="6"
-                                [(ngModel)]="p_numexp" oninput="this.value = this.value.toUpperCase()" type="text"
-                                class="form-control form-control-sm" />
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="row mb-2">
-                        <div class="col-sm-auto mb-2-5">
-                            <button (click)="consultarExpediente()" type="button"
-                                class="btn btn-primary btn-label btn-sm">
-                                <i class="ri-search-line label-icon align-middle fs-16 me-2"></i>
-                                Consultar
-                            </button>
-                        </div>
-                        <div class="col-sm-auto mb-2-5">
-                            <button type="button" [routerLink]="['/coactivo/crear']"
-                                class="btn btn-primary btn-label btn-sm">
-                                <i class="ri-file-2-fill label-icon align-middle fs-16 me-2"></i>
-                                Nuevo
-                            </button>
-                        </div>
-                        <!-- <div class="col-sm-auto mb-2-5">
-                            <button type="button" class="btn btn-danger btn-label btn-sm" (click)="exportarccPDF()">
-                                <i class="ri-file-2-fill label-icon align-middle fs-16 me-2"></i>
-                                PDF
-                            </button>
-                        </div> -->
-                        <!-- <div class="col-sm-auto mb-2-5">
-                            <button type="button" class="btn_excel btn btn-success btn-label btn-sm" id="ExportarExcel"
-                                (click)="exportarExcel()">
-                                <i class="ri-file-excel-2-fill label-icon align-middle fs-16 me-2"></i>Excel
-                            </button>
-                        </div> -->
-                        <div class="col-sm-auto mb-2-5">
-                            <button (click)="limpiarCampos()" type="button" class="btn btn-info btn-label btn-sm">
-                                <i class=" ri-brush-2-line label-icon align-middle fs-16 me-2"></i>
-                                Limpiar
-                            </button>
+                                [(ngModel)]="p_fecexp" oninput="this.value = this.value.toUpperCase()" type="date"
+                                class="form-control form-control-sm disabled-color" />
                         </div>
                     </div>
                 </div>
@@ -99,27 +62,23 @@
                                     [dtTrigger]="dtTrigger" class=" align-middle mb-0 " style="width: 100%;">
                                     <thead class="table-light">
                                         <tr style="font-size: 12px;">
-                                            <th class="text-center">Nº Expediente</th>
+                                            <!-- <th class="text-center">Chek</th> -->
+                                            <th class="text-center">Nº Resolucion Sanci.</th>
                                             <th class="text-center">Fecha</th>
-                                            <th class="text-center">Nombre Administrado</th>
+                                            <th class="text-center">Descripción Infracción</th>
                                             <th class="text-center">Monto</th>
-                                            <th class="text-center">Cod.SIGET</th>
-                                            <th class="text-center"></th>
+                                            <th class="text-center">Saldo</th>
                                         </tr>
                                     </thead>
                                     <tbody style="overflow-y: scroll;">
                                         <tr ngClass="" *ngFor="let data of datosExpediente; let i = index"
                                             (click)="getDataUser($event,data)" class="text-center tr_hover">
-                                            <td>{{ data.exp_numexp }}</td>
-                                            <td>{{ data.exp_fecexp | date: 'dd/MM/yyyy' }}</td>
-                                            <td>{{ data.exp_admnom }}</td>
-                                            <td>{{ data.exp_monexp | number : "1.2-2"}}</td>
-                                            <td>{{ data.exp_sigeta}}</td>
-                                            <td><button type="button" (click)="verDatosExpediente(data.exp_id)" title="Ver"
-                                                    class="btn btn-primary btn-sm">
-                                                    <i class="ri-eye-line"></i>
-                                                </button>
-                                            </td>
+                                            <!-- <td><input type="checkbox" style="margin-top: 5px;"></td> -->
+                                            <td>{{ data.numrsa }}</td>
+                                            <td>{{ data.fecres | date:'dd/MM/yyyy' }}</td>
+                                            <td>{{ data.aredes }}</td>
+                                            <td>{{ data.monmul | number : "1.2-2" }}</td>
+                                            <td>{{ data.monsal | number : "1.2-2"}}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -129,9 +88,32 @@
                 </div>
             </div>
 
+            <div class="card container-fluid" id="cardsuperior">
+                <div class="row">
+                    <div class="mb-3 col-sm-2">
+                    </div>
+                    <div class="mb-3 col-sm-2">
+                    </div>
+                    <div class="mb-3 col-sm-2">
+                    </div>
+                    <div class="mb-3 col-sm-2">
+                    </div>
+                    <div class="mb-3 col-sm-2">
+                    </div>
+                    <div class="mb-3 col-sm-2"
+                        style="display: flex; align-items: center; justify-content: right; margin-top: 23px; ">
+                        <div class=" mb-2-5" style="margin: 0 10px;">
+                        </div>
+                        <div class=" mb-2-5" style="margin: 0 10px;">
+                            <button type="button" [routerLink]="['/coactivo']" class="btn btn-danger btn-label btn-sm">
+                                <i class="ri-file-2-fill label-icon align-middle fs-16 me-2"></i>
+                                Salir
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-
-
     </div>
 </div>
 
@@ -219,8 +201,8 @@
                     <div class="card">
                         <div class="card-header" style="display: flex; justify-content: space-between;">
                             <h4 class="card-title mb-0">Registrar Informe Final</h4>
-                            <a class="" (click)="cerrarModal('modalInformeFinal')" style="cursor: pointer;"> <i
-                                    style="font-size: 1.50rem; " class=" ri-close-fill"></i></a>
+                            <a class="" (click)="cerrarModal('modalInformeFinal')" style="cursor: pointer;">
+                                <i style="font-size: 1.50rem; " class=" ri-close-fill"></i></a>
                         </div>
                         <div class="card-body">
                             <app-crear-informe-final></app-crear-informe-final>

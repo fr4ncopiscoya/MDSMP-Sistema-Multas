@@ -8,6 +8,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="card container-fluid" id="cardsuperior">
                 <div class="row">
                     <div class="mb-3 col-sm-2">
@@ -19,7 +20,7 @@
                                 class="form-control form-control-sm" />
                         </div>
                     </div>
-                    <div class="mb-3 col-sm-10 ">
+                    <div class="mb-3 col-sm-6 ">
                         <label for="" class="form-label col-form-label-sm">Nombre Administrado</label>
                         <div class="" style="display: flex; align-items: center">
                             <input id="cnombre" disabled="" [(ngModel)]="cnombre"
@@ -31,12 +32,36 @@
                             </button>
                         </div>
                     </div>
+                    <div class="mb-3 col-sm-2">
+                        <label for="" class="form-label col-form-label-sm">Número Exp.</label>
+                        <div class="" style="display: flex">
+                            <input disabled="" id="numexp" #inputCodigoAdm (keydown.tab)="obtenerNombrePorCod(inputCodigoAdm.value)"
+                                (keyup.enter)="obtenerNombrePorCod(inputCodigoAdm.value)" maxlength="6"
+                                [(ngModel)]="p_numexp" (keypress)="validarNumero($event)"  type="text"
+                                class="form-control form-control-sm disabled-color" />
+                        </div>
+                    </div>
+                    <div class="mb-3 col-sm-2">
+                        <label for="" class="form-label col-form-label-sm">Fecha Exp.</label>
+                        <div class="" style="display: flex">
+                            <input disabled="" id="fecexp" #inputCodigoAdm (keydown.tab)="obtenerNombrePorCod(inputCodigoAdm.value)"
+                                (keyup.enter)="obtenerNombrePorCod(inputCodigoAdm.value)" maxlength="6"
+                                [(ngModel)]="p_fecexp" oninput="this.value = this.value.toUpperCase()" type="date"
+                                class="form-control form-control-sm disabled-color" />
+                        </div>
+                    </div>
                 </div>
                 <div class="row mb-2">
                     <div class="col-sm-auto mb-2-5">
-                        <button (click)="consultarMulta()" type="button" class="btn btn-primary btn-label btn-sm">
+                        <button (click)="consultarExpediente()" type="button" class="btn btn-primary btn-label btn-sm">
                             <i class="ri-search-line label-icon align-middle fs-16 me-2"></i>
                             Consultar
+                        </button>
+                    </div>
+                    <div class="col-sm-auto mb-2-5">
+                        <button (click)="limpiarCampos()" type="button" class="btn btn-info btn-label btn-sm">
+                            <i class=" ri-brush-2-line label-icon align-middle fs-16 me-2"></i>
+                            Limpiar
                         </button>
                     </div>
                 </div>
@@ -44,66 +69,58 @@
 
             <div class="row">
                 <div class="col-12">
-                  <div class="card card-h-100">
-                    <div class="card-body">
-                      <div>
-                        <table id="tablaAplicacion" datatable [dtOptions]="dtOptionsModal" [dtTrigger]="dtTrigger"
-                          class=" align-middle mb-0 " style="width: 100%;">
-                          <thead class="table-light">
-                            <tr style="font-size: 12px;">
-                              <th class="text-center">Nº Not.</th>
-                              <th class="text-center">Código</th>
-                              <th class="text-center">Descripción Multa</th>
-                              <th class="text-center">Nº Resol</th>
-                              <th class="text-center">F.Noti</th>
-                              <th class="text-center">Monto</th>
-                              <th class="text-center">Estado</th>
-                              <th class="text-center">Acciones</th>
-                            </tr>
-                          </thead>
-                          <tbody style="overflow-y: scroll;">
-                            <tr ngClass="" *ngFor="let data of datosMulta; let i = index" (click)="getDataUser($event,data)"
-                              class="text-center tr_hover">
-                              <td>{{ data.nnumnot }}</td>
-                              <td>{{ data.ccontri }}</td>
-                              <td>{{ data.dmulta }}</td>
-                              <td>{{ data.cnumres }}</td>
-                              <td>{{ data.dfecnot | date:'dd/MM/yyyy' }}</td>
-                              <td>{{ data.nmonto | number : "1.2-2" }}</td>
-                              <td>
-                                <span style="font-weight: bold" [style.color]="data.colreg">
-                                  {{ data.estreg }}
-                                </span>
-                              </td>
-                              <td></td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
+                    <div class="card card-h-100">
+                        <div class="card-body">
+                            <div>
+                                <table id="tablaAplicacion" datatable [dtOptions]="dtOptionsModal"
+                                    [dtTrigger]="dtTrigger" class=" align-middle mb-0 " style="width: 100%;">
+                                    <thead class="table-light">
+                                        <tr style="font-size: 12px;">
+                                            <th class="text-center">Chek</th>
+                                            <th class="text-center">Nº Resolucion Sanci.</th>
+                                            <th class="text-center">Fecha</th>
+                                            <th class="text-center">Descripción Infracción</th>
+                                            <th class="text-center">Monto</th>
+                                            <th class="text-center">Saldo</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody style="overflow-y: scroll;">
+                                        <tr ngClass="" *ngFor="let data of datosExpediente; let i = index"
+                                            (click)="getDataUser($event,data)" class="text-center tr_hover">
+                                            <td><input type="checkbox" style="margin-top: 5px;"></td>
+                                            <td>{{ data.numrsa }}</td>
+                                            <td>{{ data.fecres | date:'dd/MM/yyyy' }}</td>
+                                            <td>{{ data.aredes }}</td>
+                                            <td>{{ data.monmul | number : "1.2-2" }}</td>
+                                            <td>{{ data.monsal | number : "1.2-2"}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
-                  </div>
                 </div>
-              </div>
+            </div>
 
             <div class="card container-fluid" id="cardsuperior">
                 <div class="row">
                     <div class="mb-3 col-sm-2">
-                        <label for="" class="form-label col-form-label-sm">Número</label>
+                        <!-- <label for="" class="form-label col-form-label-sm">Número</label>
                         <div class="" style="display: flex">
                             <input #inputCodigoAdm (keydown.tab)="obtenerNombrePorCod(inputCodigoAdm.value)"
                                 (keyup.enter)="obtenerNombrePorCod(inputCodigoAdm.value)" maxlength="6"
-                                [(ngModel)]="p_codcon" oninput="this.value = this.value.toUpperCase()" type="text"
+                                [(ngModel)]="p_numexp" oninput="this.value = this.value.toUpperCase()" type="text"
                                 class="form-control form-control-sm" />
-                        </div>
+                        </div> -->
                     </div>
                     <div class="mb-3 col-sm-2">
-                        <label for="" class="form-label col-form-label-sm">Fecha</label>
+                        <!-- <label for="" class="form-label col-form-label-sm">Fecha</label>
                         <div class="" style="display: flex">
                             <input #inputCodigoAdm (keydown.tab)="obtenerNombrePorCod(inputCodigoAdm.value)"
                                 (keyup.enter)="obtenerNombrePorCod(inputCodigoAdm.value)" maxlength="6"
-                                [(ngModel)]="p_codcon" oninput="this.value = this.value.toUpperCase()" type="date"
+                                [(ngModel)]="p_fecexp" oninput="this.value = this.value.toUpperCase()" type="date"
                                 class="form-control form-control-sm" />
-                        </div>
+                        </div> -->
                     </div>
                     <div class="mb-3 col-sm-2">
 
@@ -117,7 +134,8 @@
                     <div class="mb-3 col-sm-2"
                         style="display: flex; align-items: center; justify-content: right; margin-top: 23px; ">
                         <div class=" mb-2-5" style="margin: 0 10px;">
-                            <button type="button" class="btn btn-primary btn-label btn-sm">
+                            <button type="button" class="btn btn-primary btn-label btn-sm"
+                                (click)="registrarExpediente();">
                                 <i class="ri-save-line label-icon align-middle fs-16 me-2"></i>
                                 Grabar
                             </button>

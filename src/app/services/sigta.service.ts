@@ -177,6 +177,26 @@ export class SigtaService {
       );
   }
 
+  listarExpedienteNuevo(data: any) {
+    return this.httpClientUtils
+      .postQuery('sigta/expedientenuevo/listar', data)
+      .pipe(
+        map((data) => {
+          return data;
+        })
+      );
+  }
+
+  listarExpedienteVer(data: any) {
+    return this.httpClientUtils
+      .postQuery('sigta/expediente/ver', data)
+      .pipe(
+        map((data) => {
+          return data;
+        })
+      );
+  }
+
   registrarAdministrado(data: any) {
     return this.httpClientUtils
       .postQuery('sigta/administrado/registrar', data)
@@ -238,6 +258,16 @@ export class SigtaService {
   registrarInformeFinal(data: any) {
     return this.httpClientUtils
       .postQuery('sigta/informe/registrar', data)
+      .pipe(
+        map((data) => {
+          return data;
+        })
+      );
+  }
+
+  registrarExpediente(data: any) {
+    return this.httpClientUtils
+      .postQuery('sigta/expediente/registrar', data)
       .pipe(
         map((data) => {
           return data;

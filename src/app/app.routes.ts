@@ -11,6 +11,7 @@ import { LoginGuard } from './guards/login.guard';
 import { CuentacorrienteComponent } from './pages/cuentacorriente/cuentacorriente.component';
 import { CoactivoComponent } from './pages/coactivo/coactivo.component';
 import { CoactivoCrearComponent } from './pages/coactivo-crear/coactivo-crear.component';
+import { CoactivoVerComponent } from './pages/coactivo-ver/coactivo-ver.component';
 
 
 export const ROUTES: Routes = [
@@ -30,6 +31,7 @@ export const ROUTES: Routes = [
 
   //Expediente
   { path: 'coactivo/crear', component: CoactivoCrearComponent, canActivate: [AuthGuard] },
+  { path: 'coactivo/ver/:id', component: CoactivoVerComponent, canActivate: [AuthGuard] },
 
   { path: '', pathMatch: 'full', redirectTo: 'login' },
   { path: '**', pathMatch: 'full', redirectTo: 'login' },

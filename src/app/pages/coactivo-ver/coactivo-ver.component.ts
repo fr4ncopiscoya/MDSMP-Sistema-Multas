@@ -22,11 +22,11 @@ import * as XLSX from 'xlsx';
 
 
 @Component({
-  selector: 'app-coactivo-crear',
-  templateUrl: './coactivo-crear.component.html',
-  styleUrls: ['./coactivo-crear.component.css']
+  selector: 'app-coactivo-ver',
+  templateUrl: './coactivo-ver.component.html',
+  styleUrls: ['./coactivo-ver.component.css']
 })
-export class CoactivoCrearComponent implements OnInit {
+export class CoactivoVerComponent implements OnInit {
   // MODAL
   @ViewChild('template') miModal!: ElementRef;
   modalRefs: { [key: string]: BsModalRef } = {}; // Objeto para almacenar los modalRefs
@@ -87,7 +87,7 @@ export class CoactivoCrearComponent implements OnInit {
   // p_numexp: string = '';
   p_fecexp: string = ''
   // p_fecfin: string = '';
-  // p_codadm: string = '';
+  p_expnid: number = 0;
 
   error: string = ''
 
@@ -116,8 +116,13 @@ export class CoactivoCrearComponent implements OnInit {
     private fb: FormBuilder,
     private platform: Platform,
   ) {
+    let id = Number(this.route.snapshot.paramMap.get('id'));
+    this.p_expnid = id;
+    this.consultarExpediente();
+
     this.appComponent.login = false;
     this.dataUsuario = localStorage.getItem('dataUsuario');
+
   }
 
   ngOnInit(): void {
@@ -125,7 +130,7 @@ export class CoactivoCrearComponent implements OnInit {
       info: false,
       scrollY: '400px',
       columnDefs: [
-        { width: '500px', targets: 3 },
+        { width: '500px', targets: 2 },
       ],
       language: {
         url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
@@ -438,22 +443,22 @@ export class CoactivoCrearComponent implements OnInit {
   consultarExpediente() {
 
     let post = {
-      p_codadm: this.p_codcon,
+      p_expnid: this.p_expnid,
     };
     console.log(post);
 
-
-    if (this.p_codcon.length > 3) {
       this.spinner.show();
-      this.sigtaService.listarExpedienteNuevo(post).subscribe({
+      this.sigtaService.listarExpedienteVer(post).subscribe({
         next: (data: any) => {
           this.spinner.hide();
           // console.log(data);
 
           this.datosExpediente = data;
+          this.p_codcon = data[0].codadm;
+          this.cnombre = data[0].nomadm;
           console.log(this.datosExpediente);
-
-
+          console.log(this.p_codcon);
+          console.log(this.cnombre);
 
           this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
             dtInstance.destroy();
@@ -467,7 +472,6 @@ export class CoactivoCrearComponent implements OnInit {
           console.log(error);
         },
       });
-    }
 
   }
 
@@ -597,3 +601,4 @@ export class CoactivoCrearComponent implements OnInit {
   }
 
 }
+
