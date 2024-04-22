@@ -20,6 +20,7 @@ import Swal from 'sweetalert2';
 import { Platform } from '@angular/cdk/platform';
 import * as XLSX from 'xlsx';
 import { Observable } from 'rxjs';
+import { TRANSITION_DURATIONS } from 'ngx-bootstrap/modal/modal-options.class';
 
 
 
@@ -57,6 +58,10 @@ export class CoactivoComponent implements OnInit {
   datosDescripcion: any;
   dataUsuario: any;
   datosFechas: any;
+
+  //COSTAS
+  datosCostas:any;
+  datosGastos:any;
 
   // BUSQUEDA POR CODIGO CONTRIBUYENTE
   cnombre: string = '';
@@ -96,6 +101,9 @@ export class CoactivoComponent implements OnInit {
   nomusm: string = '';
   fecins: string = '';
   fecmod: string = '';
+
+  p_concid: number = 0;
+  exp_id: number = 0;
 
 
   constructor(
@@ -252,6 +260,10 @@ export class CoactivoComponent implements OnInit {
     }
   }
 
+  rellenarCeros(){
+    this.p_numexp = this.p_numexp.padStart(6,'0')
+  }
+
   onInputChange(event: any) {
     event.target.value = event.target.value.toUpperCase();
   }
@@ -277,6 +289,19 @@ export class CoactivoComponent implements OnInit {
 
   modalDescri(templateDescri: TemplateRef<any>) {
     this.modalRefs['listar-descri'] = this.modalService.show(templateDescri, { id: 2, class: 'modal-xl', backdrop: 'static', keyboard: false });
+  }
+
+  listarCosGas(id:any,template: TemplateRef<any>, exp_id:number) {
+    this.p_concid = id;
+    this.sigtaService.p_concid = this.p_concid;
+    // console.log(this.sigtaService.p_concid);
+    
+    this.exp_id = exp_id;
+    this.sigtaService.exp_id = this.exp_id;
+    // console.log(this.exp_id);
+    
+    // this.consultarCosGas();
+    this.modalRefs['cosgas'] = this.modalService.show(template, { id: 8, class: 'modal-lg',  backdrop: 'static', keyboard: false });
   }
 
 
@@ -368,11 +393,9 @@ export class CoactivoComponent implements OnInit {
       tr.classList.add('active-color');
     }
 
-    this.nomusi = data.nomusi;
-    this.nomusm = data.nomusm;
-    this.fecins = data.fecins;
-    this.fecmod = data.fecmod;
-
+    this.exp_id = data.exp_id;
+    // this.sigtaService.exp_id = this.exp_id;
+    // console.log(this.exp_id);
   }
 
 
@@ -403,9 +426,9 @@ export class CoactivoComponent implements OnInit {
     this.cnombre = '';
     // this.p_fecini = '';
     // this.p_fecfin = '';
-    this.p_codinf = '';
-    this.r_descri = '';
-    this.p_numnot = '';
+    this.p_fecfin = '';
+    this.p_fecini = '';
+    this.p_numexp = '';
   }
 
   editarDatosMulta(id: string | null) {
@@ -427,6 +450,12 @@ export class CoactivoComponent implements OnInit {
       this.router.navigate(['/coactivo/ver', id]);
     }
   }
+  verDatosCosGas(id: string | null) {
+    if (id !== null) {
+      console.log(id);
+      this.router.navigate(['/cosgas', id]);
+    }
+  }
 
 
 
@@ -436,23 +465,23 @@ export class CoactivoComponent implements OnInit {
   consultarExpediente() {
 
     let post = {
-      p_numexp: this.p_numexp,
+      p_numexp: Number(this.p_numexp),
       p_fecini: this.p_fecini.toString(),
       p_fecfin: this.p_fecfin.toString(),
       p_codadm: this.p_codcon,
     };
     console.log(post);
 
-    
-    if(this.p_numexp.length > 0 || this.p_fecfin.length > 0 || this.p_fecini.length > 0 || this.p_codcon.length > 0 ){
+
+    if (this.p_numexp.length > 0 || this.p_fecfin.length > 0 || this.p_fecini.length > 0 || this.p_codcon.length > 0) {
       this.spinner.show();
       this.sigtaService.listarExpediente(post).subscribe({
         next: (data: any) => {
           this.spinner.hide();
           console.log(data);
-  
+
           this.datosExpediente = data;
-  
+
           this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
             dtInstance.destroy();
             this.dtTrigger.next();
@@ -465,8 +494,47 @@ export class CoactivoComponent implements OnInit {
         },
       });
     }
-
   }
+
+  consultarCosGas() {
+
+    let post = {
+      p_concid: this.p_concid,
+      // p_subcid: this.p_fecini.toString(),
+    };
+    console.log(post);
+      this.sigtaService.listarCosGasValue(post).subscribe({
+        next: (data: any) => {
+          console.log(data);
+
+          this.datosCostas = data;
+
+        },
+        error: (error: any) => {
+          console.log(error);
+        },
+      });
+  }
+
+  // consultarGastos() {
+
+  //   let post = {
+  //     p_concid: this.idgas,
+  //     // p_subcid: this.p_fecini.toString(),
+  //   };
+  //   console.log(post);
+  //     this.sigtaService.listarCosGasValue(post).subscribe({
+  //       next: (data: any) => {
+  //         console.log(data);
+
+  //         this.datosGastos = data;
+
+  //       },
+  //       error: (error: any) => {
+  //         console.log(error);
+  //       },
+  //     });
+  // }
 
   listarFechas() {
     let post = {
@@ -502,6 +570,42 @@ export class CoactivoComponent implements OnInit {
       this.spinner.show();
 
       this.sigtaService.obtenerNombrePorCod(post).subscribe({
+        next: (data: any) => {
+          this.spinner.hide();
+          console.log(data);
+
+          if (data && data.length > 0) {
+            this.cnombre = data[0].cnombre;
+          } else {
+            this.errorSweetAlertCode();
+            this.cnombre = '';
+            this.p_codcon = '';
+            console.log("noData");
+
+          }
+        },
+        error: (error: any) => {
+          this.spinner.hide();
+          this.errorSweetAlertCode();
+          this.cnombre = '';
+          this.p_codcon = '';
+          console.log(error);
+        },
+      });
+    }
+
+  }
+
+  obtenerCosGas(value: any) {
+    let post = {
+      p_codcon: this.p_codcon,
+    };
+
+    if (this.p_codcon != '') {
+
+      this.spinner.show();
+
+      this.sigtaService.listarCosGasValue(post).subscribe({
         next: (data: any) => {
           this.spinner.hide();
           console.log(data);

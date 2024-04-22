@@ -362,7 +362,7 @@ export class CoactivoCrearComponent implements OnInit {
     const disabled_numexp = document.getElementById('numexp') as HTMLInputElement
     const disabled_fecexp = document.getElementById('fecexp') as HTMLInputElement
 
-    if (this.datosExpediente != '') {
+    if (this.datosExpediente.length <= 0) {
       disabled_numexp.removeAttribute('disabled')
       disabled_numexp.classList.remove('disabled-color')
 
@@ -405,9 +405,8 @@ export class CoactivoCrearComponent implements OnInit {
     this.cnombre = '';
     // this.p_fecini = '';
     // this.p_fecfin = '';
-    this.p_codinf = '';
-    this.r_descri = '';
-    this.p_numnot = '';
+    this.p_numexp = '';
+    this.p_fecexp = '';
   }
 
   editarDatosMulta(id: string | null) {

@@ -129,7 +129,7 @@ export class CuentacorrienteComponent implements OnInit {
       scrollY: '400px',
       columnDefs: [
         { width: '500px', targets: 0 },
-      ],
+      ],  
       language: {
         url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
       },
@@ -421,35 +421,37 @@ export class CuentacorrienteComponent implements OnInit {
 
     let post = {
       p_codigo: this.p_codcon,
-      // p_numnot: this.p_numnot,
-      // p_codinf: this.p_codinf,
-      // p_tipfec: Number(this.mrf_id),
-      // p_fecini: this.p_fecini.toString(),
-      // p_fecfin: this.p_fecfin.toString(),
-      // p_idcorr: this.p_idcorr,
     };
     console.log(post);
 
-    this.spinner.show();
+    if (this.p_codcon.length > 3) {
 
-    this.sigtaService.listarCuentaCorriente(post).subscribe({
-      next: (data: any) => {
-        this.spinner.hide();
-        console.log(data);
+      this.spinner.show();
 
-        this.datosCuenta = data;
+      this.sigtaService.listarCuentaCorriente(post).subscribe({
+        next: (data: any) => {
+          this.spinner.hide();
+          console.log(data);
 
-        this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-          dtInstance.destroy();
-          this.dtTrigger.next();
-        });
-      },
-      error: (error: any) => {
-        this.errorSweetAlertData();
-        this.spinner.hide();
-        console.log(error);
-      },
-    });
+          this.datosCuenta = data;
+
+          this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+            dtInstance.destroy();
+            this.dtTrigger.next();
+          });
+        },
+        error: (error: any) => {
+          this.errorSweetAlertData();
+          this.spinner.hide();
+          console.log(error);
+        },
+      });
+      
+      this.dtOptionsModal = {
+        order:[[0, 'desc']] 
+      }
+    }
+
 
   }
 

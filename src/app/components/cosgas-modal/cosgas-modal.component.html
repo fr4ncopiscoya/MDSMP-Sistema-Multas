@@ -1,0 +1,42 @@
+<div class="card-body">
+    <h4 class="card-title mb-3" style="text-align: center; margin-bottom: 10px; font-weight: bold;">{{destitulo}}</h4>
+    <div class="row">
+        <div class="col-sm-3 mb-2">
+            <label for="" class="form-label">{{descombo}} <span style="color: red;">*</span>
+            </label>
+        </div>
+        <div class="col-sm-9 mb-2">
+            <select id="cosgasid" (change)="onSelectionChange($event)" class="form-select disabled-color" style="padding: 3px 50px 3px 10px; font-size: 12px;">
+                <option *ngIf="p_concid !== 6" [value]="0">Seleccionar</option>
+                <option *ngFor="let data of datosCosGas" [value]="data.concid +'|'+data.subcid">
+                    {{data.desdil}}
+                </option>
+            </select>
+            <div *ngIf="error === 'Codigo Sub-Concepto, Invalido'" class="text-danger">Campo Obligatorio</div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <label for="" class="form-label">Fecha<span style="color: red;">*</span>
+            </label>
+            <input type="date" class="form-control form-control-sm" [(ngModel)]="p_feccga" max="{{getMaxDate()}}">
+            <div *ngIf="error === 'Fecha Costas y Gastos, Invalido'" class="text-danger">Campo Obligatorio</div>
+        </div>
+        <div class="col-sm-6">
+            <label for="" class="form-label"> Monto </label>
+            <input [ngModel]="p_montot" (keypress)="validarMonto($event)" (ngModelChange)="p_montot = $event"
+                type="text" class="form-control form-control-sm" />
+            <div *ngIf="error === 'Monto Invalido'" class="text-danger">Campo Obligatorio *</div>
+        </div>
+    </div>
+</div>
+<div class="col-sm-auto mb-2-5" style="display: flex; justify-content: right;">
+    <button type="button" (click)="registrarCosGas()" class="btn btn-primary btn-label btn-sm" style="margin: 5px 20px;">
+        <i class="ri-file-2-fill label-icon align-middle fs-16 me-2"></i>
+        Guardar
+    </button>
+    <!-- <button type="button" class="btn btn-danger btn-label btn-sm">
+        <i class="ri-file-2-fill label-icon align-middle fs-16 me-2"></i>
+        Cerrar
+    </button> -->
+</div>

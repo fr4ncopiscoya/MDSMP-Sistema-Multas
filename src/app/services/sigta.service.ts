@@ -11,7 +11,11 @@ import { HttpClient } from '@angular/common/http';
 })
 export class SigtaService {
 
+  //id's-exportar
   idcorrl: any;
+  cga_id:any;
+  exp_id: any;
+  p_concid:any;
 
   constructor(private httpClientUtils: HttpClientUtils, private http: HttpClient) { }
 
@@ -84,6 +88,16 @@ export class SigtaService {
   listarReferencia(data: any) {
     return this.httpClientUtils
       .postQuery('sigta/referencia/listar', data)
+      .pipe(
+        map((data) => {
+          return data;
+        })
+      );
+  }
+
+  listarCosGasValue(data: any) {
+    return this.httpClientUtils
+      .postQuery('sigta/cosgasvalue/listar', data)
       .pipe(
         map((data) => {
           return data;
@@ -197,9 +211,29 @@ export class SigtaService {
       );
   }
 
+  listarCosGas(data: any) {
+    return this.httpClientUtils
+      .postQuery('sigta/cosgas/listar', data)
+      .pipe(
+        map((data) => {
+          return data;
+        })
+      );
+  }
+
   registrarAdministrado(data: any) {
     return this.httpClientUtils
       .postQuery('sigta/administrado/registrar', data)
+      .pipe(
+        map((data) => {
+          return data;
+        })
+      );
+  }
+
+  registrarCosGas(data: any) {
+    return this.httpClientUtils
+      .postQuery('sigta/cosgas/registrar', data)
       .pipe(
         map((data) => {
           return data;

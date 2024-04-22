@@ -41,6 +41,8 @@ import { CuentacorrienteComponent } from './pages/cuentacorriente/cuentacorrient
 import { CoactivoComponent } from './pages/coactivo/coactivo.component';
 import { CoactivoCrearComponent } from './pages/coactivo-crear/coactivo-crear.component';
 import { CoactivoVerComponent } from './pages/coactivo-ver/coactivo-ver.component';
+import { CosgasComponent } from './pages/cosgas/cosgas.component';
+import { CosgasModalComponent } from './components/cosgas-modal/cosgas-modal.component';
 
 @NgModule({
   declarations: [
@@ -68,6 +70,8 @@ import { CoactivoVerComponent } from './pages/coactivo-ver/coactivo-ver.componen
     CoactivoComponent,
     CoactivoCrearComponent,
     CoactivoVerComponent,
+    CosgasComponent,
+    CosgasModalComponent,
   ],
   imports: [
     BrowserModule,

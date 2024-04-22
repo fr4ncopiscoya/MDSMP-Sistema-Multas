@@ -1,32 +1,30 @@
+import { Platform } from '@angular/cdk/platform';
 import {
   Component,
-  OnInit,
-  ViewChild,
-  TemplateRef,
-  AfterViewInit,
   ElementRef,
+  OnInit,
+  TemplateRef,
+  ViewChild
 } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { DataTableDirective } from 'angular-datatables';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { Subject } from 'rxjs';
 import { AppComponent } from 'src/app/app.component';
 import { MasterService } from 'src/app/services/master.service';
 import { SanidadService } from 'src/app/services/sanidad.service';
 import { SigtaService } from 'src/app/services/sigta.service';
-import { DataTableDirective } from 'angular-datatables';
-import { Subject } from 'rxjs';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
-import { Platform } from '@angular/cdk/platform';
-import * as XLSX from 'xlsx';
 
 
 @Component({
-  selector: 'app-coactivo-ver',
-  templateUrl: './coactivo-ver.component.html',
-  styleUrls: ['./coactivo-ver.component.css']
+  selector: 'app-cosgas',
+  templateUrl: './cosgas.component.html',
+  styleUrls: ['./cosgas.component.css']
 })
-export class CoactivoVerComponent implements OnInit {
+export class CosgasComponent implements OnInit {
   // MODAL
   @ViewChild('template') miModal!: ElementRef;
   modalRefs: { [key: string]: BsModalRef } = {}; // Objeto para almacenar los modalRefs
@@ -46,10 +44,13 @@ export class CoactivoVerComponent implements OnInit {
 
   /// ================== VARIABLES ============================
 
+  //Id-exportar
+  cga_id:number = 0;
+
   //DATA PARA ALMACENAR
   data: any;
   dataMulta: any;
-  datosExpediente: any;
+  datosCosGas: any;
   datosContribuyente: any;
   datosNombreContribuyente: any = [];
   datosDescripcion: any;
@@ -119,7 +120,7 @@ export class CoactivoVerComponent implements OnInit {
     let id = Number(this.route.snapshot.paramMap.get('id'));
     this.p_expnid = id;
     this.consultarExpedienteTop();
-    this.consultarExpediente();
+    this.consultarCosGas();
 
     this.appComponent.login = false;
     this.dataUsuario = localStorage.getItem('dataUsuario');
@@ -131,7 +132,7 @@ export class CoactivoVerComponent implements OnInit {
       info: false,
       scrollY: '400px',
       columnDefs: [
-        { width: '500px', targets: 2 },
+        { width: '500px', targets: 0 },
       ],
       language: {
         url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
@@ -220,6 +221,10 @@ export class CoactivoVerComponent implements OnInit {
     }
   }
 
+  rellenarCeros() {
+    this.p_numexp = this.p_numexp.padStart(6, '0');
+  }
+
   //DIGITAR UNICAMENTE NUMEROS
   validarNumero(event: any): void {
     const keyCode = event.keyCode;
@@ -253,6 +258,14 @@ export class CoactivoVerComponent implements OnInit {
 
   modalDescri(templateDescri: TemplateRef<any>) {
     this.modalRefs['listar-descri'] = this.modalService.show(templateDescri, { id: 2, class: 'modal-xl', backdrop: 'static', keyboard: false });
+  }
+
+  modalAnularCosGas(template: TemplateRef<any>, data: any) {
+    this.sigtaService.cga_id = data.cga_id;
+    console.log(data.cga_id);
+
+    this.modalRefs['anularCosGas'] = this.modalService.show(template, { id: 8, class: '', backdrop: 'static', keyboard: false });
+    this.sigtaService.cga_id = this.cga_id;
   }
 
 
@@ -291,6 +304,27 @@ export class CoactivoVerComponent implements OnInit {
     Swal.fire({
       icon: 'error',
       text: 'Por favor ingrese un código válido',
+    });
+  }
+  SweetAlertAnularCG(data:any) {
+    this.cga_id = data.cga_id;
+    console.log(this.cga_id);
+    Swal.fire({
+      title: "Estas seguro de eliminar este dato?",
+      text: "No podras revertir esto!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Eliminar"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: "Eliminado!",
+          text: "Costas y Gastos eliminado.",
+          icon: "success"
+        });
+      }
     });
   }
   private errorSweetAlertData() {
@@ -362,13 +396,13 @@ export class CoactivoVerComponent implements OnInit {
   validarCamposBusqueda() {
 
     console.log('validarCamposBusqueda');
-    console.log(this.datosExpediente);
+    console.log(this.datosCosGas);
 
 
     const disabled_numexp = document.getElementById('numexp') as HTMLInputElement
     const disabled_fecexp = document.getElementById('fecexp') as HTMLInputElement
 
-    if (this.datosExpediente != '') {
+    if (this.datosCosGas != '') {
       disabled_numexp.removeAttribute('disabled')
       disabled_numexp.classList.remove('disabled-color')
 
@@ -416,6 +450,10 @@ export class CoactivoVerComponent implements OnInit {
     this.p_numnot = '';
   }
 
+  getMaxDate(): string {
+    return new Date().toISOString().split('T')[0];
+  }
+
   editarDatosMulta(id: string | null) {
 
 
@@ -459,8 +497,8 @@ export class CoactivoVerComponent implements OnInit {
         this.spinner.hide();
         console.log(data);
 
-        this.p_codcon = data[0].exp_admnom,
-        this.cnombre = data[0].exp_codadm,
+        this.cnombre = data[0].exp_admnom,
+        this.p_codcon = data[0].exp_codadm,
         this.p_numexp = data[0].exp_numexp,
         this.p_fecexp = data[0].exp_fecexp
 
@@ -480,7 +518,7 @@ export class CoactivoVerComponent implements OnInit {
 
 
 
-  consultarExpediente() {
+  consultarCosGas() {
 
     let post = {
       p_expnid: this.p_expnid,
@@ -488,12 +526,12 @@ export class CoactivoVerComponent implements OnInit {
     console.log(post);
 
     this.spinner.show();
-    this.sigtaService.listarExpedienteVer(post).subscribe({
+    this.sigtaService.listarCosGas(post).subscribe({
       next: (data: any) => {
         this.spinner.hide();
-        // console.log(data);
+        console.log(data);
 
-        this.datosExpediente = data;
+        this.datosCosGas = data;
         // this.p_codcon = data[0].codadm;
         // this.cnombre = data[0].nomadm;
 
@@ -637,4 +675,5 @@ export class CoactivoVerComponent implements OnInit {
   }
 
 }
+
 

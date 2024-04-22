@@ -46,8 +46,8 @@
                         <label for="" class="form-label col-form-label-sm">Nro. Expediente</label>
                         <div class="" style="display: flex">
                             <input #inputCodigoAdm (keydown.tab)="obtenerNombrePorCod(inputCodigoAdm.value)"
-                                (keyup.enter)="obtenerNombrePorCod(inputCodigoAdm.value)" maxlength="6"
-                                [(ngModel)]="p_numexp" oninput="this.value = this.value.toUpperCase()" type="text"
+                                (keyup.enter)="obtenerNombrePorCod(inputCodigoAdm.value)" (blur)="rellenarCeros()"
+                                maxlength="6" [(ngModel)]="p_numexp" (keypress)="validarNumero($event)" type="text"
                                 class="form-control form-control-sm" />
                         </div>
                     </div>
@@ -68,18 +68,7 @@
                                 Nuevo
                             </button>
                         </div>
-                        <!-- <div class="col-sm-auto mb-2-5">
-                            <button type="button" class="btn btn-danger btn-label btn-sm" (click)="exportarccPDF()">
-                                <i class="ri-file-2-fill label-icon align-middle fs-16 me-2"></i>
-                                PDF
-                            </button>
-                        </div> -->
-                        <!-- <div class="col-sm-auto mb-2-5">
-                            <button type="button" class="btn_excel btn btn-success btn-label btn-sm" id="ExportarExcel"
-                                (click)="exportarExcel()">
-                                <i class="ri-file-excel-2-fill label-icon align-middle fs-16 me-2"></i>Excel
-                            </button>
-                        </div> -->
+
                         <div class="col-sm-auto mb-2-5">
                             <button (click)="limpiarCampos()" type="button" class="btn btn-info btn-label btn-sm">
                                 <i class=" ri-brush-2-line label-icon align-middle fs-16 me-2"></i>
@@ -104,7 +93,8 @@
                                             <th class="text-center">Nombre Administrado</th>
                                             <th class="text-center">Monto</th>
                                             <th class="text-center">Cod.SIGET</th>
-                                            <th class="text-center"></th>
+                                            <th class="text-center">Acciones</th>
+                                            <!-- <th class="text-center">C-G</th> -->
                                         </tr>
                                     </thead>
                                     <tbody style="overflow-y: scroll;">
@@ -115,11 +105,30 @@
                                             <td>{{ data.exp_admnom }}</td>
                                             <td>{{ data.exp_monexp | number : "1.2-2"}}</td>
                                             <td>{{ data.exp_sigeta}}</td>
-                                            <td><button type="button" (click)="verDatosExpediente(data.exp_id)" title="Ver"
+                                            <td>
+                                                <button type="button" style="padding: 2px 5px; margin: 2px 0px; "
+                                                    (click)="verDatosExpediente(data.exp_id)" title="Ver"
                                                     class="btn btn-primary btn-sm">
                                                     <i class="ri-eye-line"></i>
                                                 </button>
+                                                <button type="button" style="padding: 2px 5px; margin: 2px 5px; "
+                                                    (click)="listarCosGas(5,modalCosGas,data.exp_id)" title="Costas"
+                                                    class="btn btn-success btn-sm">
+                                                    C
+                                                </button>
+                                                <button type="button" style="padding: 2px 5px; margin: 2px 0px; "
+                                                    (click)="listarCosGas(6,modalCosGas,data.exp_id)" title="Gastos"
+                                                    class="btn btn-warning btn-sm">
+                                                    G
+                                                </button>
                                             </td>
+                                            <!-- <td>
+                                                <button type="button" style="padding: 2px 5px; margin: 2px 0px; "
+                                                    (click)="verDatosCosGas(data.exp_id)" title="Ver"
+                                                    class="btn btn-success btn-sm">
+                                                    <i class="ri-file-2-line"></i>
+                                                </button>
+                                            </td> -->
                                         </tr>
                                     </tbody>
                                 </table>
@@ -152,85 +161,24 @@
     </div>
 </ng-template>
 
-<ng-template #modalResolucionVer>
-    <div class="col-lg-12">
-        <div class="row">
-            <form>
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-header" style="display: flex; justify-content: space-between;">
-                            <h4 class="card-title mb-0">Ver Resolución</h4>
-                            <a class="" (click)="cerrarModal('modalVerResolucion')" style="cursor: pointer;"> <i
-                                    style="font-size: 1.50rem; " class=" ri-close-fill"></i></a>
-                        </div>
-                        <div class="card-body">
-                            <app-ver-resolucion></app-ver-resolucion>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-</ng-template>
-
-<ng-template #anularResolucion>
+<ng-template #modalCosGas>
     <div class="row">
-        <!-- <form [formGroup]="formAnularResolucion" (ngSubmit)="submitAnularResolucion()"> -->
         <div class="col-lg-12">
             <div class="card">
-                <div class="card-header" style="display: flex; justify-content: space-between;">
-                    <h4 class="card-title mb-0">Anular Resolución</h4>
-                    <a class="" (click)="cerrarModal('modalAnularRes')" style="cursor: pointer;"> <i
-                            style="font-size: 1.50rem; " class=" ri-close-fill"></i></a>
-                </div>
+                <!-- <div class="card-header" style="display: flex; justify-content: space-between;"> -->
+                <!-- <h4 class="card-title mb-0">Costas y Gastos</h4> -->
+                <a class="" style="cursor: pointer;display: flex;justify-content: right;padding: 0 20px;"
+                    (click)="cerrarModal('cosgas')"> <i style="font-size: 1.50rem; " class=" ri-close-fill"></i></a>
+                <!-- </div> -->
                 <div class="card-body">
-                    <app-anular-resolucion></app-anular-resolucion>
+                    <app-cosgas-modal></app-cosgas-modal>
                 </div>
             </div>
         </div>
-        <!-- </form> -->
     </div>
 </ng-template>
 
-<ng-template #anularMulta>
-    <div class="row">
-        <!-- <form [formGroup]="formAnularResolucion" (ngSubmit)="submitAnularResolucion()"> -->
-        <div class="col-lg-12">
-            <div class="card">
-                <div class="card-header" style="display: flex; justify-content: space-between;">
-                    <h4 class="card-title mb-0">Anular Multa</h4>
-                    <a class="" (click)="cerrarModal('modalAnularMulta')" style="cursor: pointer;"> <i
-                            style="font-size: 1.50rem; " class=" ri-close-fill"></i></a>
-                </div>
-                <div class="card-body">
-                    <app-anular-multa></app-anular-multa>
-                </div>
-            </div>
-        </div>
-        <!-- </form> -->
-    </div>
-</ng-template>
 
-<ng-template #modalInformeFinal>
-    <div class="col-lg-12">
-        <div class="row">
-            <form>
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-header" style="display: flex; justify-content: space-between;">
-                            <h4 class="card-title mb-0">Registrar Informe Final</h4>
-                            <a class="" (click)="cerrarModal('modalInformeFinal')" style="cursor: pointer;"> <i
-                                    style="font-size: 1.50rem; " class=" ri-close-fill"></i></a>
-                        </div>
-                        <div class="card-body">
-                            <app-crear-informe-final></app-crear-informe-final>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-</ng-template>
 
 
 <ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="ball-square-spin" [fullScreen]="false">
