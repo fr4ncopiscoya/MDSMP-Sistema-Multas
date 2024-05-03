@@ -250,6 +250,16 @@ export class SigtaService {
         })
       );
   }
+
+  listarMenu(data: any) {
+    return this.httpClientUtils
+      .postQuery('sigta/menu/listar', data)
+      .pipe(
+        map((data) => {
+          return data;
+        })
+      );
+  }
   ingresarUsuario(data: any) {
     return this.httpClientUtils
       .postQuery('sigta/usuario/ingresar', data)

@@ -47,7 +47,7 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     this.getIp()
     console.log(this.ip);
-    
+
   }
 
   private errorSweetAlertCode(icon: 'error' | 'warning' | 'info' | 'success' = 'error') {
@@ -167,10 +167,10 @@ export class LoginComponent implements OnInit {
       next: (data: any) => {
         this.spinner.hide();
 
-        localStorage.setItem("dataUsuario", JSON.stringify(data[0]));
+        // localStorage.setItem("dataUsuario", JSON.stringify(data[0]));
 
-        console.log(this.dataUsuario);
-        
+        // console.log(this.dataUsuario);
+
 
         if (this.p_nomusu === '') {
           this.errorSweetAlertUsuario();
@@ -184,7 +184,7 @@ export class LoginComponent implements OnInit {
             this.desare = data[0].desare;
             console.log(data);
 
-            this.dataUsuario = data[0];
+            // this.dataUsuario = data[0];
 
           } else {
             this.errorSweetAlertUsuario();
@@ -201,16 +201,15 @@ export class LoginComponent implements OnInit {
     });
   }
 
-
-  ingresarUsuario(value:any) {
+  ingresarUsuario(value: any) {
     let btnLogin = document.getElementById('btnLoginAction') as HTMLButtonElement;
     btnLogin.innerHTML = '<span class="align-items-center"><span class="spinner-border flex-shrink-0" role="status"><span class="visually-hidden">Loading...</span></span><span class="flex-grow-1 ms-2">Ingresando...</span></span>';
     btnLogin.classList.add('pe-none', 'btn-load');
 
     let post = {
-      p_nomusu: this.p_nomusu,
+      p_loging: this.p_nomusu,
       p_passwd: this.p_passwd,
-      p_nomhos: this.ip
+      p_apl_id: 10
     };
 
     console.log(post);
@@ -221,6 +220,10 @@ export class LoginComponent implements OnInit {
       next: (data: any) => {
         this.spinner.hide();
         localStorage.setItem("session-dashboard", data[0]);
+        localStorage.setItem("dataUsuario", JSON.stringify(data[0]));
+        this.dataUsuario = data[0].numid;
+
+        console.log(this.dataUsuario);
 
         // if (data && data.length > 0) {
         this.error = data[0].mensa;

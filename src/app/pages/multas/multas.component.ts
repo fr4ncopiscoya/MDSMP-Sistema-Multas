@@ -135,7 +135,7 @@ export class MultasComponent implements OnInit {
         url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
       },
     }
-
+    
     this.listarFechas();
 
     const fechaActual = new Date().toISOString().split('T')[0];
@@ -504,10 +504,10 @@ export class MultasComponent implements OnInit {
       });
 
       verResElements.forEach((element: Element) => {
-        (element as HTMLElement).style.display = '';
+        (element as HTMLElement).style.display = 'none';
       });
       anularResElements.forEach((element: Element) => {
-        (element as HTMLElement).style.display = '';
+        (element as HTMLElement).style.display = 'none';
       });
       registrarResElements.forEach((element: Element) => {
         (element as HTMLElement).style.display = '';

@@ -308,8 +308,9 @@ export class CrearMultaComponent implements OnInit {
     let post = {
       p_anypro: p_anyproDate.toString(),
       p_codinf: this.p_codinf,
-      // r_descri: this.r_descri,
-      // p_arecod: this.carea
+      p_desinf: this.r_descri,
+      p_arecod: this.carea,
+      p_fecnot: this.p_anypro,
     };
 
     if (this.p_codinf != '') {

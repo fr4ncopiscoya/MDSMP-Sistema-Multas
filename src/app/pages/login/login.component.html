@@ -16,14 +16,12 @@
                                 <div class="input-group">
                                     <span class="input-group-text" id="basic-addon1"><i
                                             class="ri-user-3-line"></i></span>
-                                    <input #inputUsuario type="text" (keydown.tab)="listarUsuario(inputUsuario.value)"
-                                        (keyup.enter)="listarUsuario(inputUsuario.value)"
-                                        oninput="this.value = this.value.toUpperCase()" class="form-control"
+                                    <input #inputUsuario type="text" class="form-control"
                                         id="username" [(ngModel)]="p_nomusu" placeholder="Ingrese su usuario"
                                         autocomplete="off">
                                 </div>
                             </div>
-                            <div class="mb-3">
+                            <!-- <div class="mb-3">
                                 <label class="form-label" for="">Nombre</label>
                                 <div class="position-relative auth-pass-inputgroup overflow-hidden">
                                     <div class="input-group">
@@ -32,8 +30,8 @@
                                             id="" style="background-color: #e1e1e1;">
                                     </div>
                                 </div>
-                            </div>
-                            <div class="mb-3">
+                            </div> -->
+                            <!-- <div class="mb-3">
                                 <label class="form-label" for="">Area</label>
                                 <div class="position-relative auth-pass-inputgroup overflow-hidden">
                                     <div class="input-group">
@@ -43,7 +41,7 @@
                                             id="" style="background-color: #e1e1e1;">
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="mb-3">
                                 <label class="form-label" for="password-input">Contraseña</label>
                                 <div class="position-relative auth-pass-inputgroup overflow-hidden">

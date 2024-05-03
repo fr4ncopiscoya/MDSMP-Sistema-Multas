@@ -91,7 +91,6 @@ export class ListarAdministradoComponent implements OnInit, AfterViewInit, OnDes
           console.log();
 
           this.datosContribuyente = data;
-          console.log("entra")
           this.dtElementModal.dtInstance.then((dtInstance: DataTables.Api) => {
             dtInstance.destroy();
             this.dtTriggerModal.next();
