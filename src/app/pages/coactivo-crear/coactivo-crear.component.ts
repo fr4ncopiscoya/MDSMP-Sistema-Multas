@@ -153,7 +153,7 @@ export class CoactivoCrearComponent implements OnInit {
       p_codigo: this.p_codcon,
     };
 
-    
+
 
     this.sigtaService.exportarccPDF(post).subscribe(
       (response: any) => { // Cambiado a 'any' en lugar de 'Blob'
@@ -272,10 +272,14 @@ export class CoactivoCrearComponent implements OnInit {
     }
   }
 
-  private errorSweetAlert(icon: 'error' | 'warning' | 'info' | 'success' = 'error') {
+  private errorSweetAlert(icon: 'error' | 'warning' | 'info' | 'success' = 'error', callback?: () => void) {
     Swal.fire({
       icon: icon,
       text: this.error || 'Hubo un error al procesar la solicitud',
+    }).then((result) => {
+      if (result.isConfirmed && callback) {
+        callback();
+      }
     });
   }
 
@@ -449,7 +453,7 @@ export class CoactivoCrearComponent implements OnInit {
     let post = {
       p_codadm: this.p_codcon,
     };
-    
+
 
 
     if (this.p_codcon.length > 3) {
@@ -500,8 +504,8 @@ export class CoactivoCrearComponent implements OnInit {
           const icon = this.getIconByErrorCode(errorCode);
 
           // Muestra el SweetAlert con el icono y el mensaje de error
-          this.errorSweetAlert(icon);
-          this.goBackToMultas()
+          this.errorSweetAlert(icon, this.goBackToMultas.bind(this));
+          // this.goBackToMultas()
 
           // window.location.reload();
         } else {
@@ -576,7 +580,7 @@ export class CoactivoCrearComponent implements OnInit {
 
     this.spinner.show();
 
-    
+
     this.sigtaService.busContribuyente(post).subscribe({
       next: (data: any) => {
         this.spinner.hide();

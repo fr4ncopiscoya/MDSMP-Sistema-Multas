@@ -239,10 +239,14 @@ export class EditarMultaComponent implements OnInit {
     }
   }
 
-  private errorSweetAlertCode(icon: 'error' | 'warning' | 'info' | 'success' = 'error') {
+  private errorSweetAlertCode(icon: 'error' | 'warning' | 'info' | 'success' = 'error', callback?: () => void) {
     Swal.fire({
       icon: icon,
       text: this.error || 'Hubo un error al procesar la solicitud',
+    }).then((result) => {
+      if (result.isConfirmed && callback) {
+        callback();
+      }
     });
   }
 
@@ -270,10 +274,18 @@ export class EditarMultaComponent implements OnInit {
   }
 
   onSelectionChange(event: any) {
-    let value = event.target.value;
-    let split = value.split('|');
-    this.girovalue = split[0];
-    this.desgiro = split[1];
+    const value = event;
+    if (value) {
+      this.girovalue = value.ccodgir;
+      this.desgiro = value.ddesgir;
+    }
+
+    console.log("giro:", this.girovalue);
+    console.log("desgiro: ", this.desgiro);
+  }
+
+  onSelectionChangeMedida(event: any) {
+    this.csancio = event.CCODTIP
   }
 
 
@@ -322,7 +334,7 @@ export class EditarMultaComponent implements OnInit {
           this.activeacta = this.utils.setNumberToBoolean(data[0].chkact);
           this.nroActaConstatacion = data[0].ACTA_CONSTATACION;
           this.f_ejecucion = data[0].f_ejecucion;
-          this.giro = data[0].giro + '|' + data[0].OTROS_GIROS;
+          this.giro = data[0].giro;
           this.desgiro = data[0].OTROS_GIROS;
           this.cmulta = data[0].cmulta;
           this.nmonto = data[0].nmonto;
@@ -337,6 +349,9 @@ export class EditarMultaComponent implements OnInit {
           this.listarGiroEstablecimiento();
           this.listarMedidaComp();
           this.listarDocumentosInfraccion();
+
+          // console.log("giro: ", this.giro);
+
 
 
         } else {
@@ -413,9 +428,10 @@ export class EditarMultaComponent implements OnInit {
 
     let post = {
       p_anypro: p_anyproDate.toString(),
-      p_codinf: this.cmulta,
-      // r_descri: this.dmulta,
-      // p_arecod: this.carea
+      p_codinf: this.p_codinf,
+      // p_desinf: this.r_descri,
+      // p_arecod: this.carea,
+      p_fecnot: this.p_anypro,
     };
 
     this.spinner.show();
@@ -447,7 +463,7 @@ export class EditarMultaComponent implements OnInit {
             this.nmonto = '';
             this.dmulta = '';
             this.r_codint = '';
-            // this.cmulta = '';
+            this.cmulta = '';
 
           }
         }
@@ -531,7 +547,6 @@ export class EditarMultaComponent implements OnInit {
   }
 
   editarInfraccion() {
-
     const montoLimpio = this.nmonto.replace('S/.', '').replace(',', '');
     const montoFloat = parseFloat(montoLimpio);
 
@@ -569,6 +584,9 @@ export class EditarMultaComponent implements OnInit {
       usumod: this.sigtaService.cusuari
     };
 
+    console.log("data-informe", post);
+
+
     this.spinner.show();
 
     this.sigtaService.editarInfraccion(post).subscribe({
@@ -584,8 +602,8 @@ export class EditarMultaComponent implements OnInit {
 
           const icon = this.getIconByErrorCode(errorCode);
 
-          this.errorSweetAlertCode(icon);
-          this.goBackToMultas();
+          this.errorSweetAlertCode(icon, this.goBackToMultas.bind(this));
+          // this.goBackToMultas();
 
         } else {
         }
@@ -610,6 +628,18 @@ export class EditarMultaComponent implements OnInit {
     const keyCode = event.keyCode;
     if (keyCode < 48 || keyCode > 57) {
       event.preventDefault();
+    }
+  }
+
+  validarNumeroInforme(event: any): void {
+    const inputValue = event.target.value.toUpperCase(); // Convertir a mayúsculas
+    const lastChar = inputValue.slice(-1);
+
+    // Permitir letras mayúsculas, números (0-9), y el guion "-"
+    if (/^[A-Z0-9-]+$/.test(lastChar)) {
+      return;
+    } else {
+      event.target.value = inputValue.slice(0, -1); // Eliminar el último carácter ingresado
     }
   }
 
@@ -696,7 +726,7 @@ export class EditarMultaComponent implements OnInit {
           // Handle other cases if needed
           break;
       }
-    }, 1000);
+    });
   }
 
 }

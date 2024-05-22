@@ -149,17 +149,16 @@
         <div class="col-7">
           <div class="mb-3">
             <label for="" class="form-label col-form-label col-form-label-sm">Medida Complementaria</label>
-            <!-- <ng-select placeholder="Selecciona..." [(ngModel)]="csancio" (input)="onInputChange($event)"
-              [items]="datosMedidaComp" (change)="onSelectionChangeMedida($event)" [closeOnSelect]="true"
-              [searchable]="true" bindValue="CCODTIP" bindLabel="DCODTIP" name="" class="form-control custom"
-              style="border: 1px solid #b9b9b9 !important">
-            </ng-select> -->
-            <select class="form-select form-select-sm" [(ngModel)]="csancio">
-              <!-- <option [value]="0">Seleccionar</option> -->
+            <ng-select style="border: 1px solid #b9b9b9; border-radius: 5px;" class="" [(ngModel)]="csancio"
+              (input)="onInputChange($event)" (change)="onSelectionChangeMedida($event)" [items]="datosMedidaComp"
+              bindValue="CCODTIP" bindLabel="DCODTIP" placeholder="Seleccionar">
+            </ng-select>
+            <!-- <select class="form-select form-select-sm" [(ngModel)]="csancio">
+              <option [value]="0">Seleccionar</option>
               <option *ngFor="let data of datosMedidaComp" [value]="data.CCODTIP">
                 {{data.DCODTIP}}
               </option>
-            </select>
+            </select> -->
           </div>
         </div>
         <div class="col-sm-1" style="display: flex; justify-content: center">
@@ -191,13 +190,18 @@
       <div class="row" style="align-items: center; padding: 15px">
         <label for="" class="col-sm-2 col-form-label col-form-label-sm">Giro de Establecimiento</label>
         <div class="col-sm-10">
-          <select class="form-select form-select-sm" (change)="onSelectionChange($event)"
+          <ng-select style="border: 1px solid #b9b9b9; border-radius: 5px;" class="" (input)="onInputChange($event)"
+            [items]="datosGiroEstablecimiento" bindValue="ccodgir" bindLabel="ddesgir" placeholder="Seleccionar"
+            (change)="onSelectionChange($event)">
+          </ng-select>
+
+          <!-- <select class="form-select form-select-sm" (change)="onSelectionChange($event)"
             (input)="onInputChange($event)" [searchable]="true">
             <option [value]="0">Seleccionar</option>
             <option *ngFor="let data of datosGiroEstablecimiento" [value]="data.ccodgir +'|'+ data.ddesgir">
               {{data.ddesgir}}
             </option>
-          </select>
+          </select> -->
         </div>
       </div>
     </div>
@@ -246,7 +250,7 @@
         <div class="mb-3 col-sm-12">
           <label for="EndleaveDate" class="form-label col-form-label-sm mt-label-notificacion">Observaciones</label>
           <input [(ngModel)]="mobserv" type="text" oninput="this.value = this.value.toUpperCase()"
-            class="form-control form-control-lg" id="" placeholder="" />
+            class="form-control form-control-sm" id="" placeholder="" />
         </div>
       </div>
     </div>
@@ -259,8 +263,9 @@
         </div>
         <div class="mb-3 col-sm-2">
           <label for="" class="form-label col-form-label-sm">Nº de Informes</label>
-          <input [(ngModel)]="nro_informe" type="text" oninput="this.value = this.value.toUpperCase()"
-            (keypress)="validarNumero($event)" class="form-control form-control-sm" id="employeeUrl" placeholder="" />
+          <input [(ngModel)]="nro_informe" (input)="validarNumeroInforme($event)"
+            oninput="this.value = this.value.toUpperCase()" type="text" maxlength="20"
+            class="form-control form-control-sm" id="employeeUrl" placeholder="" />
         </div>
         <div class="col-sm-2" style="display: flex; align-items: center"></div>
         <div class="col-sm-2" style="display: flex; align-items: center; justify-content: right">

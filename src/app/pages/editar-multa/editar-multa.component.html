@@ -144,12 +144,16 @@
         <div class="col-7">
           <div class="mb-3">
             <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Medida Complementaria</label>
-            <select class="form-select form-select-sm" [(ngModel)]="csancio">
+            <ng-select style="border: 1px solid #b9b9b9; border-radius: 5px;" class="" [(ngModel)]="csancio"
+              (input)="onInputChange($event)" (change)="onSelectionChangeMedida($event)" [items]="datosMedidaComp" bindValue="CCODTIP" bindLabel="DCODTIP"
+              placeholder="Seleccionar">
+            </ng-select>
+            <!-- <select class="form-select form-select-sm" [(ngModel)]="csancio">
               <option [value]="0">Seleccionar</option>
               <option *ngFor="let data of datosMedidaComp" [value]="data.CCODTIP">
                 {{data.DCODTIP}}
               </option>
-            </select>
+            </select> -->
           </div>
         </div>
         <div class="col-sm-1" style="display: flex; justify-content: center">
@@ -181,13 +185,16 @@
       <div class="row" style="align-items: center; padding: 15px">
         <label for="" class="col-sm-2 col-form-label col-form-label-sm">Giro de Establecimiento</label>
         <div class="col-sm-10">
-          <select class="form-select form-select-sm" [(ngModel)]="giro"
+          <ng-select style="border: 1px solid #b9b9b9; border-radius: 5px;" [(ngModel)]="giro" class="" (input)="onInputChange($event)"
+            [items]="datosGiroEstablecimiento" bindValue="ccodgir" bindLabel="ddesgir" placeholder="Seleccionar"
             (change)="onSelectionChange($event)">
+          </ng-select>
+          <!-- <select class="form-select form-select-sm" [(ngModel)]="giro" (change)="onSelectionChange($event)">
             <option [value]="0">Seleccionar</option>
             <option *ngFor="let data of datosGiroEstablecimiento" [value]="data.ccodgir +'|'+ data.ddesgir">
               {{data.ddesgir}}
             </option>
-          </select>
+          </select> -->
         </div>
       </div>
     </div>
@@ -243,14 +250,14 @@
         <div class="mb-3 col-sm-4">
           <label for="" class="form-label col-form-label-sm">Inspector Municipal</label>
           <input [(ngModel)]="ins_municipal" [value]="ins_municipal" oninput="this.value = this.value.toUpperCase()"
-            type="text" class="form-control form-control-sm disabled-color" disabled="" id="employeeUrl"
-            placeholder="" />
+            type="text" class="form-control form-control-sm" id="employeeUrl" placeholder="" />
         </div>
         <div class="mb-3 col-sm-2">
           <label for="" class="form-label col-form-label-sm">Nº de Informes</label>
-          <input disabled="" [(ngModel)]="nro_informe" type="text" (keypress)="validarNumero($event)"
-            class="form-control form-control-sm " ngClass="disabled-color" id="employeeUrl" placeholder="" />
+          <input [(ngModel)]="nro_informe" (input)="validarNumeroInforme($event)" oninput="this.value = this.value.toUpperCase()" type="text" maxlength="20"
+            class="form-control form-control-sm" id="employeeUrl" placeholder="" />
         </div>
+
         <div class="col-sm-2" style="display: flex; align-items: center"></div>
         <div class="col-sm-2" style="display: flex; align-items: center; justify-content: right">
           <button (click)="editarInfraccion()" type="button" class="btn btn-primary btn-label btn btn-sm"

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -9,6 +9,12 @@ export class AppComponent {
   login: boolean = true;
   dataUsuario: any;
   botonesPermisos: any;
+
+  @HostListener('window:beforeunload', ['$event'])
+  clearLocalStorage(event: Event) {
+    // Aquí puedes limpiar los datos de localStorage que desees
+   localStorage.clear()
+  }
 
   //BOTONES
   // btnNuevo: number;

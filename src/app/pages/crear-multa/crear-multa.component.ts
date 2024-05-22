@@ -69,8 +69,6 @@ export class CrearMultaComponent implements OnInit {
   datosTipoEspecie: any;
   dataUsuario: any;
 
-
-
   //Variables
   p_desubi: string = '';
   p_anypro: string = '';
@@ -134,7 +132,6 @@ export class CrearMultaComponent implements OnInit {
   //Combo Documento Infraccion
   tdi_id: number = 0
 
-
   constructor(
     private appComponent: AppComponent,
     private serviceMaster: MasterService,
@@ -191,10 +188,14 @@ export class CrearMultaComponent implements OnInit {
     }
   }
 
-  private errorSweetAlert(icon: 'error' | 'warning' | 'info' | 'success' = 'error') {
+  private errorSweetAlert(icon: 'error' | 'warning' | 'info' | 'success' = 'error', callback?: () => void) {
     Swal.fire({
       icon: icon,
       text: this.error || 'Hubo un error al procesar la solicitud',
+    }).then((result) => {
+      if (result.isConfirmed && callback) {
+        callback();
+      }
     });
   }
 
@@ -283,10 +284,14 @@ export class CrearMultaComponent implements OnInit {
   }
 
   onSelectionChange(event: any) {
-    let value = event.target.value;
-    let split = value.split('|');
-    this.giro = split[0];
-    this.desgiro = split[1];
+    const value = event;
+    if (value) {
+      this.giro = value.ccodgir;
+      this.desgiro = value.ddesgir;
+    }
+
+    console.log("giro:", this.giro);
+    console.log("desgiro: ", this.desgiro);
   }
 
   listarDocInfra() {
@@ -374,7 +379,7 @@ export class CrearMultaComponent implements OnInit {
       p_codinf: this.p_codinf,
       // p_desinf: this.r_descri,
       // p_arecod: this.carea,
-      // p_fecnot: this.p_anypro,
+      p_fecnot: this.p_anypro,
     };
 
     if (this.p_codinf != '') {
@@ -397,6 +402,7 @@ export class CrearMultaComponent implements OnInit {
             this.carea = '';
             this.nmonto = '';
             this.r_descri = '';
+            this.p_codinf = '';
 
           }
         },
@@ -536,8 +542,8 @@ export class CrearMultaComponent implements OnInit {
           const icon = this.getIconByErrorCode(errorCode);
 
           // Muestra el SweetAlert con el icono y el mensaje de error
-          this.errorSweetAlert(icon);
-          this.goBackToMultas()
+          this.errorSweetAlert(icon, this.goBackToMultas.bind(this));
+          // this.goBackToMultas()
 
           // window.location.reload();
         } else {
@@ -567,6 +573,21 @@ export class CrearMultaComponent implements OnInit {
       event.preventDefault();
     }
   }
+
+  validarNumeroInforme(event: any): void {
+    const inputValue = event.target.value.toUpperCase(); // Convertir a mayúsculas
+    const lastChar = inputValue.slice(-1);
+
+    // Permitir letras mayúsculas, números (0-9), y el guion "-"
+    if (/^[A-Z0-9-]+$/.test(lastChar)) {
+      return;
+    } else {
+      event.target.value = inputValue.slice(0, -1); // Eliminar el último carácter ingresado
+    }
+  }
+
+
+
 
   validarFechaMulta() {
     if (this.p_anypro == '') {
@@ -613,17 +634,15 @@ export class CrearMultaComponent implements OnInit {
   }
 
   goBackToMultas() {
-    setTimeout(() => {
-      switch (this.error) {
-        case 'Notificacion Grabada Correctamente':
-        case 'Notificacion Actualizada Correctamente':
-          this.router.navigateByUrl('/multas');
-          break;
-        default:
-          //
-          break;
-      }
-    }, 1000);
+    switch (this.error) {
+      case 'Notificacion Grabada Correctamente':
+      case 'Notificacion Actualizada Correctamente':
+        this.router.navigateByUrl('/multas');
+        break;
+      default:
+        // No hacer nada
+        break;
+    }
   }
 
   formatNumber() {

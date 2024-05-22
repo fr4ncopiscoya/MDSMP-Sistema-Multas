@@ -470,10 +470,10 @@ export class MultasComponent implements OnInit {
       tr.classList.add('active-color');
     }
 
-    // this.nomusi = data.nomusi;
-    this.nomusi = data.usuins
-    // this.nomusm = data.nomusm;
-    this.nomusm = data.usumod;
+    this.nomusi = data.nomusi;
+    // this.nomusi = data.usuins
+    this.nomusm = data.nomusm;
+    // this.nomusm = data.usumod;
     this.fecins = data.fecins;
     this.fecmod = data.fecmod;
 

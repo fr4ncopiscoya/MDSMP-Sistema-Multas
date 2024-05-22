@@ -33,6 +33,10 @@
           </div>
           <div class="mb-2-5 col-sm-2">
             <label for="" class="form-label col-form-label col-form-label-sm">Filtro Fechas</label>
+            <!-- <ng-select [(ngModel)]="mrf_id">
+              <ng-option>Seleccione</ng-option>
+              <ng-option *ngFor="let data of datosFechas" [value]="data.id">{{data.mrf_descri}}</ng-option>
+           </ng-select> -->
             <select id="mrf_id" class="form-select form-select-sm" [(ngModel)]="mrf_id" (change)="busquedaTipoFecha()">
               <option [value]="0">Seleccionar</option>
               <option *ngFor="let data of datosFechas" [value]="data.mrf_id">
@@ -223,13 +227,13 @@
         </div>
       </div>
 
-      <!-- <div class="row">
+      <div class="row">
         <div class="datos-container">
           <div class="col-12 datos-body">
             <div class="col-4">
               <div class="datos-creacion">
                 <div class="dato-usuario">
-                  <label for=""> <span class="datos-spancolor"> Usuario: &nbsp; </span> </label>
+                  <label for=""> <span class="datos-spancolor"> Creado: &nbsp; </span> </label>
                   <label for=""> {{nomusi}} </label>
                 </div>
                 <div class="dato-fechacre">
@@ -254,7 +258,7 @@
             </div>
           </div>
         </div>
-      </div> -->
+      </div>
 
     </div>
 

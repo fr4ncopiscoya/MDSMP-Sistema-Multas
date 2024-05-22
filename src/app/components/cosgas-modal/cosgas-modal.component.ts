@@ -68,10 +68,14 @@ export class CosgasModalComponent implements OnInit {
     this.validarSelectDisable();
   }
 
-  private errorSweetAlert(icon: 'error' | 'warning' | 'info' | 'success' = 'error') {
+  private errorSweetAlert(icon: 'error' | 'warning' | 'info' | 'success' = 'error', callback?: () => void) {
     Swal.fire({
       icon: icon,
       text: this.error || 'Hubo un error al procesar la solicitud',
+    }).then((result) => {
+      if (result.isConfirmed && callback) {
+        callback();
+      }
     });
   }
 
@@ -104,7 +108,7 @@ export class CosgasModalComponent implements OnInit {
           //
           break;
       }
-    }, 800);
+    });
   }
 
   cerrarModal(modalKey: string) {
@@ -228,9 +232,9 @@ export class CosgasModalComponent implements OnInit {
         const icon = this.getIconByErrorCode(errorCode);
 
         // Muestra el SweetAlert con el icono y el mensaje de error
-        this.errorSweetAlert(icon);
+        this.errorSweetAlert(icon, this.goBackTo.bind(this));
 
-        this.goBackTo();
+        // this.goBackTo();
 
         // this.datosCosGas = data;
         // console.log("data:", data);

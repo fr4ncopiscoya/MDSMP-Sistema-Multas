@@ -45,7 +45,7 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getIp()
+    // this.getIp()
   }
 
   private errorSweetAlertCode(icon: 'error' | 'warning' | 'info' | 'success' = 'error') {
@@ -145,8 +145,6 @@ export class LoginComponent implements OnInit {
 
       },
       error: (error: any) => {
-        // this.spinner.hide();
-        // this.errorSweetAlertCode();
         console.log(error);
       },
     });
