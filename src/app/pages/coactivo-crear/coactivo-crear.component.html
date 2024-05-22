@@ -14,9 +14,11 @@
                     <div class="mb-3 col-sm-2">
                         <label for="" class="form-label col-form-label-sm">Codigo Administrado</label>
                         <div class="" style="display: flex">
-                            <input #inputCodigoAdm (keydown.tab)="obtenerNombrePorCod(inputCodigoAdm.value)"
-                                (keyup.enter)="obtenerNombrePorCod(inputCodigoAdm.value)" maxlength="6"
-                                [(ngModel)]="p_codcon" oninput="this.value = this.value.toUpperCase()" type="text"
+                            <input #inputCodigoAdm (keydown.backspace)="validarCodigoMultaVacio(inputCodigoAdm.value)"
+                                (keydown.delete)="validarCodigoMultaVacio(inputCodigoAdm.value)"
+                                (keyup.enter)="obtenerNombrePorCod(inputCodigoAdm.value)"
+                                (blur)="obtenerNombrePorCod(inputCodigoAdm.value)" maxlength="6" [(ngModel)]="p_codcon"
+                                id="codadm" oninput="this.value = this.value.toUpperCase()" type="text"
                                 class="form-control form-control-sm" />
                         </div>
                         <div *ngIf="error === 'Codigo de Administrado Invalido'" class="text-danger">Campo obligatorio *
@@ -37,17 +39,20 @@
                     <div class="mb-3 col-sm-2">
                         <label for="" class="form-label col-form-label-sm">Número Exp.</label>
                         <div class="" style="display: flex">
-                            <input id="numexp" #inputCodigoAdm (keydown.tab)="obtenerNombrePorCod(inputCodigoAdm.value)"
-                                (keyup.enter)="obtenerNombrePorCod(inputCodigoAdm.value)" maxlength="6"
-                                [(ngModel)]="p_numexp" (keypress)="validarNumero($event)" type="text"
-                                class="form-control form-control-sm" />
+                            <input id="numexp" #inputNumExp
+                                (keydown.backspace)="validarNumExp(inputNumExp.value)"
+                                (keydown.delete)="validarNumExp(inputNumExp.value)"
+                                (blur)="validarCamposBusqueda()" maxlength="6" [(ngModel)]="p_numexp"
+                                (keypress)="validarNumero($event)" type="text" class="form-control form-control-sm" />
                         </div>
                     </div>
                     <div class="mb-3 col-sm-2">
                         <label for="" class="form-label col-form-label-sm">Fecha Exp.</label>
                         <div class="" style="display: flex">
-                            <input id="fecexp" #inputCodigoAdm (keydown.tab)="obtenerNombrePorCod(inputCodigoAdm.value)"
-                                (keyup.enter)="obtenerNombrePorCod(inputCodigoAdm.value)" maxlength="6"
+                            <input id="fecexp" #inputFecExp
+                                (keydown.backspace)="validarFecExp(inputFecExp.value)"
+                                (keydown.delete)="validarFecExp(inputFecExp.value)"
+                                (blur)="validarCamposBusqueda()" maxlength="6"
                                 [(ngModel)]="p_fecexp" oninput="this.value = this.value.toUpperCase()" type="date"
                                 class="form-control form-control-sm" />
                         </div>
@@ -55,7 +60,8 @@
                 </div>
                 <div class="row mb-2">
                     <div class="col-sm-auto mb-2-5">
-                        <button (click)="consultarExpediente()" type="button" class="btn btn-primary btn-label btn-sm">
+                        <button id="btn_consultar" disabled="" (click)="consultarExpediente()" type="button"
+                            class="btn btn-primary btn-label btn-sm disabled-color">
                             <i class="ri-search-line label-icon align-middle fs-16 me-2"></i>
                             Consultar
                         </button>
@@ -109,28 +115,12 @@
             <div class="card container-fluid" id="cardsuperior">
                 <div class="row">
                     <div class="mb-3 col-sm-2">
-                        <!-- <label for="" class="form-label col-form-label-sm">Número</label>
-                        <div class="" style="display: flex">
-                            <input #inputCodigoAdm (keydown.tab)="obtenerNombrePorCod(inputCodigoAdm.value)"
-                                (keyup.enter)="obtenerNombrePorCod(inputCodigoAdm.value)" maxlength="6"
-                                [(ngModel)]="p_numexp" oninput="this.value = this.value.toUpperCase()" type="text"
-                                class="form-control form-control-sm" />
-                        </div> -->
                     </div>
                     <div class="mb-3 col-sm-2">
-                        <!-- <label for="" class="form-label col-form-label-sm">Fecha</label>
-                        <div class="" style="display: flex">
-                            <input #inputCodigoAdm (keydown.tab)="obtenerNombrePorCod(inputCodigoAdm.value)"
-                                (keyup.enter)="obtenerNombrePorCod(inputCodigoAdm.value)" maxlength="6"
-                                [(ngModel)]="p_fecexp" oninput="this.value = this.value.toUpperCase()" type="date"
-                                class="form-control form-control-sm" />
-                        </div> -->
                     </div>
                     <div class="mb-3 col-sm-2">
-
                     </div>
                     <div class="mb-3 col-sm-2">
-
                     </div>
                     <div class="mb-3 col-sm-2">
 
@@ -141,7 +131,7 @@
                             <button type="button" class="btn btn-primary btn-label btn-sm"
                                 (click)="registrarExpediente();">
                                 <i class="ri-save-line label-icon align-middle fs-16 me-2"></i>
-                                Grabar
+                                Registrar
                             </button>
                         </div>
                         <div class=" mb-2-5" style="margin: 0 10px;">

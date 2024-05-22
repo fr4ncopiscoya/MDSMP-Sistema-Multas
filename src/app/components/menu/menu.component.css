@@ -8,7 +8,11 @@
 }
 
 .active {
-    color: #438eff
+    font-weight: bold;
+    color: white !important;
+    background-color: #20529d;
+    /* transition: 3ms; */
+    
 }
 
 @media (min-width:1025px) {

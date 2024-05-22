@@ -39,6 +39,10 @@ thead.table-light {
   color: white;
 }
 
+.disabled-color {
+  background-color: #e1e1e1;
+}
+
 input {
   border: 1px solid #b9b9b9;
 }
@@ -98,7 +102,7 @@ textarea {
 }
 
 /* styles.css o styles.scss */
-.modal-lg .modal-bc{
+.modal-lg .modal-bc {
   background-color: black !important;
 }
 

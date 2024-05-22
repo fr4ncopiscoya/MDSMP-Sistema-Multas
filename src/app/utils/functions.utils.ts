@@ -13,6 +13,17 @@ export class FunctionsUtils {
     });
   }
 
+  setNumberToBoolean(value: number) {
+    let result;
+    if (value > 0) {
+      result = true
+    } else {
+      result = false
+    }
+
+    return result;
+  }
+
   statusText(status: boolean) {
     if (status) {
       return '<i class="ri-checkbox-circle-line fs-17 align-middle"></i> Activo';

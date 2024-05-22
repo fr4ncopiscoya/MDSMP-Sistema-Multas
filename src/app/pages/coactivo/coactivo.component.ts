@@ -5,6 +5,7 @@ import {
   TemplateRef,
   AfterViewInit,
   ElementRef,
+  HostListener,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppComponent } from 'src/app/app.component';
@@ -60,8 +61,8 @@ export class CoactivoComponent implements OnInit {
   datosFechas: any;
 
   //COSTAS
-  datosCostas:any;
-  datosGastos:any;
+  datosCostas: any;
+  datosGastos: any;
 
   // BUSQUEDA POR CODIGO CONTRIBUYENTE
   cnombre: string = '';
@@ -105,6 +106,15 @@ export class CoactivoComponent implements OnInit {
   p_concid: number = 0;
   exp_id: number = 0;
 
+  botonesExpediente: any;
+
+  //BOTONES
+  btnNuevo: number;
+  btnVer: number;
+  btnEditar: number;
+  btnAnular: number;
+  btnPdf: number;
+  btnExcel: number;
 
   constructor(
     private appComponent: AppComponent,
@@ -121,7 +131,16 @@ export class CoactivoComponent implements OnInit {
   ) {
     this.appComponent.login = false;
     this.dataUsuario = localStorage.getItem('dataUsuario');
+    this.botonesExpediente = this.appComponent.botonesPermisos;
   }
+
+  // Redirige a la ruta especial al presionar F5
+  // @HostListener('document:keydown', ['$event'])
+  // handleKeyboardEvent(event: KeyboardEvent) {
+  //   if (event.key === 'F5') {
+  //     this.router.navigate(['/dashboard']);
+  //   }
+  // }
 
   ngOnInit(): void {
     this.dtOptionsModal = {
@@ -137,6 +156,7 @@ export class CoactivoComponent implements OnInit {
       },
     }
 
+    this.botonesExpediente = this.appComponent.botonesPermisos
     this.listarFechas();
 
     const fechaActual = new Date().toISOString().split('T')[0];
@@ -156,12 +176,43 @@ export class CoactivoComponent implements OnInit {
     /* (document.querySelector('.dataTables_scrollBody') as HTMLElement).style.top = '150px'; */
   }
 
+  validacionBotones() {
+    const botonesCoactivo = JSON.parse(localStorage.getItem('menu-items'))
+    // const botonesMultas = JSON.parse(this.botonesMultas);
+
+    botonesCoactivo.forEach((item: any) => {
+      switch (item.bot_id) {
+        case 1:
+          this.btnNuevo = item.apb_activo
+          break;
+        case 2:
+          this.btnEditar = item.apb_activo
+          break;
+        case 3:
+          this.btnVer = item.apb_activo
+          break;
+        case 4:
+          this.btnAnular = item.apb_activo;
+          break;
+        case 5:
+          this.btnExcel = item.apb_activo
+          break;
+        case 10:
+          this.btnPdf = item.apb_activo
+          break;
+        default:
+          break;
+      }
+    })
+  }
+
+
   exportarccPDF() {
     let post = {
       p_codigo: this.p_codcon,
     };
 
-    console.log(post);
+
 
     this.sigtaService.exportarccPDF(post).subscribe(
       (response: any) => { // Cambiado a 'any' en lugar de 'Blob'
@@ -260,8 +311,14 @@ export class CoactivoComponent implements OnInit {
     }
   }
 
-  rellenarCeros(){
-    this.p_numexp = this.p_numexp.padStart(6,'0')
+  rellenarCeros() {
+    this.p_numexp = this.p_numexp.padStart(6, '0')
+  }
+
+  validarCodigoMultaVacio(event: any) {
+    if (this.p_codcon.length < 7) {
+      this.cnombre = ''
+    }
   }
 
   onInputChange(event: any) {
@@ -291,17 +348,17 @@ export class CoactivoComponent implements OnInit {
     this.modalRefs['listar-descri'] = this.modalService.show(templateDescri, { id: 2, class: 'modal-xl', backdrop: 'static', keyboard: false });
   }
 
-  listarCosGas(id:any,template: TemplateRef<any>, exp_id:number) {
+  listarCosGas(id: any, template: TemplateRef<any>, exp_id: number) {
     this.p_concid = id;
     this.sigtaService.p_concid = this.p_concid;
     // console.log(this.sigtaService.p_concid);
-    
+
     this.exp_id = exp_id;
     this.sigtaService.exp_id = this.exp_id;
     // console.log(this.exp_id);
-    
+
     // this.consultarCosGas();
-    this.modalRefs['cosgas'] = this.modalService.show(template, { id: 8, class: 'modal-lg',  backdrop: 'static', keyboard: false });
+    this.modalRefs['cosgas'] = this.modalService.show(template, { id: 8, class: 'modal-lg', backdrop: 'static', keyboard: false });
   }
 
 
@@ -380,7 +437,7 @@ export class CoactivoComponent implements OnInit {
   }
 
   getDataUser(event: MouseEvent, data: any) {
-    console.log(data);
+    
 
     const trs = document.querySelectorAll('tbody tr') as NodeListOf<HTMLTableRowElement>;
     trs.forEach((tr: HTMLTableRowElement) => {
@@ -436,23 +493,21 @@ export class CoactivoComponent implements OnInit {
 
     if (id !== null) {
       this.router.navigate(['/multas/editar-multa'], { queryParams: { id: id } });
-      console.log(id);
       // this.router.navigate(['/multas/editar-multa/', id]);
     } else {
-      console.log('ni pases');
 
     }
   }
 
   verDatosExpediente(id: string | null) {
     if (id !== null) {
-      console.log(id);
+
       this.router.navigate(['/coactivo/ver', id]);
     }
   }
   verDatosCosGas(id: string | null) {
     if (id !== null) {
-      console.log(id);
+
       this.router.navigate(['/cosgas', id]);
     }
   }
@@ -470,7 +525,7 @@ export class CoactivoComponent implements OnInit {
       p_fecfin: this.p_fecfin.toString(),
       p_codadm: this.p_codcon,
     };
-    console.log(post);
+
 
 
     if (this.p_numexp.length > 0 || this.p_fecfin.length > 0 || this.p_fecini.length > 0 || this.p_codcon.length > 0) {
@@ -478,7 +533,7 @@ export class CoactivoComponent implements OnInit {
       this.sigtaService.listarExpediente(post).subscribe({
         next: (data: any) => {
           this.spinner.hide();
-          console.log(data);
+          
 
           this.datosExpediente = data;
 
@@ -502,18 +557,18 @@ export class CoactivoComponent implements OnInit {
       p_concid: this.p_concid,
       // p_subcid: this.p_fecini.toString(),
     };
-    console.log(post);
-      this.sigtaService.listarCosGasValue(post).subscribe({
-        next: (data: any) => {
-          console.log(data);
 
-          this.datosCostas = data;
+    this.sigtaService.listarCosGasValue(post).subscribe({
+      next: (data: any) => {
+        
 
-        },
-        error: (error: any) => {
-          console.log(error);
-        },
-      });
+        this.datosCostas = data;
+
+      },
+      error: (error: any) => {
+        console.log(error);
+      },
+    });
   }
 
   // consultarGastos() {
@@ -525,7 +580,7 @@ export class CoactivoComponent implements OnInit {
   //   console.log(post);
   //     this.sigtaService.listarCosGasValue(post).subscribe({
   //       next: (data: any) => {
-  //         console.log(data);
+  //         
 
   //         this.datosGastos = data;
 
@@ -543,7 +598,7 @@ export class CoactivoComponent implements OnInit {
 
     this.sigtaService.listarFechas(post).subscribe({
       next: (data: any) => {
-        console.log(data);
+        
 
         this.datosFechas = data;
         // this.mrf_descri = data[0].mrf_descri;
@@ -567,12 +622,11 @@ export class CoactivoComponent implements OnInit {
 
     if (this.p_codcon != '') {
 
-      this.spinner.show();
+      // this.spinner.show();
 
       this.sigtaService.obtenerNombrePorCod(post).subscribe({
         next: (data: any) => {
-          this.spinner.hide();
-          console.log(data);
+          // this.spinner.hide();
 
           if (data && data.length > 0) {
             this.cnombre = data[0].cnombre;
@@ -580,12 +634,11 @@ export class CoactivoComponent implements OnInit {
             this.errorSweetAlertCode();
             this.cnombre = '';
             this.p_codcon = '';
-            console.log("noData");
 
           }
         },
         error: (error: any) => {
-          this.spinner.hide();
+          // this.spinner.hide();
           this.errorSweetAlertCode();
           this.cnombre = '';
           this.p_codcon = '';
@@ -608,7 +661,6 @@ export class CoactivoComponent implements OnInit {
       this.sigtaService.listarCosGasValue(post).subscribe({
         next: (data: any) => {
           this.spinner.hide();
-          console.log(data);
 
           if (data && data.length > 0) {
             this.cnombre = data[0].cnombre;
@@ -616,7 +668,6 @@ export class CoactivoComponent implements OnInit {
             this.errorSweetAlertCode();
             this.cnombre = '';
             this.p_codcon = '';
-            console.log("noData");
 
           }
         },
@@ -641,11 +692,10 @@ export class CoactivoComponent implements OnInit {
 
     this.spinner.show();
 
-    console.log(post);
+
     this.sigtaService.busContribuyente(post).subscribe({
       next: (data: any) => {
         this.spinner.hide();
-        console.log();
 
         this.datosContribuyente = data;
         this.dtElementModal.dtInstance.then((dtInstance: DataTables.Api) => {

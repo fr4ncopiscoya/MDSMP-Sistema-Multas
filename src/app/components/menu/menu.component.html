@@ -60,7 +60,7 @@
         </li>
         <li class="nav-item">
           <a class="nav-link menu-link" [routerLink]="['coactivo']">
-            <i class="bi bi-hdd-stack"></i>
+            <i class="bi bi-hdd-stack"></i>[]
             <span data-key="t-coactivo">Expediente</span>
           </a>
         </li>
@@ -75,19 +75,31 @@
             <button class="nav-link menu-link" (click)="toggleCollapse(menuItem.obj_descri.toLowerCase())">
               <i class="bi bi-journal-medical"></i> <span>{{ menuItem.obj_descri }}</span>
               <i class="bi"
-                [ngClass]="{'bi-chevron-down': isCollapsed(menuItem.obj_descri.toLowerCase()), 'bi-chevron-up': !isCollapsed(menuItem.obj_descri.toLowerCase())}"></i>
+                [ngClass]="{'bi-chevron-down': isCollapsed(menuItem.obp_descritoLowerCase()), 'bi-chevron-up': !isCollapsed(menuItem.obj_descri.toLowerCase())}"></i>
             </button>
-            <div class="collapse menu-dropdown" [id]="menuItem.obj_descri.toLowerCase()"
-              [ngClass]="{'show': !isCollapsed(menuItem.obj_descri.toLowerCase())}">
+            <div class="collapse menu-dropdown" [id]="menuItem.obp_descritoLowerCase()"
+              [ngClass]="{'show': !isCollapsed(menuItem.obp_descri.toLowerCase())}">
               <ul class="nav nav-sm flex-column">
                 <li class="nav-item" *ngFor="let subItem of menuItem.sub_menu">
-                  <a href="#" class="nav-link">{{ subItem.obp_descri }}</a>
+                  <a (click)="getMenuID(menuItem.obj_id,menuItem.obj_enlace)" [routerLink]="[menuItem.obj_enlace]"
+                    class="nav-link">{{
+                    subItem.obp_descri }}</a>
                 </li>
               </ul>
             </div>
           </li>
-          <li class="nav-item" *ngIf="!menuItem.sub_menu || menuItem.sub_menu.length === 0">
-            <a [routerLink]="[menuItem.obj_descri]" class="nav-link menu-link" href="">
+          <!-- <li class="nav-item" *ngIf="!menuItem.sub_menu || menuItem.sub_menu.length === 0">
+            <a class="nav-link menu-link" [ngClass]="{'active': menuItem.obj_id === activeMenuId}"
+              [ngStyle]="{'background-color': menuItem.obj_id === activeMenuId ? activeMenuColor : ''}"
+              (click)="getMenuID(menuItem.obj_id, menuItem.obj_enlace)">
+              <span>{{ menuItem.obj_descri }}</span>
+            </a>
+          </li> -->
+
+
+          <li class="nav-item" *ngIf="!menuItem.sub_menu || menuItem.sub_menu.length === 0" style="cursor: pointer;">
+            <a (click)="getMenuID(menuItem.obj_id,menuItem.obj_enlace)" class="nav-link menu-link"
+              [ngClass]="{'active': menuItem.obj_id == activeMenuId}">
               <span>{{ menuItem.obj_descri}}</span>
             </a>
           </li>

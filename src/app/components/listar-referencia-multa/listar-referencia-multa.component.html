@@ -1,0 +1,84 @@
+<div class="col-lg-12">
+    <div class="row">
+        <div class="mb-2-5 col-lg-12">
+            <label for="" class="form-label col-form-label-sm">Descripción nueva refere</label>
+            <div class="" style="display: flex; align-items: center">
+                <input #inputReferencia [(ngModel)]="p_desubi" (keydown.tab)="obtenerReferencia(inputReferencia.value)"
+                    (keyup.enter)="obtenerReferencia(inputReferencia.value)" type="text"
+                    class="form-control form-control-sm" id="employeeUrl"
+                    oninput="this.value = this.value.toUpperCase()" style="margin-right: 5px" />
+                <button type="button" class="btn btn-primary btn-label btn-sm"
+                    (click)="obtenerReferencia(inputReferencia.value)">
+                    <i class="ri-search-line label-icon align-middle fs-16 me-2"></i>
+                    Consultar
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="row">
+                <div class="card-body">
+                    <div>
+                        <table id="tablaAplicaciona" datatable [dtInstance]="dtInstance" [dtOptions]="dtOptionsModal"
+                            [dtTrigger]="dtTriggerModal" class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr style="width: 100%;">
+                                    <th scope="col" class="text-center" style="width: 100px">
+                                        ID
+                                    </th>
+                                    <th scope="col" class="text-center" style="width: 100px">
+                                        Distrito
+                                    </th>
+                                    <th scope="col" class="text-center" style="width: 400px">
+                                        Descripción
+                                    </th>
+                                    <th scope="col" class="text-center" style="width: 100px">
+                                        Acción
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let data of datosReferencia;let idx = index"
+                                    class="text-center parentesco-data-row" style="text-align: center">
+                                    <td>{{ idx + 1 }}</td>
+                                    <td>{{ data.dpostal }}</td>
+                                    <td>{{ data.viaurb }}</td>
+                                    <td>
+                                        <button type="button" (click)="emitir(data)" class="btn btn-primary btn-sm">
+                                            <i class="ri-check-fill fs-10"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!-- <div class="col-sm-auto mb-2-5">
+                            <button (click)="modalCrearRefereMulta(nuevaDirec);" type="button"
+                                class="btn btn-primary btn-label btn-sm">
+                                <i class="ri-file-2-fill label-icon align-middle fs-16 me-2"></i>
+                                Nuevo
+                            </button>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #nuevaDirec>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header" style="display: flex; justify-content: space-between;">
+                    <h4 class="card-title mb-0">Buscar</h4>
+                    <a class="" style="cursor: pointer;" (click)="cerrarModal('crear-referencia-multa')"> <i
+                            style="font-size: 1.50rem; " class=" ri-close-fill"></i></a>
+                </div>
+                <div class="card-body">
+                    <app-crear-referencia-multa></app-crear-referencia-multa>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>

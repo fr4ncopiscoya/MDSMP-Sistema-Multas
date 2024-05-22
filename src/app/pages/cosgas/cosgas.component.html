@@ -132,7 +132,7 @@
             <div class="card container-fluid" id="cardsuperior">
                 <div class="row">
                     <div class="mb-3 col-sm-2" style="display: flex; align-items: center; justify-content: left; margin-top: 23px; ">
-                        <button type="button" [routerLink]="['/coactivo/crear']"
+                        <button [ngClass]="{'disabled-color': !btnNuevo}" [disabled]="!btnNuevo" type="button" [routerLink]="['/coactivo/crear']"
                             class="btn btn-primary btn-label btn-sm">
                             <i class="ri-file-2-fill label-icon align-middle fs-16 me-2"></i>
                             Nuevo

@@ -46,8 +46,6 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.getIp()
-    console.log(this.ip);
-
   }
 
   private errorSweetAlertCode(icon: 'error' | 'warning' | 'info' | 'success' = 'error') {
@@ -142,11 +140,9 @@ export class LoginComponent implements OnInit {
   getIp() {
     this.sigtaService.getIp().subscribe({
       next: (data: any) => {
-        console.log(data);
         this.ip = data
         // this.spinner.hide();
 
-        console.log("ip" + this.ip);
       },
       error: (error: any) => {
         // this.spinner.hide();
@@ -182,7 +178,6 @@ export class LoginComponent implements OnInit {
 
             this.nomusu = data[0].nomusu;
             this.desare = data[0].desare;
-            console.log(data);
 
             // this.dataUsuario = data[0];
 
@@ -191,7 +186,6 @@ export class LoginComponent implements OnInit {
             this.nomusu = '';
             this.desare = '';
           }
-          console.log(data);
         }
       },
       error: (error: any) => {
@@ -212,8 +206,6 @@ export class LoginComponent implements OnInit {
       p_apl_id: 10
     };
 
-    console.log(post);
-
     this.spinner.show();
 
     this.sigtaService.ingresarUsuario(post).subscribe({
@@ -223,11 +215,8 @@ export class LoginComponent implements OnInit {
         localStorage.setItem("dataUsuario", JSON.stringify(data[0]));
         this.dataUsuario = data[0].numid;
 
-        console.log(this.dataUsuario);
-
         // if (data && data.length > 0) {
         this.error = data[0].mensa;
-        console.log(data);
 
         if (data[0].error == 0) {
           this.toastComponent.showToast('Inicio de sesión correcto.', 'success');
@@ -236,7 +225,7 @@ export class LoginComponent implements OnInit {
             btnLogin.innerHTML = 'Ingresar';
             btnLogin.classList.remove('pe-none', 'btn-load');
 
-            this.router.navigate(['/multas',]);
+            this.router.navigate(['/dashboard',]);
           }, 2000);
 
         } else {

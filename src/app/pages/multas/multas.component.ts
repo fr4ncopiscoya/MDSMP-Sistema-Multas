@@ -5,6 +5,7 @@ import {
   TemplateRef,
   AfterViewInit,
   ElementRef,
+  HostListener
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppComponent } from 'src/app/app.component';
@@ -16,6 +17,7 @@ import { Subject } from 'rxjs';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { MenuComponent } from 'src/app/components/menu/menu.component';
 import Swal from 'sweetalert2';
 import { Platform } from '@angular/cdk/platform';
 import * as XLSX from 'xlsx';
@@ -56,6 +58,8 @@ export class MultasComponent implements OnInit {
   datosDescripcion: any;
   dataUsuario: any;
   datosFechas: any;
+
+  databotones: any;
 
   // BUSQUEDA POR CODIGO CONTRIBUYENTE
   cnombre: string = '';
@@ -104,6 +108,20 @@ export class MultasComponent implements OnInit {
   fecins: string = '';
   fecmod: string = '';
 
+  //Botones activar
+  apb_activo: number = 0;
+  btn_id: number = 0;
+
+  botonesMultas: any;
+
+  //BOTONES
+  btnNuevo: number;
+  btnVer: number;
+  btnEditar: number;
+  btnAnular: number;
+  btnPdf: number;
+  btnExcel: number;
+
 
   constructor(
     private appComponent: AppComponent,
@@ -118,9 +136,20 @@ export class MultasComponent implements OnInit {
     private fb: FormBuilder,
     private platform: Platform,
   ) {
+
     this.appComponent.login = false;
     this.dataUsuario = localStorage.getItem('dataUsuario');
+    // this.botonesMultas = this.appComponent.botonesPermisos;
+
+    // this.botonesMultas = localStorage.getItem('menu-items')
   }
+  // Redirige a la ruta especial al presionar F5
+  // @HostListener('document:keydown', ['$event'])
+  // handleKeyboardEvent(event: KeyboardEvent) {
+  //   if (event.key === 'F5') {
+  //     this.router.navigate(['/dashboard']);
+  //   }
+  // }
 
   ngOnInit(): void {
     this.dtOptionsModal = {
@@ -129,23 +158,16 @@ export class MultasComponent implements OnInit {
       info: false,
       scrollY: '400px',
       columnDefs: [
-        { width: '600px', targets: 2 },
+        { width: '650px', targets: 5 },
       ],
       language: {
         url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
       },
+      order: [['0', 'desc']]
     }
-    
+    this.validacionBotones();
     this.listarFechas();
-
     const fechaActual = new Date().toISOString().split('T')[0];
-
-    // this.p_fecini = fechaActual;
-    // this.p_fecfin = fechaActual;
-    // this.consultarMulta();
-    /* setTimeout(() => {
-      (document.querySelector('.dataTables_scrollBody') as HTMLElement).style.height = '100%';
-    }, 1000); */
   }
 
   ngOnDestroy(): void {
@@ -156,11 +178,38 @@ export class MultasComponent implements OnInit {
   ngAfterViewInit() {
     this.dtTrigger.next();
     this.dtTriggerModal.next();
-
-
     /* (document.querySelector('.dataTables_scrollBody') as HTMLElement).style.top = '150px'; */
   }
 
+  validacionBotones() {
+    const botonesMultas = JSON.parse(localStorage.getItem('menu-items'))
+    // const botonesMultas = JSON.parse(this.botonesMultas);
+
+    botonesMultas.forEach((item: any) => {
+      switch (item.bot_id) {
+        case 1:
+          this.btnNuevo = item.apb_activo
+          break;
+        case 2:
+          this.btnEditar = item.apb_activo
+          break;
+        case 3:
+          this.btnVer = item.apb_activo
+          break;
+        case 4:
+          this.btnAnular = item.apb_activo;
+          break;
+        case 5:
+          this.btnExcel = item.apb_activo
+          break;
+        case 10:
+          this.btnPdf = item.apb_activo
+          break;
+        default:
+          break;
+      }
+    })
+  }
 
   exportarExcel() {
     let array = [];
@@ -208,18 +257,31 @@ export class MultasComponent implements OnInit {
     }
   }
 
+  //VALIDAR CAMPO VACIO EN CODIGO ADMINISTRADO
+  validarCodigoMultaVacio(event: any) {
+    if (this.p_codcon.length < 7) {
+      this.cnombre = ''
+    }
+  }
+
+  validarCodigoInfraVacio(event: any) {
+    if (this.p_codinf.length < 7) {
+      this.r_descri = ''
+    }
+  }
+
+  validarCodigoNotificacion(event: any) {
+    if (this.p_numnot.length < 7) {
+      this.p_numnot = ''
+    }
+  }
+
   onInputChange(event: any) {
     event.target.value = event.target.value.toUpperCase();
   }
 
-  onSelectionDate(event: any) {
-    this.mrf_id = event.mrf_id
-    console.log(this.mrf_id)
-  }
-
   //FILTROS DE BUSQUEDA POR FECHA 
   busquedaTipoFecha() {
-    console.log('llegas');
     const fechaActual = new Date().toISOString().split('T')[0];
 
     const disabled_fecini = document.getElementById('fecini') as HTMLInputElement
@@ -236,47 +298,16 @@ export class MultasComponent implements OnInit {
     } else {
       disabled_fecini.classList.add('disabled-color')
       disabled_fecfin.classList.add('disabled-color')
-      disabled_fecini.removeAttribute('disabled')
-      disabled_fecfin.removeAttribute('disabled')
+      disabled_fecini.setAttribute('disabled', 'disabled')
+      disabled_fecfin.setAttribute('disabled', 'disabled')
       this.p_fecini = '';
       this.p_fecfin = '';
     }
   }
 
-
-  // validarFechas(): boolean {
-  //   let result = false;
-
-  //   console.log(this.p_fecfin);
-  //   console.log(this.p_fecini);
-  //   if (this.p_fecini != '' && this.p_fecfin != '') {
-
-  //     if (this.p_fecini.length < 7 || this.p_fecfin.length < 7) {
-  //       this.errorSweetAlertFechaIncompleta()
-  //       result = true;
-  //     } else {
-  //       if (this.p_fecini > this.p_fecfin) {
-  //         this.errorSweetAlertFecha();
-  //         result = true;
-
-  //       } else {
-  //         console.log("todo bien en las fechas");
-  //         result = false;
-  //       }
-  //     }
-  //   } else {
-  //     console.log('fuera del if');
-
-  //   }
-
-  //   return result;
-  // }
-
   validarFechas(): boolean {
     let result = false;
 
-    console.log(this.p_fecfin);
-    console.log(this.p_fecini);
     if (this.p_fecini != '' && this.p_fecfin != '') {
       // result = true;
 
@@ -289,14 +320,10 @@ export class MultasComponent implements OnInit {
           result = true;
 
         } else {
-          console.log("todo bien en las fechas");
           result = false;
         }
       }
     } else {
-      console.log('fuera del if');
-      // result = false;
-      // this.errorSweetAlertFiltros();
 
     }
 
@@ -336,7 +363,6 @@ export class MultasComponent implements OnInit {
 
   modalAnularMulta(template: TemplateRef<any>, data: any) {
     this.idcorrl = data.id_corrl;
-    console.log(this.idcorrl);
 
     this.modalRefs['modalAnularMulta'] = this.modalService.show(template, { id: 6, class: '', backdrop: 'static', keyboard: false });
     this.sigtaService.idcorrl = this.idcorrl;
@@ -406,6 +432,7 @@ export class MultasComponent implements OnInit {
       icon: 'info',
       text: 'Por favor ingrese un filtro de busqueda',
     });
+    this.datosMulta = []
   }
 
 
@@ -432,8 +459,6 @@ export class MultasComponent implements OnInit {
   // }
 
   getDataUser(event: MouseEvent, data: any) {
-    console.log(data);
-
     const trs = document.querySelectorAll('tbody tr') as NodeListOf<HTMLTableRowElement>;
     trs.forEach((tr: HTMLTableRowElement) => {
       tr.classList.remove('active-color');
@@ -445,8 +470,10 @@ export class MultasComponent implements OnInit {
       tr.classList.add('active-color');
     }
 
-    this.nomusi = data.nomusi;
-    this.nomusm = data.nomusm;
+    // this.nomusi = data.nomusi;
+    this.nomusi = data.usuins
+    // this.nomusm = data.nomusm;
+    this.nomusm = data.usumod;
     this.fecins = data.fecins;
     this.fecmod = data.fecmod;
 
@@ -458,6 +485,7 @@ export class MultasComponent implements OnInit {
     const editarMultaElements = document.querySelectorAll('.editarMulta');
     const anularMultaElements = document.querySelectorAll('.anularMulta');
     const reganuMultaElements = document.querySelectorAll('.registraranularInfo');
+    const btnReso = document.getElementById('btnReso')
 
     //Resolucion
     const verResElements = document.querySelectorAll('.verRes');
@@ -529,19 +557,23 @@ export class MultasComponent implements OnInit {
         (element as HTMLElement).style.display = 'none';
       });
 
-      verResElements.forEach((element: Element) => {
-        (element as HTMLElement).style.display = '';
-      });
-      anularResElements.forEach((element: Element) => {
-        (element as HTMLElement).style.display = 'none';
-      });
-      registrarResElements.forEach((element: Element) => {
-        (element as HTMLElement).style.display = 'none';
-      });
-      reganuMultaElements.forEach((element: Element) => {
-        (element as HTMLElement).style.display = 'none';
-      });
+      btnReso?.setAttribute('disabled', 'disabled')
 
+      // verResElements.forEach((element: Element) => {
+      //   (element as HTMLElement).style.display = 'none';
+      // });
+      // anularResElements.forEach((element: Element) => {
+      //   (element as HTMLElement).style.display = 'none';
+      // });
+      // registrarResElements.forEach((element: Element) => {
+      //   (element as HTMLElement).style.display = 'none';
+      // });
+      // reganuMultaElements.forEach((element: Element) => {
+      //   (element as HTMLElement).style.display = 'none';
+      // });
+
+    } else {
+      btnReso?.removeAttribute('disabled')
     }
 
 
@@ -605,7 +637,6 @@ export class MultasComponent implements OnInit {
   }
 
   goBackToMultas() {
-    console.log(this.error);
     setTimeout(() => {
       switch (this.error) {
         case 'Resolucion Registrada Correctamente':
@@ -641,18 +672,21 @@ export class MultasComponent implements OnInit {
 
     if (id !== null) {
       this.router.navigate(['/multas/editar-multa'], { queryParams: { id: id } });
-      console.log(id);
       // this.router.navigate(['/multas/editar-multa/', id]);
     } else {
-      console.log('ni pases');
 
     }
   }
 
   verDatosMulta(id: string | null) {
     if (id !== null) {
-      console.log(id);
       this.router.navigate(['/multas/ver-multa/', id]);
+    }
+  }
+
+  validarDatosVaciosBusqueda() {
+    if (this.mrf_id === 0 && this.p_codcon === '' && this.p_codinf === '' && this.p_numnot === '') {
+      this.dataMulta = []
     }
   }
 
@@ -662,13 +696,6 @@ export class MultasComponent implements OnInit {
 
   //====================== CONSULTAR/FILTRAR MULTA =====================
   consultarMulta() {
-    // let result;
-    // result = this.validarFechas();
-    // console.log(result);
-
-
-    // if (!result) {
-
     let post = {
       p_codcon: this.p_codcon,
       p_numnot: this.p_numnot,
@@ -678,7 +705,6 @@ export class MultasComponent implements OnInit {
       p_fecfin: this.p_fecfin.toString(),
       p_idcorr: this.p_idcorr,
     };
-    console.log(post);
 
     if (this.mrf_id > 0 || this.p_codcon != '' || this.p_codinf != '' || this.p_numnot != '') {
       this.spinner.show();
@@ -686,9 +712,12 @@ export class MultasComponent implements OnInit {
       this.sigtaService.consultarMulta(post).subscribe({
         next: (data: any) => {
           this.spinner.hide();
-          console.log(data);
 
           this.datosMulta = data;
+
+          if (!data || data.length === 0) {
+            this.datosMulta = [];
+          }
 
           this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
             dtInstance.destroy();
@@ -698,22 +727,30 @@ export class MultasComponent implements OnInit {
         error: (error: any) => {
           this.errorSweetAlertData();
           this.spinner.hide();
-          console.log(error);
+          // this.datosMulta = ''
         },
       });
+
+      // this.dtOptionsModal = {
+      //   order: [['0', 'asc']]
+      // };
     } else {
       this.spinner.hide();
       this.errorSweetAlertFiltros();
+      this.datosMulta = []
+
+      this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+        dtInstance.destroy();
+        this.dtTrigger.next();
+      });
     }
 
   }
 
   consultarMultaExport() {
-    console.log('llegasteebport');
 
     let result;
     result = this.validarFechas();
-    console.log(result);
 
     if (!result) {
 
@@ -725,18 +762,15 @@ export class MultasComponent implements OnInit {
         p_fecfin: this.p_fecfin.toString(),
         p_idcorr: this.p_idcorr,
       };
-      console.log(post);
       this.spinner.show();
 
       this.sigtaService.consultarMultaExport(post).subscribe({
         next: (data: any) => {
-          console.log(data);
 
           this.datosMulta = data;
 
         },
         error: (error: any) => {
-          console.log(error);
         },
       });
     }
@@ -749,17 +783,14 @@ export class MultasComponent implements OnInit {
 
     this.sigtaService.listarFechas(post).subscribe({
       next: (data: any) => {
-        console.log(data);
 
         this.datosFechas = data;
-        // this.mrf_descri = data[0].mrf_descri;
-        // this.mrf_id = data[0].mrf_id;
-
-
-
+        this.mrf_descri = data[0].mrf_descri;
+        this.mrf_id = data[0].mrf_id;
+        this.busquedaTipoFecha();
+        this.consultarMulta();
       },
       error: (error: any) => {
-        console.log(error);
       },
     });
   }
@@ -775,13 +806,9 @@ export class MultasComponent implements OnInit {
     };
 
     if (this.p_codcon != '') {
-
-      this.spinner.show();
-
       this.sigtaService.obtenerNombrePorCod(post).subscribe({
         next: (data: any) => {
           this.spinner.hide();
-          console.log(data);
 
           if (data && data.length > 0) {
             this.cnombre = data[0].cnombre;
@@ -789,16 +816,12 @@ export class MultasComponent implements OnInit {
             this.errorSweetAlertCode();
             this.cnombre = '';
             this.p_codcon = '';
-            console.log("noData");
-
           }
         },
         error: (error: any) => {
-          this.spinner.hide();
           this.errorSweetAlertCode();
           this.cnombre = '';
           this.p_codcon = '';
-          console.log(error);
         },
       });
     }
@@ -819,17 +842,14 @@ export class MultasComponent implements OnInit {
 
     if (this.p_codinf != '') {
 
-      console.log(post);
 
       this.spinner.show();
 
       this.sigtaService.obtenerDescripcionPorCod(post).subscribe({
         next: (data: any) => {
           this.spinner.hide();
-          console.log(data);
 
           if (this.p_codinf == '') {
-            console.log("vacio codinf");
             this.errorSweetAlertCode()
             this.r_descri = '';
           } else {
@@ -849,7 +869,6 @@ export class MultasComponent implements OnInit {
           this.errorSweetAlertCode();
           this.r_descri = '';
           this.p_codinf = '';
-          console.log(error);
         },
       });
     }
@@ -869,11 +888,9 @@ export class MultasComponent implements OnInit {
 
     this.spinner.show();
 
-    console.log(post);
     this.sigtaService.busContribuyente(post).subscribe({
       next: (data: any) => {
         this.spinner.hide();
-        console.log();
 
         this.datosContribuyente = data;
         this.dtElementModal.dtInstance.then((dtInstance: DataTables.Api) => {
@@ -883,7 +900,6 @@ export class MultasComponent implements OnInit {
       },
       error: (error: any) => {
         this.spinner.hide();
-        console.log(error);
       },
     });
   }
@@ -917,7 +933,6 @@ export class MultasComponent implements OnInit {
 
   modalVerResolucion(template: TemplateRef<any>, data: any) {
     this.idcorrl = data.id_corrl;
-    console.log(this.idcorrl);
 
     this.modalRefs['modalVerResolucion'] = this.modalService.show(template, { id: 4, class: 'modal-lg', backdrop: 'static', keyboard: false });
     this.sigtaService.idcorrl = this.idcorrl;
@@ -925,7 +940,6 @@ export class MultasComponent implements OnInit {
 
   modalInforme(template: TemplateRef<any>, data: any) {
     this.idcorrl = data.id_corrl;
-    console.log(this.idcorrl);
 
     this.modalRefs['modalInformeFinal'] = this.modalService.show(template, { id: 7, class: '', backdrop: 'static', keyboard: false });
     this.sigtaService.idcorrl = this.idcorrl;
@@ -949,13 +963,11 @@ export class MultasComponent implements OnInit {
         observc: this.observc
       }
 
-      console.log(post);
 
       this.sigtaService.registrarResolucion(post).subscribe({
         next: (data: any) => {
           this.error = data[0].mensa;
           const errorCode = data[0].error;
-          console.log(this.error);
 
           // Selecciona el icono según el código de error
           const icon = this.getIconByErrorCode(errorCode);
@@ -963,14 +975,18 @@ export class MultasComponent implements OnInit {
           // Muestra el SweetAlert con el icono y el mensaje de error
           this.errorSweetAlert(icon);
           this.goBackToMultas()
+          this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+            dtInstance.destroy();
+            this.dtTrigger.next();
+          });
 
         },
         error: (error: any) => {
           this.spinner.hide();
-          console.log(error);
         },
       });
     }
+
   }
 
 
@@ -988,8 +1004,7 @@ export class MultasComponent implements OnInit {
   modalAnularResolucion(template: TemplateRef<any>, data: any) {
     this.idcorrl = data.id_corrl;
     // this.dataMulta = data;
-    // console.log(data);
-    console.log(this.idcorrl);
+    //
 
 
     this.submitted = false;

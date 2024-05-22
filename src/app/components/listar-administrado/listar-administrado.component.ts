@@ -32,18 +32,19 @@ export class ListarAdministradoComponent implements OnInit, AfterViewInit, OnDes
     private sigtaService: SigtaService,
     private spinner: NgxSpinnerService,
     private modalService: BsModalService
-  ) { }
-
-  ngOnInit(): void {
+  ) {
     this.dtOptionsModal = {
       paging: true,
       pagingType: 'numbers',
       info: false,
       scrollY: '320px',
       language: {
-        url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
+        // url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
       },
     }
+  }
+
+  ngOnInit(): void {
     // this.busContribuyente();
   }
 
@@ -84,11 +85,10 @@ export class ListarAdministradoComponent implements OnInit, AfterViewInit, OnDes
     if (this.p_nomcontri.length > 2) {
       this.spinner.show();
 
-      console.log(post);
+     
       this.sigtaService.busContribuyente(post).subscribe({
         next: (data: any) => {
           this.spinner.hide();
-          console.log();
 
           this.datosContribuyente = data;
           this.dtElementModal.dtInstance.then((dtInstance: DataTables.Api) => {
@@ -101,9 +101,8 @@ export class ListarAdministradoComponent implements OnInit, AfterViewInit, OnDes
           this.spinner.hide();
         },
       });
-    }else{
-      console.log("cantidad");
-      
+    } else {
+
     }
   }
 

@@ -40,7 +40,6 @@ export class CrearInformeFinalComponent implements OnInit {
       switch (this.error) {
         case 'Informe Anulado Correctamente':
         case 'Informe Registrado Correctamente':
-          // location.reload();
           this.modalService.hide(7)
           this.consultarMulta();
           break;
@@ -56,6 +55,7 @@ export class CrearInformeFinalComponent implements OnInit {
       icon: icon,
       text: this.error || 'Hubo un error al procesar la solicitud',
     });
+    Swal.hideLoading;
   }
 
   private getIconByErrorCode(errorCode: string): 'error' | 'warning' | 'info' | 'success' {

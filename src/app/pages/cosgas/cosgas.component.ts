@@ -45,7 +45,7 @@ export class CosgasComponent implements OnInit {
   /// ================== VARIABLES ============================
 
   //Id-exportar
-  cga_id:number = 0;
+  cga_id: number = 0;
 
   //DATA PARA ALMACENAR
   data: any;
@@ -56,6 +56,7 @@ export class CosgasComponent implements OnInit {
   datosDescripcion: any;
   dataUsuario: any;
   datosFechas: any;
+  botonesCosGas: any;
 
   // BUSQUEDA POR CODIGO CONTRIBUYENTE
   cnombre: string = '';
@@ -103,6 +104,14 @@ export class CosgasComponent implements OnInit {
   fecins: string = '';
   fecmod: string = '';
 
+  //BOTONES
+  btnNuevo: number;
+  btnVer: number;
+  btnEditar: number;
+  btnAnular: number;
+  btnPdf: number;
+  btnExcel: number;
+
 
   constructor(
     private appComponent: AppComponent,
@@ -124,7 +133,7 @@ export class CosgasComponent implements OnInit {
 
     this.appComponent.login = false;
     this.dataUsuario = localStorage.getItem('dataUsuario');
-
+    this.botonesCosGas = this.appComponent.botonesPermisos
   }
 
   ngOnInit(): void {
@@ -138,7 +147,7 @@ export class CosgasComponent implements OnInit {
         url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
       },
     }
-
+    this.validacionBotones();
     // this.listarFechas();
 
     const fechaActual = new Date().toISOString().split('T')[0];
@@ -155,12 +164,40 @@ export class CosgasComponent implements OnInit {
     this.dtTriggerModal.next();
   }
 
+  validacionBotones() {
+    const botonesCosGas = JSON.parse(localStorage.getItem('menu-items'))
+    // const botonesMultas = JSON.parse(this.botonesMultas);
+
+    botonesCosGas.forEach((item: any) => {
+      switch (item.bot_id) {
+        case 1:
+          this.btnNuevo = item.apb_activo
+          break;
+        case 2:
+          this.btnEditar = item.apb_activo
+          break;
+        case 3:
+          this.btnVer = item.apb_activo
+          break;
+        case 4:
+          this.btnAnular = item.apb_activo;
+          break;
+        case 5:
+          this.btnExcel = item.apb_activo
+          break;
+        case 10:
+          this.btnPdf = item.apb_activo
+          break;
+        default:
+          break;
+      }
+    })
+  }
+
   exportarccPDF() {
     let post = {
       p_codigo: this.p_codcon,
     };
-
-    console.log(post);
 
     this.sigtaService.exportarccPDF(post).subscribe(
       (response: any) => { // Cambiado a 'any' en lugar de 'Blob'
@@ -197,7 +234,6 @@ export class CosgasComponent implements OnInit {
   }
 
   busquedaTipoFecha() {
-    console.log('llegas');
     const fechaActual = new Date().toISOString().split('T')[0];
 
     const disabled_fecini = document.getElementById('fecini') as HTMLInputElement
@@ -239,7 +275,6 @@ export class CosgasComponent implements OnInit {
 
   onSelectionDate(event: any) {
     this.mrf_id = event.mrf_id
-    console.log(this.mrf_id)
   }
 
 
@@ -262,7 +297,6 @@ export class CosgasComponent implements OnInit {
 
   modalAnularCosGas(template: TemplateRef<any>, data: any) {
     this.sigtaService.cga_id = data.cga_id;
-    console.log(data.cga_id);
 
     this.modalRefs['anularCosGas'] = this.modalService.show(template, { id: 8, class: '', backdrop: 'static', keyboard: false });
     this.sigtaService.cga_id = this.cga_id;
@@ -306,9 +340,8 @@ export class CosgasComponent implements OnInit {
       text: 'Por favor ingrese un código válido',
     });
   }
-  SweetAlertAnularCG(data:any) {
+  SweetAlertAnularCG(data: any) {
     this.cga_id = data.cga_id;
-    console.log(this.cga_id);
     Swal.fire({
       title: "Estas seguro de eliminar este dato?",
       text: "No podras revertir esto!",
@@ -366,8 +399,6 @@ export class CosgasComponent implements OnInit {
 
   getDataUser(event: MouseEvent, data: any) {
 
-    console.log(data.idcorr);
-
     const target = event.target as HTMLInputElement;
     const tr = target.closest('tr') as HTMLTableRowElement | null;
 
@@ -388,17 +419,11 @@ export class CosgasComponent implements OnInit {
           this.p_idcorrl.splice(index, 1);
         }
       }
-      console.log(this.p_idcorrl);
 
     }
   }
 
   validarCamposBusqueda() {
-
-    console.log('validarCamposBusqueda');
-    console.log(this.datosCosGas);
-
-
     const disabled_numexp = document.getElementById('numexp') as HTMLInputElement
     const disabled_fecexp = document.getElementById('fecexp') as HTMLInputElement
 
@@ -421,7 +446,6 @@ export class CosgasComponent implements OnInit {
   }
 
   goBackToMultas() {
-    console.log(this.error);
     setTimeout(() => {
       switch (this.error) {
         case 'Expediente Registrado Correctamente':
@@ -459,17 +483,12 @@ export class CosgasComponent implements OnInit {
 
     if (id !== null) {
       this.router.navigate(['/multas/editar-multa'], { queryParams: { id: id } });
-      console.log(id);
-      // this.router.navigate(['/multas/editar-multa/', id]);
     } else {
-      console.log('ni pases');
-
     }
   }
 
   verDatosMulta(id: string | null) {
     if (id !== null) {
-      console.log(id);
       this.router.navigate(['/multas/ver-multa/', id]);
     }
   }
@@ -489,18 +508,16 @@ export class CosgasComponent implements OnInit {
       // p_codadm: this.p_codcon,
       p_expnid: this.p_expnid,
     };
-    console.log(post);
 
     this.spinner.show();
     this.sigtaService.listarExpediente(post).subscribe({
       next: (data: any) => {
         this.spinner.hide();
-        console.log(data);
 
         this.cnombre = data[0].exp_admnom,
-        this.p_codcon = data[0].exp_codadm,
-        this.p_numexp = data[0].exp_numexp,
-        this.p_fecexp = data[0].exp_fecexp
+          this.p_codcon = data[0].exp_codadm,
+          this.p_numexp = data[0].exp_numexp,
+          this.p_fecexp = data[0].exp_fecexp
 
         this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
           dtInstance.destroy();
@@ -523,13 +540,11 @@ export class CosgasComponent implements OnInit {
     let post = {
       p_expnid: this.p_expnid,
     };
-    console.log(post);
 
     this.spinner.show();
     this.sigtaService.listarCosGas(post).subscribe({
       next: (data: any) => {
         this.spinner.hide();
-        console.log(data);
 
         this.datosCosGas = data;
         // this.p_codcon = data[0].codadm;
@@ -552,7 +567,6 @@ export class CosgasComponent implements OnInit {
   registrarExpediente() {
 
     const idCorrlString = this.p_idcorrl.join(', ');
-    console.log(idCorrlString); // Esto imprimirá la cadena de texto
 
     let post = {
       p_codadm: this.p_codcon,
@@ -563,7 +577,6 @@ export class CosgasComponent implements OnInit {
 
     this.sigtaService.registrarExpediente(post).subscribe({
       next: (data: any) => {
-        console.log(data);
 
         if (data && data.length > 0) {
           this.error = data[0].mensa;
@@ -584,7 +597,6 @@ export class CosgasComponent implements OnInit {
 
       },
       error: (error: any) => {
-        console.log(error);
       },
     });
   }
@@ -598,8 +610,6 @@ export class CosgasComponent implements OnInit {
 
     this.sigtaService.listarFechas(post).subscribe({
       next: (data: any) => {
-        console.log(data);
-
         this.datosFechas = data;
       },
       error: (error: any) => {
@@ -622,7 +632,6 @@ export class CosgasComponent implements OnInit {
       this.sigtaService.obtenerNombrePorCod(post).subscribe({
         next: (data: any) => {
           this.spinner.hide();
-          console.log(data);
 
           if (data && data.length > 0) {
             this.cnombre = data[0].cnombre;
@@ -630,7 +639,6 @@ export class CosgasComponent implements OnInit {
             this.errorSweetAlertCode();
             this.cnombre = '';
             this.p_codcon = '';
-            console.log("noData");
 
           }
         },
@@ -653,13 +661,11 @@ export class CosgasComponent implements OnInit {
       p_mensaje: this.p_mensaje,
     };
 
-    this.spinner.show();
+    // this.spinner.show();
 
-    console.log(post);
     this.sigtaService.busContribuyente(post).subscribe({
       next: (data: any) => {
-        this.spinner.hide();
-        console.log();
+        // this.spinner.hide();
 
         this.datosContribuyente = data;
         this.dtElementModal.dtInstance.then((dtInstance: DataTables.Api) => {

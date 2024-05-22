@@ -10,6 +10,11 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import Swal from 'sweetalert2';
 import { DatePipe } from '@angular/common';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+import { FunctionsUtils } from 'src/app/utils/functions.utils';
+import { CleaveDirective } from 'src/cleave.directive';
+import { createMask } from '@ngneat/input-mask';
+import { FormControl } from '@angular/forms';
+
 
 @Component({
   selector: 'app-editar-multa',
@@ -17,6 +22,16 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
   styleUrls: ['./editar-multa.component.css']
 })
 export class EditarMultaComponent implements OnInit {
+
+  currencyInputMask = createMask({
+    alias: 'numeric',
+    groupSeparator: ',',
+    digits: 2,
+    digitsOptional: false,
+    prefix: 'S/. ',
+    placeholder: '0',
+  });
+  // currencyFC = new FormControl('');
 
   @ViewChild(DataTableDirective, { static: false })
 
@@ -57,6 +72,7 @@ export class EditarMultaComponent implements OnInit {
   datosAreaOficina: any;
   datosMedidaComp: any;
   datosGiroEstablecimiento: any;
+  datosDocumentoInfra: any;
   datosMulta: any;
   datosTipoEspecie: any;
   datosReferencia: any;
@@ -87,8 +103,10 @@ export class EditarMultaComponent implements OnInit {
   id_corrl: number = 0;
 
   error: string = '';
-  chkact = 0;
+  activeacta: boolean;
   ahora: any;
+
+  tdi_id: number = 0;
 
 
 
@@ -127,6 +145,8 @@ export class EditarMultaComponent implements OnInit {
   haburb: string = '' //  --Nombre Habilitacion Urbana(Urbanizacion)
   nroActaConstatacion: string = '' // -- Numero Acta Constatacion ===
 
+  girovalue: string = ''
+
 
   constructor(
     private appComponent: AppComponent,
@@ -137,13 +157,11 @@ export class EditarMultaComponent implements OnInit {
     private serviceSanidad: SanidadService,
     private sigtaService: SigtaService,
     private sanidadService: SanidadService,
-    private modalService: BsModalService
+    private modalService: BsModalService,
+    private utils: FunctionsUtils
   ) {
 
     this.dataUsuario = localStorage.getItem('dataUsuario');
-
-
-
     this.appComponent.login = false;
   }
 
@@ -155,15 +173,10 @@ export class EditarMultaComponent implements OnInit {
 
       //Almaceno el id en una variable
       this.id_corrl = id;
-      console.log("llegaste ruta");
 
       this.id_corrl = params['id'];
       // Utiliza el ID como necesites en este componente
     });
-
-    this.listarMedidaComp();
-    this.listarGiroEstablecimiento();
-
     //Carga todos los datos del infractor
     this.consultarMulta();
 
@@ -183,20 +196,19 @@ export class EditarMultaComponent implements OnInit {
   // ============================ MODALES ===================================
 
   cerrarModal(modalKey: string) {
-    console.log("cerrarModal called with modalKey:", modalKey);
     if (this.modalRefs[modalKey]) {
       this.modalRefs[modalKey].hide(); // Cierra el modal si está definido
     } else {
-      console.log("Modal reference not found for key:", modalKey);
     }
   }
 
   //Obtengo el valor seleccionado en el modal
-  confirmClickRefere(value: any) {
+  confirmClickRefereMulta(value: any) {
     this.p_desubi = value.viaurb;
-
-    this.obtenerReferencia();
-    this.modalService.hide(2);
+    this.via = value.cpbdo;
+    this.haburb = value.dpoblad;
+    // this.obtenerReferencia();
+    // this.modalService.hide(2);
   }
 
   modalRefere(template: TemplateRef<any>) {
@@ -253,21 +265,26 @@ export class EditarMultaComponent implements OnInit {
 
   // ============================ EVENTOS ONCHANGE ==========================
 
-  onSelectionChangeGiro(event: any) {
-    this.giro = event.ccodgir
-    // this.desgiro = event.ddesgir
-  }
-
-  onSelectionChangeMedida(event: any) {
-    this.csancio = event.CCODTIP
-    this.dsancio = event.DCODTIP
-  }
-
   onInputChange(event: any) {
     event.target.value = event.target.value.toUpperCase();
   }
 
+  onSelectionChange(event: any) {
+    let value = event.target.value;
+    let split = value.split('|');
+    this.girovalue = split[0];
+    this.desgiro = split[1];
+  }
 
+
+  validarChkactive() {
+    const chkacta = document.getElementById("chkacta") as HTMLInputElement;
+    if (chkacta && chkacta.checked) {
+    } else {
+      this.nro_acta = '';
+      this.f_ejecucion = '';
+    }
+  }
 
 
 
@@ -276,14 +293,8 @@ export class EditarMultaComponent implements OnInit {
   //Trae todos los datos del infractor
   consultarMulta() {
     let post = {
-      // p_codcon: this.p_codcon,
-      // p_numnot: this.nnumnot,
-      // p_codinf: this.r_descri,
-      // p_fecini: this.p_fecini.toString(),
-      // p_fecfin: this.p_fecfin.toString(),
       p_idcorr: this.id_corrl,
     };
-    console.log(post);
     this.spinner.show();
 
     this.sigtaService.consultarMulta(post).subscribe({
@@ -291,7 +302,7 @@ export class EditarMultaComponent implements OnInit {
         this.spinner.hide();
 
         if (data && data.length > 0 && data) {
-          this.datosMulta = data[0];
+          this.tdi_id = data[0].tdi_id;
           this.ccontri = data[0].ccontri;
           this.cnombre = data[0].cnombre;
           this.dpredio = data[0].dpredio;
@@ -308,10 +319,10 @@ export class EditarMultaComponent implements OnInit {
           this.cnumres = data[0].cnumres;
           this.dfecres = data[0].dfectra;
           this.dsancio = data[0].dsancio;
-          this.chkact = data[0].chkact;
+          this.activeacta = this.utils.setNumberToBoolean(data[0].chkact);
           this.nroActaConstatacion = data[0].ACTA_CONSTATACION;
           this.f_ejecucion = data[0].f_ejecucion;
-          this.giro = data[0].giro;
+          this.giro = data[0].giro + '|' + data[0].OTROS_GIROS;
           this.desgiro = data[0].OTROS_GIROS;
           this.cmulta = data[0].cmulta;
           this.nmonto = data[0].nmonto;
@@ -320,9 +331,13 @@ export class EditarMultaComponent implements OnInit {
           this.mobserv = data[0].mobserv;
           this.ins_municipal = data[0].ins_municipal;
           this.nro_informe = data[0].nro_informe;
+          this.via = data[0].via;
+          this.haburb = data[0].haburb;
 
-          console.log(this.csancio);
-          // this.formatNumber();
+          this.listarGiroEstablecimiento();
+          this.listarMedidaComp();
+          this.listarDocumentosInfraccion();
+
 
         } else {
           this.errorSweetAlertData();
@@ -338,17 +353,12 @@ export class EditarMultaComponent implements OnInit {
 
   listarGiroEstablecimiento() {
     let post = {
-
     };
 
     this.sigtaService.listarGiroEstablecimiento(post).subscribe({
       next: (data: any) => {
 
         this.datosGiroEstablecimiento = data;
-        // this.desgiro = data[0].ddesgir
-        // this.giro = data[0].ccodgir;
-        console.log(this.giro);
-
       },
       error: (error: any) => {
         console.log(error);
@@ -364,8 +374,6 @@ export class EditarMultaComponent implements OnInit {
     this.sigtaService.listarMedidaComp(post).subscribe({
       next: (data: any) => {
         this.datosMedidaComp = data;
-        this.csancio = data[0].CCODTIP;
-
       },
       error: (error: any) => {
         console.log(error);
@@ -384,6 +392,22 @@ export class EditarMultaComponent implements OnInit {
     }
   }
 
+
+  listarDocumentosInfraccion() {
+    let post = {
+
+    };
+
+    this.sigtaService.listarDocInfra(post).subscribe({
+      next: (data: any) => {
+        this.datosDocumentoInfra = data;
+      },
+      error: (error: any) => {
+        console.log(error);
+      },
+    });
+  }
+
   obtenerAreaPorCod(value: any) {
     const p_anyproDate = new Date(this.p_anypro).getFullYear();
 
@@ -393,8 +417,6 @@ export class EditarMultaComponent implements OnInit {
       // r_descri: this.dmulta,
       // p_arecod: this.carea
     };
-
-    console.log(post);
 
     this.spinner.show();
 
@@ -417,9 +439,16 @@ export class EditarMultaComponent implements OnInit {
             this.r_codint = data[0].r_codint;
 
             this.removerClase();
-            this.formatNumber();
+            // this.formatNumber();
           } else {
             this.errorSweetAlertCode();
+            this.dareas = '';
+            this.carea = '';
+            this.nmonto = '';
+            this.dmulta = '';
+            this.r_codint = '';
+            // this.cmulta = '';
+
           }
         }
 
@@ -448,15 +477,11 @@ export class EditarMultaComponent implements OnInit {
 
 
         if (this.p_codcon = '') {
-          console.log("Esta vacio: " + this.p_codcon);
-
         } else {
           if (data && data.length > 0 && data[0].cnombre) {
             this.cnombre = data[0].cnombre;
             this.dfiscal = data[0].dfiscal;
             this.ccontri = data[0].ccontri;
-
-            console.log(this.ccontri);
 
           } else {
             this.errorSweetAlertCode();
@@ -477,7 +502,6 @@ export class EditarMultaComponent implements OnInit {
       p_desubi: this.p_desubi,
     };
 
-    console.log(post);
 
     this.spinner.show();
 
@@ -508,7 +532,8 @@ export class EditarMultaComponent implements OnInit {
 
   editarInfraccion() {
 
-    const nmontoAsNumber = parseFloat(this.nmonto);
+    const montoLimpio = this.nmonto.replace('S/.', '').replace(',', '');
+    const montoFloat = parseFloat(montoLimpio);
 
     let storedData = localStorage.getItem("dataUsuario");
     if (storedData !== null) {
@@ -534,16 +559,15 @@ export class EditarMultaComponent implements OnInit {
       ins_municipal: this.ins_municipal,
       nro_acta: this.nro_acta,
       nro_informe: this.nro_informe,
-      giro: this.giro,
+      giro: this.girovalue,
       desgiro: this.desgiro,
       f_ejecucion: this.f_ejecucion,
       via: this.via,
       haburb: this.haburb,
       nroActaConstatacion: this.nroActaConstatacion,
-      nmonto: nmontoAsNumber,
+      nmonto: montoFloat,
+      usumod: this.sigtaService.cusuari
     };
-    console.log(post);
-    console.log(this.csancio);
 
     this.spinner.show();
 
@@ -561,16 +585,13 @@ export class EditarMultaComponent implements OnInit {
           const icon = this.getIconByErrorCode(errorCode);
 
           this.errorSweetAlertCode(icon);
-
           this.goBackToMultas();
 
         } else {
-          // this.errorSweetAlertCode();
         }
       },
       error: (error: any) => {
         this.spinner.hide();
-        // this.errorSweetAlertCode();
         console.log(error);
       },
     });
@@ -609,24 +630,44 @@ export class EditarMultaComponent implements OnInit {
       this.r_descri = '';
 
     } else {
-      console.log("no hagas nada");
+    }
+  }
+
+  listarDocInfra() {
+    const disabled_nro_not = document.getElementById('nro_not') as HTMLInputElement
+
+    if (this.tdi_id != 0) {
+      disabled_nro_not.classList.remove('disabled-color');
+      disabled_nro_not.removeAttribute('disabled')
+    } else {
+      disabled_nro_not.classList.add('disabled-color')
+      disabled_nro_not.setAttribute('disabled', 'disabled')
+      this.tdi_id = 0;
+      this.nnumnot = ''
     }
   }
 
 
   formatNumber() {
-    const nmontoAsNumber = parseFloat(this.nmonto);
+    // Eliminar el símbolo de moneda y los separadores de miles
+    const montoLimpio = this.nmonto.replace('S/.', '').replace(',', '');
 
-    let formattedNumber = nmontoAsNumber.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    formattedNumber = formattedNumber.replace('.', '.');
+    // Convertir el monto limpio a tipo float
+    const montoFloat = parseFloat(montoLimpio);
 
-    formattedNumber = formattedNumber.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+    // Imprimir el monto convertido en la consola
+    // const nmontoAsNumber = parseFloat(this.nmonto);
 
-    if (nmontoAsNumber >= 0) {
-      this.nmonto = formattedNumber;
-    } else {
-      this.nmonto = '0.00';
-    }
+    // let formattedNumber = nmontoAsNumber.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    // formattedNumber = formattedNumber.replace('.', '.');
+
+    // formattedNumber = formattedNumber.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+
+    // if (nmontoAsNumber >= 0) {
+    //   this.nmonto = formattedNumber;
+    // } else {
+    //   this.nmonto = '0.00';
+    // }
   }
 
 

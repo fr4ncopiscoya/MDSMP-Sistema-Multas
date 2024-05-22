@@ -14,8 +14,10 @@
           <div class="mb-3 col-sm-2">
             <label for="" class="form-label col-form-label-sm">Codigo Administrado</label>
             <div class="" style="display: flex">
-              <input #inputCodigoAdm (keydown.tab)="obtenerNombrePorCod(inputCodigoAdm.value)"
-                (keyup.enter)="obtenerNombrePorCod(inputCodigoAdm.value)" maxlength="6" [(ngModel)]="p_codcon"
+              <input #inputCodigoAdm (blur)="obtenerNombrePorCod(inputCodigoAdm.value)"
+                (keyup.enter)="obtenerNombrePorCod(inputCodigoAdm.value)"
+                (keydown.delete)="validarCodigoMultaVacio(inputCodigoAdm)"
+                (keydown.backspace)="validarCodigoMultaVacio(inputCodigoAdm.value)" [(ngModel)]="p_codcon"
                 oninput="this.value = this.value.toUpperCase()" type="text" class="form-control form-control-sm" />
             </div>
           </div>
@@ -40,14 +42,15 @@
               </button>
             </div>
             <div class="col-sm-auto mb-2-5">
-              <button type="button" class="btn btn-danger btn-label btn-sm" (click)="exportarccPDF()">
+              <button [ngClass]="{'disabled-color':!btnPdf}" type="button" class="btn btn-danger btn-label btn-sm"
+                (click)="exportarccPDF()">
                 <i class="ri-file-2-fill label-icon align-middle fs-16 me-2"></i>
                 PDF
               </button>
             </div>
             <div class="col-sm-auto mb-2-5">
-              <button type="button" class="btn_excel btn btn-success btn-label btn-sm" id="ExportarExcel"
-                (click)="exportarExcel()">
+              <button [ngClass]="{'disabled-color': !btnExcel}" [disabled]="!btnExcel" type="button"
+                class="btn_excel btn btn-success btn-label btn-sm" id="ExportarExcel" (click)="exportarExcel()">
                 <i class="ri-file-excel-2-fill label-icon align-middle fs-16 me-2"></i>Excel
               </button>
             </div>

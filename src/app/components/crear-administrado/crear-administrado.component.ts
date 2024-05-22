@@ -30,7 +30,8 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
   datosTipoDocumento: any;
   datosDistrito: any;
   datosReferencia: any;
-  dataUsuario:any;
+  dataUsuario: any;
+  datosPersonaPide: any
 
   //Variables
   ccontri: string = ''
@@ -59,7 +60,15 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
   de_mail: string = ''
   dnumcel: string = ''
   fecnaci: string = ''
-  cusuari: string = 'N05'
+  cusuari: string = ''
+
+  //datos emitidos de crear referencia
+  cdvia: string = ''
+  cdtipvia: string = ''
+  cdescri: string = ''
+  ccodhur: string = ''
+  ctiphur: string = ''
+  dpoblad: string = ''
 
   valor: boolean = false
 
@@ -81,14 +90,18 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
     private spinner: NgxSpinnerService,
     private modalService: BsModalService
   ) {
-    this.dataUsuario=localStorage.getItem('dataUsuario')
-   }
+    console.log(this.dataUsuario);
+
+  }
 
   ngOnInit(): void {
 
     this.listarTipoDocumento();
     this.listarTipoPersona();
     this.listarDistrito();
+
+    this.cusuari = this.sigtaService.cusuari;
+    console.log(this.cusuari);
 
     this.dtOptionsModal = {
       paging: true,
@@ -137,6 +150,7 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
 
 
 
+
   // =============================== MODALES ====================================
 
   // confirmClick(value: string) {
@@ -150,16 +164,26 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
   }
 
   confirmClickRefere(value: any) {
-    this.dnomvia = value.cdvia;
+    console.log(value);
+    this.dnomvia = value.dnomvia;
     this.dnomurb = value.dpoblad;
     this.ccodurb = value.cpoblad;
     this.dtipurb = value.dtippob;
     this.ccodvia = value.v_codi;
     this.dtipvia = value.v_tipo;
-    console.log(this.ccodurb);
-    console.log(this.dtipurb);
-    console.log(this.ccodvia);
-    console.log(this.dtipvia);
+
+    //Datos emitidos de crear referencia
+    // this.dnomvia = value.cdvia;
+    this.dtipvia = value.cdtipvia;
+    this.cdescri = value.cdescri;
+    // this.ccodhur = value.ccodhur;
+    this.dtipurb = value.ctiphur;
+    this.dpoblad = value.dpoblad;
+
+    let nombreVia: string = value.v_tipo + ' ' + value.v_descri;
+    let nombreUrb: string = value.dtippob + ' ' + value.dpoblad;
+    this.dnomvia = nombreVia;
+    this.dnomurb = nombreUrb;
 
     this.modalService.hide(1);
   }
@@ -199,6 +223,9 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
   ChangeTipoDistrito(event: any) {
     this.cpostal = event.CPOSTAL
     console.log(this.cpostal)
+    this.sigtaService.cpostal = this.cpostal
+    console.log(this.sigtaService.cpostal);
+
   }
 
   onInputChange(event: any) {
@@ -217,6 +244,11 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
     }
   }
 
+  validarDni() {
+    if (this.ctipdoc === 'DNI') {
+      this.dtipdoc = ''
+    }
+  }
 
 
 
@@ -317,10 +349,84 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
     });
   }
 
+  validarTipDoc() {
+    if (this.ctipdoc === '' || this.ctipdoc === null) {
+      this.dpatern = ''
+      this.dmatern = ''
+      this.dnombre = ''
+      this.fecnaci = ''
+      this.dtipdoc = ''
+      this.ctipdoc = ''
+    }
+  }
+
+  validarNumDoc() {
+    if (this.dtipdoc === '') {
+      this.dpatern = ''
+      this.dmatern = ''
+      this.dnombre = ''
+      this.fecnaci = ''
+      this.dtipdoc = ''
+      // this.ctipdoc = ''
+    }
+  }
+
+  consultarPide() {
+    let post = {
+      p_tdi_id: this.ctipdoc,
+      p_per_numdoi: this.dtipdoc,
+    };
+
+    // this.spinner.show();
+
+    console.log(post);
+    if (this.dtipdoc.length > 6) {
+      this.sigtaService.consultarPide(post).subscribe({
+        next: (data: any) => {
+
+          // this.spinner.hide();
+          console.log(data);
+          this.datosPersonaPide = data['persona'];
+          if (this.datosPersonaPide) {
+            console.log(this.datosPersonaPide);
+
+            this.dpatern = data['persona'].pen_apepat,
+              this.dmatern = data['persona'].pen_apemat,
+              this.dnombre = data['persona'].pen_nombre,
+              this.fecnaci = data['persona'].pen_fecnac
+          } else {
+            this.dpatern = ''
+            this.dmatern = ''
+            this.dnombre = ''
+            this.fecnaci = ''
+            // this.spinner.hide();
+          }
+
+        },
+        error: (error: any) => {
+          console.log(error);
+          // this.dpatern = ''
+          // this.dmatern = ''
+          // this.dnombre = ''
+          // this.fecnaci = ''
+          // this.spinner.hide();
+        },
+      });
+    } else {
+      // console.log('pocos digitos');
+      this.dpatern = ''
+      this.dmatern = ''
+      this.dnombre = ''
+      this.fecnaci = ''
+      this.spinner.hide();
+
+    }
+  }
+
   registrarAdministrado() {
 
     let storedData = localStorage.getItem('dataUsuario')
-    if(storedData != null){
+    if (storedData != null) {
       this.dataUsuario = JSON.parse(storedData);
     }
 
@@ -351,7 +457,7 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
       de_mail: this.de_mail,
       dnumcel: this.dnumcel,
       fecnaci: this.fecnaci,
-      cusuari: this.dataUsuario.codusu,
+      cusuari: this.cusuari,
     };
 
     this.spinner.show();
@@ -365,12 +471,14 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
         if (data && data.length > 0 && data[0].error) {
           this.error = data[0].mensa;
           const errorCode = data[0].error;
+          console.log(this.error);
 
           // Selecciona el icono según el código de error
           const icon = this.getIconByErrorCode(errorCode);
 
           // Muestra el SweetAlert con el icono y el mensaje de error
           this.errorSweetAlertCode(icon);
+
         } else {
           this.errorSweetAlertCode();
         }
@@ -382,7 +490,6 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
             }, 1000);
           }
         }
-
 
       },
       error: (error: any) => {
@@ -415,6 +522,5 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
     // Obtener la fecha actual en formato "YYYY-MM-DD"
     return new Date().toISOString().split('T')[0];
   }
-
 
 }

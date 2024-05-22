@@ -1,145 +1,148 @@
 table#tablaAplicacion {
-    font-size: 12px;
-    /* Ajusta el tamaño de la fuente según tus preferencias */
-  }
-  
-  tbody td {
-    border: 1px solid #cecece;
-  }
-  
-  .tddirecciondatatable {
-    font-size: 12px;
-  }
-  
-  .card-body {
-    padding-top: 0px;
-    padding-bottom: 0px;
-  }
-  
-  .form-control.ng-select {
-    border: none;
-    padding: 0;
-  }
-  
-  /* CARNET */
-  .imagencarnet {
-    width: 794px;
-    height: 560px;
-  }
-  
-  .contenedor {
-    position: relative;
-    display: inline-block;
-    text-align: center;
-  }
-  
-  td {
-    padding-top: 0px !important;
-    padding-bottom: 0px !important;
-  }
-  
-  thead.table-light {
-    background-color: #20529d;
-    color: white;
-  }
-  
-  input {
-    border: 1px solid #b9b9b9;
-  }
-  
-  select {
-    border: 1px solid #b9b9b9;
-  }
-  
-  ng-select.form-control.input-sm.ng-select-searchable.ng-select-clearable.ng-select.ng-select-single.ng-pristine.ng-valid.ng-select-bottom.ng-touched {
-    border: 1px solid #b9b9b9 !important;
-  }
-  
-  .ng-select-container.ng-has-value {
-    border: 1px solid #b9b9b9 !important;
-  }
-  
-  .opciones {
-    display: flex;
-  }
-  
-  .estado-multa {
-    display: flex;
-  }
-  
-  .cuadrado {
-    margin: 2px;
-    padding: 5px 10px;
-    /* border: 1px solid #000; */
-    width: 110px;
-    text-align: center;
-    font-weight: bold;
-  }
-  
-  select {
-    border: 1px solid #b9b9b9;
-  }
-  
-  ng-select.form-control.input-sm.ng-select-searchable.ng-select-clearable.ng-select.ng-select-single.ng-pristine.ng-valid.ng-select-bottom.ng-touched {
-    border: 1px solid #b9b9b9 !important;
-  }
-  
-  .ng-select-container.ng-has-value {
-    border: 1px solid #b9b9b9 !important;
-  }
-  
-  ::ng-deep .select-container {
-    height: 28px !important;
-    font-size: 0.8em !important;
-  }
-  
-  .estados {
-    display: flex;
-    justify-content: space-between;
-  }
-  
-  #cardsuperior .form-label {
-    margin-bottom: 0.0rem !important;
-  }
-  
-  .tr_hover:hover {
-    cursor: pointer;
-    background-color: #e1e1e1;
-  }
-  
-  /* .disabled-color{
+  font-size: 12px;
+  /* Ajusta el tamaño de la fuente según tus preferencias */
+}
+
+tbody td {
+  border: 1px solid #cecece;
+}
+
+.tddirecciondatatable {
+  font-size: 12px;
+}
+
+.card-body {
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+
+.form-control.ng-select {
+  border: none;
+  padding: 0;
+}
+
+/* CARNET */
+.imagencarnet {
+  width: 794px;
+  height: 560px;
+}
+
+.contenedor {
+  position: relative;
+  display: inline-block;
+  text-align: center;
+}
+
+td {
+  padding-top: 0px !important;
+  padding-bottom: 0px !important;
+}
+
+thead.table-light {
+  background-color: #20529d;
+  color: white;
+}
+
+input {
+  border: 1px solid #b9b9b9;
+}
+
+select {
+  border: 1px solid #b9b9b9;
+}
+
+ng-select.form-control.input-sm.ng-select-searchable.ng-select-clearable.ng-select.ng-select-single.ng-pristine.ng-valid.ng-select-bottom.ng-touched {
+  border: 1px solid #b9b9b9 !important;
+}
+
+.ng-select-container.ng-has-value {
+  border: 1px solid #b9b9b9 !important;
+}
+
+.opciones {
+  display: flex;
+}
+
+.estado-multa {
+  display: flex;
+}
+
+.cuadrado {
+  margin: 2px;
+  padding: 5px 10px;
+  /* border: 1px solid #000; */
+  width: 110px;
+  text-align: center;
+  font-weight: bold;
+}
+
+select {
+  border: 1px solid #b9b9b9;
+}
+
+ng-select.form-control.input-sm.ng-select-searchable.ng-select-clearable.ng-select.ng-select-single.ng-pristine.ng-valid.ng-select-bottom.ng-touched {
+  border: 1px solid #b9b9b9 !important;
+}
+
+.ng-select-container.ng-has-value {
+  border: 1px solid #b9b9b9 !important;
+}
+
+::ng-deep .select-container {
+  height: 28px !important;
+  font-size: 0.8em !important;
+}
+
+.estados {
+  display: flex;
+  justify-content: space-between;
+}
+
+#cardsuperior .form-label {
+  margin-bottom: 0.0rem !important;
+}
+
+.tr_hover:hover {
+  cursor: pointer;
+  background-color: #e1e1e1;
+}
+
+/* .disabled-color{
     background-color: #e1e1e1;
   } */
-  
-  .datos-container {
-    padding: 5px 10px 5px 10px;
-    /* display: flex;
+
+.datos-container {
+  padding: 5px 10px 5px 10px;
+  /* display: flex;
     justify-content: center; */
-    background-color: #20529df1;
-    color: white;
+  background-color: #20529df1;
+  color: white;
+}
+
+.datos-body,
+.datos-creacion,
+.datos-modificados {
+  display: flex;
+  justify-content: space-between;
+}
+
+.datos-spancolor {
+  font-weight: bold;
+}
+
+
+.active-color,
+.disabled-color {
+  background-color: #e1e1e1;
+}
+
+.hide {
+  display: none;
+}
+
+@media (max-width: 400px) {
+  #tablaAplicacion {
+    height: 20vh;
+    /* Cambia el tamaño máximo para adaptarse a pantallas más pequeñas */
   }
-  
-  .datos-body,
-  .datos-creacion,
-  .datos-modificados {
-    display: flex;
-    justify-content: space-between;
-  }
-  
-  .datos-spancolor{
-    font-weight: bold;
-  }
-  
-  
-  .active-color,
-  .disabled-color {
-    background-color: #e1e1e1;
-  }
-  
-  
-  @media (max-width: 400px) {
-    #tablaAplicacion {
-      height: 20vh;
-      /* Cambia el tamaño máximo para adaptarse a pantallas más pequeñas */
-    }
-  }
+}

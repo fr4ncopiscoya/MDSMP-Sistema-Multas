@@ -14,8 +14,10 @@
                     <div class="mb-3 col-sm-2">
                         <label for="" class="form-label col-form-label-sm">Codigo Administrado</label>
                         <div class="" style="display: flex">
-                            <input #inputCodigoAdm (keydown.tab)="obtenerNombrePorCod(inputCodigoAdm.value)"
-                                (keyup.enter)="obtenerNombrePorCod(inputCodigoAdm.value)" maxlength="6"
+                            <input #inputCodigoAdm (blur)="obtenerNombrePorCod(inputCodigoAdm.value)"
+                                (keyup.enter)="obtenerNombrePorCod(inputCodigoAdm.value)"
+                                (keydown.delete)="validarCodigoMultaVacio(inputCodigoAdm)"
+                                (keydown.backspace)="validarCodigoMultaVacio(inputCodigoAdm.value)" maxlength="6"
                                 [(ngModel)]="p_codcon" oninput="this.value = this.value.toUpperCase()" type="text"
                                 class="form-control form-control-sm" />
                         </div>
@@ -46,8 +48,8 @@
                         <label for="" class="form-label col-form-label-sm">Nro. Expediente</label>
                         <div class="" style="display: flex">
                             <input #inputCodigoAdm (keydown.tab)="obtenerNombrePorCod(inputCodigoAdm.value)"
-                                (keyup.enter)="obtenerNombrePorCod(inputCodigoAdm.value)" (blur)="rellenarCeros()"
-                                maxlength="6" [(ngModel)]="p_numexp" (keypress)="validarNumero($event)" type="text"
+                                (keyup.enter)="obtenerNombrePorCod(inputCodigoAdm.value)" maxlength="6"
+                                [(ngModel)]="p_numexp" (keypress)="validarNumero($event)" type="text"
                                 class="form-control form-control-sm" />
                         </div>
                     </div>
@@ -62,7 +64,7 @@
                             </button>
                         </div>
                         <div class="col-sm-auto mb-2-5">
-                            <button type="button" [routerLink]="['/coactivo/crear']"
+                            <button [ngClass]="{'hideHtml':btnNuevo}" type="button" [routerLink]="['/coactivo/crear']"
                                 class="btn btn-primary btn-label btn-sm">
                                 <i class="ri-file-2-fill label-icon align-middle fs-16 me-2"></i>
                                 Nuevo

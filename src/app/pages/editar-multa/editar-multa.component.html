@@ -39,64 +39,79 @@
                   <div class="" style="display: flex; align-items: center">
                     <input disabled="" [(ngModel)]="p_desubi" oninput="this.value = this.value.toUpperCase()"
                       type="text" class="form-control form-control-sm " ngClass="disabled-color" placeholder="" id="" />
-                    <button type="button" title="Buscar" (click)="modalRefere(templateRefere)"
+                    <!-- <button type="button" title="Buscar" (click)="modalRefere(templateRefere)"
                       class="btn btn-primary btn-sm" style="margin-left: 5px">
                       <i class="ri-search-line"></i>
-                    </button>
+                    </button> -->
                   </div>
                 </div>
               </div>
               <div class="col-2">
                 <div class="mb-3">
                   <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Manzana</label>
-                  <input [(ngModel)]="manzana" oninput="this.value = this.value.toUpperCase()" type="email"
-                    class="form-control form-control-sm" placeholder="" id="" />
+                  <input disabled="" [(ngModel)]="manzana" oninput="this.value = this.value.toUpperCase()" type="email"
+                    class="form-control form-control-sm disabled-color " placeholder="" id="" />
                 </div>
               </div>
               <div class="col-2">
                 <div class="mb-3">
                   <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Lote</label>
-                  <input [(ngModel)]="lote" oninput="this.value = this.value.toUpperCase()" type="email"
-                    class="form-control form-control-sm" placeholder="" id="" />
+                  <input disabled="" [(ngModel)]="lote" oninput="this.value = this.value.toUpperCase()" type="email"
+                    class="form-control form-control-sm disabled-color " placeholder="" id="" />
                 </div>
               </div>
               <div class="col-2">
                 <div class="mb-3">
-                  <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Nro.Fiscal</label>
-                  <input type="number" [(ngModel)]="nro_fiscal" class="form-control form-control-sm" placeholder=""
-                    id="" />
+                  <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm ">Nro.Fiscal</label>
+                  <input disabled="" type="number" [(ngModel)]="nro_fiscal"
+                    class="form-control form-control-sm disabled-color" placeholder="" id="" />
                 </div>
               </div>
               <div class="col-2">
                 <div class="mb-3">
                   <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Dpto/Int</label>
-                  <input [(ngModel)]="dpto_int" oninput="this.value = this.value.toUpperCase()" type="text"
-                    class="form-control form-control-sm" placeholder="" id="" />
+                  <input disabled="" [(ngModel)]="dpto_int" oninput="this.value = this.value.toUpperCase()" type="text"
+                    class="form-control form-control-sm disabled-color" placeholder="" id="" />
                 </div>
               </div>
               <div class="col-4">
                 <div class="mb-3">
                   <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Referencia</label>
-                  <input [(ngModel)]="referencia" oninput="this.value = this.value.toUpperCase()" type="text"
-                    class="form-control form-control-sm" placeholder="" id="" />
+                  <input disabled="" [(ngModel)]="referencia" oninput="this.value = this.value.toUpperCase()"
+                    type="text" class="form-control form-control-sm disabled-color" placeholder="" id="" />
                 </div>
               </div>
             </div>
           </div>
           <div class="col-lg-3" style="margin-top: 10px">
-            <div class="mb-2-5">
-              <label for="employeeName" class="form-label col-sm-8 col-form-label-sm mt-label-notificacion">Nro. Notif.
-                de Cargo</label>
-              <input [(ngModel)]="nnumnot" type="text" maxlength="6"
-                class="form-control form-control-sm mt-input-notificacion" id="employeeName" placeholder="" />
-              <div *ngIf="error === 'Numero de Notificacion, Invalido'" class="text-danger">Ingrese Número de
-                Notificación </div>
+            <div class="mb-2-5" style="display: flex;width: 100%;">
+              <div class="" style="width: 50%;">
+                <label for="" class="form-label col-form-label col-form-label-sm" style="margin-bottom: -2px;">Tipo
+                  Doc. Infra</label>
+                <select id="tdi_id" disabled="" class="form-select form-select-sm disabled-color" [(ngModel)]="tdi_id"
+                  (change)="listarDocInfra()" style="margin-right: 2px;">
+                  <option [value]="0">Seleccionar</option>
+                  <option *ngFor="let data of datosDocumentoInfra" [value]="data.tdi_id">
+                    {{data.tdi_descri}}
+                  </option>
+                </select>
+              </div>
+              <div class="" style="width: 50%;">
+                <label for="employeeName" class="form-label col-sm-8 col-form-label-sm mt-label-notificacion">Nro.
+                  documento
+                  <span class="obligatorio"> * </span> </label>
+                <input disabled [(ngModel)]="nnumnot" type="text" maxlength="6"
+                  class="form-control form-control-sm mt-input-notificacion disabled-color" id="nro_not" placeholder=""
+                  style="margin-left: 2px;" />
+                <div *ngIf="error === 'Numero de Notificacion, Invalido'" class="text-danger">Campo Obligatorio *</div>
+              </div>
             </div>
             <div class="mb-2-5">
               <label for="employeeUrl" class="form-label col-sm-8 col-form-label-sm mt-label-notificacion">Nro. Acta
                 Const.</label>
-              <input [(ngModel)]="nroActaConstatacion" type="url"
-                class="form-control form-control-sm mt-input-notificacion" id="employeeUrl" placeholder="" />
+              <input [(ngModel)]="nroActaConstatacion" type="text"
+                class="form-control form-control-sm mt-input-notificacion disabled-color" disabled="" id="employeeUrl"
+                placeholder="" />
             </div>
             <div class="mb-2-5">
               <label for="StartleaveDate" class="form-label col-sm-6 col-form-label-sm mt-label-notificacion">Fecha
@@ -129,16 +144,17 @@
         <div class="col-7">
           <div class="mb-3">
             <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Medida Complementaria</label>
-            <ng-select placeholder="Selecciona..." (input)="onInputChange($event)" [ngModel]="csancio"
-              [items]="datosMedidaComp" (change)="onSelectionChangeMedida($event)" [closeOnSelect]="true"
-              [searchable]="true" bindValue="CCODTIP" bindLabel="DCODTIP" name="" class="form-control custom"
-              style="border: 1px solid #b9b9b9 !important">
-            </ng-select>
+            <select class="form-select form-select-sm" [(ngModel)]="csancio">
+              <option [value]="0">Seleccionar</option>
+              <option *ngFor="let data of datosMedidaComp" [value]="data.CCODTIP">
+                {{data.DCODTIP}}
+              </option>
+            </select>
           </div>
         </div>
         <div class="col-sm-1" style="display: flex; justify-content: center">
           <div class="" style="display: flex; align-items: center">
-            <input [(ngModel)]="chkact" type="checkbox" class="form-check-input" id="tiene-acta"
+            <input [(ngModel)]="activeacta" type="checkbox" class="form-check-input" id="chkacta"
               style="margin-right: 15px;" />
             <label for="tiene-acta" class="form-check-label col-form-label-sm">Acta</label>
           </div>
@@ -147,16 +163,16 @@
           <div class="mb-3">
             <label for="compnayNameinput" class="form-label col-sm-6 col-form-label col-form-label-sm">Nº de
               acta</label>
-            <input [value]="nro_acta" [disabled]="!chkact" type="text" class="form-control form-control-sm"
-              id="compnayNameinput" [style.background-color]="chkact ? '' : '#e1e1e1'" />
+            <input [(ngModel)]="nro_acta" [disabled]="!activeacta" [ngClass]="{'disabled-color': !activeacta}"
+              type=" text" class="form-control form-control-sm" id="compnayNameinput" />
           </div>
         </div>
         <div class="col-2">
           <div class="mb-3">
             <label for="phonenumberInput" class="form-label col-sm-8 col-form-label col-form-label-sm">Fecha
               Ejecución</label>
-            <input [disabled]="!chkact" [(ngModel)]="f_ejecucion" type="date" class="form-control form-control-sm"
-              id="phonenumberInput" [style.background-color]="chkact ? '' : '#e1e1e1'" />
+            <input [(ngModel)]="f_ejecucion" [disabled]="!activeacta" [ngClass]="{'disabled-color':!activeacta}"
+              type="date" class="form-control form-control-sm" id="phonenumberInput" />
           </div>
         </div>
       </div>
@@ -165,11 +181,13 @@
       <div class="row" style="align-items: center; padding: 15px">
         <label for="" class="col-sm-2 col-form-label col-form-label-sm">Giro de Establecimiento</label>
         <div class="col-sm-10">
-          <ng-select placeholder="Selecciona..." (input)="onInputChange($event)" [ngModel]="giro"
-            [items]="datosGiroEstablecimiento" (change)="onSelectionChangeGiro($event)" [closeOnSelect]="true"
-            [searchable]="true" bindValue="ccodgir" bindLabel="ddesgir" name="" class="form-control custom"
-            style="border: 1px solid #b9b9b9 !important">
-          </ng-select>
+          <select class="form-select form-select-sm" [(ngModel)]="giro"
+            (change)="onSelectionChange($event)">
+            <option [value]="0">Seleccionar</option>
+            <option *ngFor="let data of datosGiroEstablecimiento" [value]="data.ccodgir +'|'+ data.ddesgir">
+              {{data.ddesgir}}
+            </option>
+          </select>
         </div>
       </div>
     </div>
@@ -192,8 +210,9 @@
           </div>
           <div class="mb-3 col-sm-2">
             <label for="" class="form-label col-sm-6 col-form-label-sm">Monto </label>
-            <input disabled [ngModel]="nmonto " (keypress)="validarMonto($event)" (ngModelChange)="nmonto = $event"
-              type="text" class="form-control form-control-sm" id="montoinfra" ngClass="disabled-color" />
+            <input disabled [ngModel]="nmonto " (keypress)="validarNumero($event)" (ngModelChange)="nmonto = $event"
+              type="text" class="form-control form-control-sm disabled-color" id="montoinfra"
+              [inputMask]="currencyInputMask" placeholder="S/. 0.00" />
             <div *ngIf="error === 'Monto Infraccion no puede ser CERO'" class="text-danger">Campo Obligatorio *</div>
           </div>
           <div class="mb-3 col-sm-8">
@@ -215,7 +234,7 @@
         <div class="mb-3 col-sm-12">
           <label for="EndleaveDate" class="form-label col-form-label-sm mt-label-notificacion">Observaciones</label>
           <input [(ngModel)]="mobserv" type="text" oninput="this.value = this.value.toUpperCase()"
-            class="form-control form-control-lg" id="" placeholder="" />
+            class="form-control form-control-sm" id="" placeholder="" />
         </div>
       </div>
     </div>
@@ -224,7 +243,8 @@
         <div class="mb-3 col-sm-4">
           <label for="" class="form-label col-form-label-sm">Inspector Municipal</label>
           <input [(ngModel)]="ins_municipal" [value]="ins_municipal" oninput="this.value = this.value.toUpperCase()"
-            type="text" class="form-control form-control-sm" id="employeeUrl" placeholder="" />
+            type="text" class="form-control form-control-sm disabled-color" disabled="" id="employeeUrl"
+            placeholder="" />
         </div>
         <div class="mb-3 col-sm-2">
           <label for="" class="form-label col-form-label-sm">Nº de Informes</label>
@@ -260,7 +280,8 @@
                 class=" ri-close-fill"></i></a>
           </div>
           <div class="card-body">
-            <app-listar-referencia (confirmClicked)="confirmClickRefere($event)"></app-listar-referencia>
+            <app-listar-referencia-multa
+              (confirmClicked)="confirmClickRefereMulta($event)"></app-listar-referencia-multa>
           </div>
         </div>
       </div>

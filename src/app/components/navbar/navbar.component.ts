@@ -12,7 +12,7 @@ import { AppComponent } from 'src/app/app.component';
 export class NavbarComponent implements OnInit {
 
   dataUsuario: any;
-  dataUser:any
+  dataUser: any
 
   p_usu_apepat: string = ''
   p_usu_apemat: string = ''
@@ -20,6 +20,7 @@ export class NavbarComponent implements OnInit {
   p_usu_loging: string = ''
 
   usu_nomcom: string = '';
+  cusuari: string = '';
   // p_usu_activo: string = ''
 
   layoutModeIcon: string = 'sun';
@@ -35,7 +36,6 @@ export class NavbarComponent implements OnInit {
     if (storedData !== null) {
       this.dataUsuario = JSON.parse(storedData);
     }
-    console.log(this.dataUsuario);
   }
 
   ngOnInit() {
@@ -75,29 +75,34 @@ export class NavbarComponent implements OnInit {
   listarUsuario() {
     let post = {
       p_usu_id: this.dataUsuario.numid,
-      p_usu_apepat: this.p_usu_apepat,
-      p_usu_apemat: this.p_usu_apemat,
-      p_usu_nombre: this.p_usu_nombre,
-      p_usu_loging: this.p_usu_loging,
+      // p_usu_apepat: this.p_usu_apepat,
+      // p_usu_apemat: this.p_usu_apemat,
+      // p_usu_nombre: this.p_usu_nombre,
+      // p_usu_loging: this.p_usu_loging,
       p_usu_activo: 1,
     };
 
     this.sigtaService.listarUsuario(post).subscribe({
       next: (data: any) => {
 
+
         // localStorage.setItem("dataUsuario", JSON.stringify(data[0]));
 
         // console.log(this.dataUsuario);
         this.dataUser = data;
         this.usu_nomcom = data[0].usu_nomcom
+        this.cusuari = data[0].usu_loging;
+        // console.log(this.cusuari);
+        this.sigtaService.cusuari = this.cusuari;
+        // console.log("cusuari: ", this.sigtaService.cusuari);
+
         // this.usu_nomcom = data[0].desare;
-        console.log(this.usu_nomcom);
+        // console.log(this.usu_nomcom);
 
         // this.dataUsuario = data[0];
       }
     });
   }
-
 
   setDefaultCompany(id: number) {
 
@@ -106,7 +111,6 @@ export class NavbarComponent implements OnInit {
   logOut() {
     localStorage.removeItem('session-dashboard')
     localStorage.removeItem('dataUsuario')
-    // console.log("session closed");
     this.router.navigateByUrl('/login')
 
     // this.dataUsuario.removeItem('dataUsuario')

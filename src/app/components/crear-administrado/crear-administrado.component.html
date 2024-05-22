@@ -5,50 +5,83 @@
                 <div class="container-administrado" style="display: flex;">
                     <div class="row g-3"
                         style="padding: 0px 2px 16px 2px; margin: 5px; border: 0.5px ridge #e1e1e1; width: 50%; ">
+                        <h4 style="margin: 0; padding: 5px 0 0 5px; font-size: 20px;">Identificacion del contribuyente
+                        </h4>
+                        <!-- <div class="col-sm-4">
+                            <label for="" class="form-label col-form-label col-form-label-sm">Tipo Persona</label>
+                            <select id="mrf_id" class="form-select form-select-sm" [(ngModel)]="ctipper"
+                                (change)="ChangeTipoPer($event)">
+                                <option [value]="0">Seleccionar</option>
+                                <option *ngFor="let data of datosTipoPersona" [value]="data.ccodtip">
+                                    {{data.dcodtip}}
+                                </option>
+                            </select>
+                        </div> -->
                         <div class="col-sm-4">
                             <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Tipo
                                 Persona <span style="color: red;">*</span> </label>
-                            <ng-select [(ngModel)]="ctipper" (input)="onInputChange($event)"
-                                [items]="datosTipoPersona" (change)="ChangeTipoPer($event)" [closeOnSelect]="true"
-                                [searchable]="true" bindValue="ccodtip" bindLabel="dcodtip" name=""
-                                class="form-control custom" style="border: 1px solid #b9b9b9 !important">
+                            <ng-select [(ngModel)]="ctipper" (input)="onInputChange($event)" [items]="datosTipoPersona"
+                                (change)="ChangeTipoPer($event)" [closeOnSelect]="true" [searchable]="true"
+                                bindValue="ccodtip" bindLabel="dcodtip" name="" class="form-control custom"
+                                style="border: 1px solid #b9b9b9 !important">
                             </ng-select>
                             <div *ngIf="error === 'Tipo Persona Incorrecto'" class="text-danger">Campo Obligatorio</div>
                         </div>
+                        <!-- <div class="col-sm-4">
+                            <label for="" class="form-label col-form-label col-form-label-sm">Tipo Persona</label>
+                            <select id="mrf_id" class="form-select form-select-sm" [(ngModel)]="ctipdoc"
+                                (change)="ChangeTipoInput($event)">
+                                <option [value]="0">Seleccionar</option>
+                                <option *ngFor="let data of datosTipoDocumento" [value]="data.ccodtip">
+                                    {{data.dcodtip}}
+                                </option>
+                            </select>
+                        </div> -->
                         <div class="col-sm-4">
                             <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Tipo
                                 Documento <span style="color: red;">*</span> </label>
                             <ng-select [(ngModel)]="ctipdoc" (input)="onInputChange($event)"
-                                [items]="datosTipoDocumento" (change)="ChangeTipoDoc($event); ChangeTipoInput($event)" [closeOnSelect]="true"
-                                [searchable]="true" bindValue="ccodtip" bindLabel="dcodtip" name=""
-                                class="form-control custom" style="border: 1px solid #b9b9b9 !important">
+                                [items]="datosTipoDocumento" (change)="ChangeTipoDoc($event); ChangeTipoInput($event)"
+                                [closeOnSelect]="true" (blur)="validarTipDoc()" [searchable]="true"
+                                bindValue="ccodtip" bindLabel="dcodtip" name="" class="form-control custom"
+                                style="border: 1px solid #b9b9b9 !important">
                             </ng-select>
                             <div *ngIf="error === 'Tipo Documento Incorrecto'" class="text-danger">Campo Obligatorio
                             </div>
                         </div>
                         <div class="col-sm-4">
-                            <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Nº Doc. <span style="color: red;">*</span>
+                            <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Nº Doc. <span
+                                    style="color: red;">*</span>
                             </label>
-                            <input [(ngModel)]="dtipdoc" oninput="this.value = this.value.toUpperCase()" type="text"
-                                class="form-control form-control-sm" id="" (keypress)="validarDocumento($event)"/>
+                            <input [(ngModel)]="dtipdoc" [disabled]="ctipdoc === '' || ctipdoc === null"
+                                [ngClass]="{'disabled-color': ctipdoc === '' || ctipdoc === null}"
+                                oninput="this.value = this.value.toUpperCase()" type="text"
+                                class="form-control form-control-sm" id=""
+                                (blur)="consultarPide(); validarNumDoc()" (keyup.enter)=" consultarPide();"
+                                (keypress)="validarDocumento($event)" />
                         </div>
                         <div class="col-sm-6">
                             <label for="" class="form-label col-form-label-sm">Apellido
                                 Paterno <span style="color: red;">*</span> </label>
-                            <input [(ngModel)]="dpatern" oninput="this.value = this.value.toUpperCase()" type="text"
-                                class="form-control form-control-sm" id="" />
+                            <input [(ngModel)]="dpatern" [disabled]="dpatern"
+                                oninput="this.value = this.value.toUpperCase()" type="text"
+                                class="form-control form-control-sm" [ngClass]="{ 'disabled-color': dpatern }" id="" />
                         </div>
-                        <div *ngIf="error === 'Apellido Paterno o Razon Social, Incompleto'" class="text-danger">Campo Obligatorio</div>
+                        <div *ngIf="error === 'Apellido Paterno o Razon Social, Incompleto'" class="text-danger">Campo
+                            Obligatorio</div>
                         <div class="col-sm-6">
                             <label for="" class="form-label col-form-label-sm">Apellido
                                 Materno</label>
-                            <input [(ngModel)]="dmatern" oninput="this.value = this.value.toUpperCase()" type="text"
-                                class="form-control form-control-sm" id="" />
+                            <input [(ngModel)]="dmatern" [disabled]="dmatern"
+                                oninput="this.value = this.value.toUpperCase()" type="text"
+                                class="form-control form-control-sm" [ngClass]="{'disabled-color':dmatern}" id="" />
                         </div>
                         <div class="col-sm-12">
-                            <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm"> Nombres <span style="color: red;">*</span> </label>
-                            <input [(ngModel)]="dnombre" oninput="this.value = this.value.toUpperCase()" type="text"
-                                class="form-control form-control-sm" id="" />
+                            <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm"> Nombres <span
+                                    style="color: red;">*</span> </label>
+                            <input [disabled]="dnombre" [(ngModel)]="dnombre"
+                                oninput="this.value = this.value.toUpperCase()" type="text"
+                                class="form-control form-control-sm" [ngClass]="{'disabled-color': dnombre}" id="" />
                         </div>
                         <div *ngIf="error === 'Nombres Incompleto'" class="text-danger">Campo Obligatorio</div>
                         <div class="col-sm-6">
@@ -64,23 +97,32 @@
                                 class="form-control form-control-sm" id="" />
                         </div>
                         <div class="col-sm-8">
-                            <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm"> Correo
+                            <label for="" class="form-label col-    sm-8 col-form-label col-form-label-sm"> Correo
                                 Electrónico </label>
                             <input [(ngModel)]="de_mail" type="text" class="form-control form-control-sm" id="" />
                         </div>
                         <div class="col-sm-4">
                             <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm"> Fecha nacimiento
                             </label>
-                            <input [(ngModel)]="fecnaci" max="{{getMaxDate()}}"
+                            <input [disabled]="fecnaci" [(ngModel)]="fecnaci" max="{{getMaxDate()}}"
                                 oninput="this.value = this.value.toUpperCase()" type="date"
-                                class="form-control form-control-sm" id="" />
+                                class="form-control form-control-sm" [ngClass]="{'disabled-color':fecnaci}" id="" />
                         </div>
                     </div>
                     <div class="row g-3"
                         style=" padding: 0px 2px 16px 2px; margin: 5px; border: 0.5px ridge #e1e1e1; width: 50%; ">
+                        <h4 style="margin: 0; padding: 5px 0 0 5px; font-size: 20px;">Direccion fiscal</h4>
                         <div class="col-sm-12">
-                            <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Distrito <span style="color: red;">*</span> </label>
+                            <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Distrito <span
+                                    style="color: red;">*</span> </label>
                             <div class="" style="display: flex; justify-content: center; ">
+                                <!-- <select id="mrf_id" class="form-select form-select-sm"
+                                    (change)="ChangeTipoDistrito($event)">
+                                    <option [value]="0">Seleccionar</option>
+                                    <option *ngFor="let data of datosDistrito" [value]="data.CPOSTAL">
+                                        {{data.DPOSTAL}}
+                                    </option>
+                                </select> -->
                                 <ng-select [(ngModel)]="cpostal" (input)="onInputChange($event)" [items]="datosDistrito"
                                     (change)="ChangeTipoDistrito($event)" [closeOnSelect]="true" [searchable]="true"
                                     bindValue="CPOSTAL" bindLabel="DPOSTAL" name="" class="form-control custom"
@@ -88,8 +130,9 @@
                                 </ng-select>
                                 <div *ngIf="error === 'Codigo Postal Imcompleto'" class="text-danger">Campo Obligatorio
                                 </div>
-                                <button style="margin-left: 5px;" (click)="modalDescri(templateRefere)" type="button"
-                                    class="btn btn-primary btn-label btn-sm">
+                                <button id="btn-direc" [disabled]="!cpostal" style="margin-left: 5px;"
+                                    (click)="modalDescri(templateRefere)" type="button"
+                                    class="btn btn-primary btn-label btn-sm" [ngClass]="{ 'disabled-color': !cpostal }">
                                     <i class="ri-search-line label-icon align-middle fs-16 me-2"></i>
                                     Via/Urb.
                                 </button>
@@ -100,7 +143,7 @@
                                 via
                             </label>
                             <input [(ngModel)]="dnomvia" disabled="" oninput="this.value = this.value.toUpperCase()"
-                                type="text" class="form-control form-control-sm" placeholder="" id=""
+                                type="text" class="form-control form-control-sm" [value]="" placeholder="" id=""
                                 style="background-color: #e1e1e1;" />
                         </div>
                         <div class="col-sm-12">
@@ -179,7 +222,8 @@
             <div class="card">
                 <div class="card-header" style="display: flex; justify-content: space-between;">
                     <h4 class="card-title mb-0">Buscar</h4>
-                    <a class="" (click)="cerrarModal('listar-urba')" style="cursor: pointer;" > <i style="font-size: 1.50rem; " class=" ri-close-fill"></i></a>
+                    <a class="" (click)="cerrarModal('listar-urba')" style="cursor: pointer;"> <i
+                            style="font-size: 1.50rem; " class=" ri-close-fill"></i></a>
                 </div>
                 <div class="card-body">
                     <app-listar-referencia (confirmClicked)="confirmClickRefere($event)"></app-listar-referencia>

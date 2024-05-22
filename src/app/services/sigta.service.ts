@@ -13,15 +13,41 @@ export class SigtaService {
 
   //id's-exportar
   idcorrl: any;
-  cga_id:any;
+  cga_id: any;
   exp_id: any;
-  p_concid:any;
+  p_concid: any;
+  cusuari: any;
+
+
+  //Datos para pintar 
+  ctipvia: any;
+  cdtipvia: any;
+  cdescri: any;
+  ccodhur: any;
+  ctiphur: any;
+  dpoblad: any;
+  cpostal: any;
+
+  //Botones activos
+  obj_id: any;
+  apb_activo: any;
+  permisos: any;
 
   constructor(private httpClientUtils: HttpClientUtils, private http: HttpClient) { }
 
   listarAreaOficina(data: any) {
     return this.httpClientUtils
       .postQuery('sigta/areaoficina/listar', data)
+      .pipe(
+        map((data) => {
+          return data;
+        })
+      );
+  }
+
+  consultarPide(data: any) {
+    return this.httpClientUtils
+      .postQueryPide('persona/buscar', data)
       .pipe(
         map((data) => {
           return data;
@@ -221,6 +247,16 @@ export class SigtaService {
       );
   }
 
+  listarDocInfra(data: any) {
+    return this.httpClientUtils
+      .postQuery('sigta/docinfra/listar', data)
+      .pipe(
+        map((data) => {
+          return data;
+        })
+      );
+  }
+
   registrarAdministrado(data: any) {
     return this.httpClientUtils
       .postQuery('sigta/administrado/registrar', data)
@@ -278,6 +314,24 @@ export class SigtaService {
         })
       );
   }
+  listarVias(data: any) {
+    return this.httpClientUtils
+      .postQuery('sigta/vias/listar', data)
+      .pipe(
+        map((data) => {
+          return data;
+        })
+      );
+  }
+  listarHabUrb(data: any) {
+    return this.httpClientUtils
+      .postQuery('sigta/haburb/listar', data)
+      .pipe(
+        map((data) => {
+          return data;
+        })
+      );
+  }
 
   anularResolucion(data: any) {
     return this.httpClientUtils
@@ -312,6 +366,26 @@ export class SigtaService {
   registrarExpediente(data: any) {
     return this.httpClientUtils
       .postQuery('sigta/expediente/registrar', data)
+      .pipe(
+        map((data) => {
+          return data;
+        })
+      );
+  }
+
+  registrarDireccion(data: any) {
+    return this.httpClientUtils
+      .postQuery('sigta/direccion/registrar', data)
+      .pipe(
+        map((data) => {
+          return data;
+        })
+      );
+  }
+
+  permisoBotones(data: any) {
+    return this.httpClientUtils
+      .postQuery('sigta/botones/permiso', data)
       .pipe(
         map((data) => {
           return data;

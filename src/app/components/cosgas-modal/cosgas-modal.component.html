@@ -6,7 +6,8 @@
             </label>
         </div>
         <div class="col-sm-9 mb-2">
-            <select id="cosgasid" (change)="onSelectionChange($event)" class="form-select disabled-color" style="padding: 3px 50px 3px 10px; font-size: 12px;">
+            <select id="cosgasid" (change)="onSelectionChange($event)" class="form-select disabled-color"
+                style="padding: 3px 50px 3px 10px; font-size: 12px;">
                 <option *ngIf="p_concid !== 6" [value]="0">Seleccionar</option>
                 <option *ngFor="let data of datosCosGas" [value]="data.concid +'|'+data.subcid">
                     {{data.desdil}}
@@ -24,14 +25,16 @@
         </div>
         <div class="col-sm-6">
             <label for="" class="form-label"> Monto </label>
-            <input [ngModel]="p_montot" (keypress)="validarMonto($event)" (ngModelChange)="p_montot = $event"
-                type="text" class="form-control form-control-sm" />
-            <div *ngIf="error === 'Monto Invalido'" class="text-danger">Campo Obligatorio *</div>
+            <input [ngModel]="p_montot " (keypress)="validarNumero($event)" (ngModelChange)="p_montot = $event"
+                type="text" class="form-control form-control-sm" id="" [inputMask]="currencyInputMask"
+                placeholder="S/. 0.00" />
+            <!-- <div *ngIf="error === 'Monto Invalido'" class="text-danger">Campo Obligatorio *</div> -->
         </div>
     </div>
 </div>
 <div class="col-sm-auto mb-2-5" style="display: flex; justify-content: right;">
-    <button type="button" (click)="registrarCosGas()" class="btn btn-primary btn-label btn-sm" style="margin: 5px 20px;">
+    <button type="button" (click)="registrarCosGas()" class="btn btn-primary btn-label btn-sm"
+        style="margin: 5px 20px;">
         <i class="ri-file-2-fill label-icon align-middle fs-16 me-2"></i>
         Guardar
     </button>

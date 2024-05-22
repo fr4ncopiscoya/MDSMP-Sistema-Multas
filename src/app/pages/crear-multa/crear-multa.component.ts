@@ -10,6 +10,7 @@ import { Subject } from 'rxjs';
 import { NgxSpinnerService } from 'ngx-spinner';
 import Swal from 'sweetalert2';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { createMask } from '@ngneat/input-mask';
 
 @Component({
   selector: 'app-crear-multa',
@@ -50,10 +51,20 @@ export class CrearMultaComponent implements OnInit {
     responsive: false,
   };
 
+  currencyInputMask = createMask({
+    alias: 'numeric',
+    groupSeparator: ',',
+    digits: 2,
+    digitsOptional: false,
+    prefix: 'S/. ',
+    placeholder: '0',
+  });
+
   //Almaceno la data
   datosAreaOficina: any;
   datosMedidaComp: any;
   datosGiroEstablecimiento: any;
+  datosDocumentoInfra: any;
   datosReferencia: any;
   datosTipoEspecie: any;
   dataUsuario: any;
@@ -117,7 +128,11 @@ export class CrearMultaComponent implements OnInit {
   haburb: string = '' //  --Nombre Habilitacion Urbana(Urbanizacion)
   nroActaConstatacion: string = '' // -- Numero Acta Constatacion ===
   chkact = 0;
+  usuins: string = ''
   submited: boolean = false
+
+  //Combo Documento Infraccion
+  tdi_id: number = 0
 
 
   constructor(
@@ -139,10 +154,10 @@ export class CrearMultaComponent implements OnInit {
   ngOnInit(): void {
     this.listarMedidaComp();
     this.listarGiroEstablecimiento();
+    this.listarDocumentosInfraccion();
 
     //Obtengo la fecha actual
     const fechaActual = new Date().toISOString().split('T')[0];
-    console.log(fechaActual);
 
     this.p_anypro = fechaActual
 
@@ -222,6 +237,14 @@ export class CrearMultaComponent implements OnInit {
     this.modalService.hide(2);
   }
 
+  confirmClickRefereMulta(value: any) {
+    this.p_desubi = value.viaurb;
+    this.via = value.cpbdo;
+    this.haburb = value.dpoblad;
+    // this.obtenerReferencia();
+    // this.modalService.hide(2);
+  }
+
   //-----------------------------------------
 
   //Abre los modales
@@ -233,6 +256,13 @@ export class CrearMultaComponent implements OnInit {
     this.modalRefs['listar-descri'] = this.modalService.show(template, { id: 2, class: 'modal-lg', backdrop: 'static', keyboard: false });
   }
 
+  modalRefereMulta(template: TemplateRef<any>) {
+    this.modalRefs['listar-referencia-multa'] = this.modalService.show(template, { id: 12, class: 'modal-lg', backdrop: 'static', keyboard: false });
+  }
+
+  // modalRefereM(template: TemplateRef<any>) {
+  //   this.modalRefs['listar-referenciaM'] = this.modalService.show(template, { id: 12, class: 'modal-lg', backdrop: 'static', keyboard: false });
+  // }
 
 
 
@@ -242,23 +272,63 @@ export class CrearMultaComponent implements OnInit {
   onSelectionChangeGiro(event: any) {
     this.giro = event.ccodgir
     this.desgiro = event.ddesgir
-    console.log(this.desgiro);
   }
 
   onSelectionChangeMedida(event: any) {
     this.csancio = event.CCODTIP
-    console.log(this.csancio)
   }
 
   onInputChange(event: any) {
     event.target.value = event.target.value.toUpperCase();
   }
 
+  onSelectionChange(event: any) {
+    let value = event.target.value;
+    let split = value.split('|');
+    this.giro = split[0];
+    this.desgiro = split[1];
+  }
+
+  listarDocInfra() {
+    const disabled_nro_not = document.getElementById('nro_not') as HTMLInputElement
+
+    if (this.tdi_id != 0) {
+      disabled_nro_not.classList.remove('disabled-color');
+      disabled_nro_not.removeAttribute('disabled')
+    } else {
+      disabled_nro_not.classList.add('disabled-color')
+      disabled_nro_not.setAttribute('disabled', 'disabled')
+      this.tdi_id = 0;
+      this.nnumnot = ''
+    }
+  }
+
+  validarCodigoMultaVacio(event: any) {
+    if (this.ccontri.length < 7) {
+      this.cnombre = ''
+      this.dpredio = ''
+    }
+  }
 
 
 
 
   // ============================= METODOS ============================================
+
+  listarDocumentosInfraccion() {
+    let post = {
+
+    };
+
+    this.sigtaService.listarDocInfra(post).subscribe({
+      next: (data: any) => {
+        this.datosDocumentoInfra = data;
+      },
+      error: (error: any) => {
+        console.log(error);
+      },
+    });
+  }
 
   listarGiroEstablecimiento() {
     let post = {
@@ -267,12 +337,7 @@ export class CrearMultaComponent implements OnInit {
 
     this.sigtaService.listarGiroEstablecimiento(post).subscribe({
       next: (data: any) => {
-        // console.log(data);
-
         this.datosGiroEstablecimiento = data;
-        // this.giro = data[0].ccodgir
-        // this.desgiro = data[0].ddesgir;
-        console.log(this.desgiro);
 
       },
       error: (error: any) => {
@@ -293,7 +358,6 @@ export class CrearMultaComponent implements OnInit {
         this.datosMedidaComp = data;
         // this.dsancio = data[0].DCODTIP
         this.csancio = data[0].CCODTIP;
-        console.log(this.csancio);
 
       },
       error: (error: any) => {
@@ -308,19 +372,17 @@ export class CrearMultaComponent implements OnInit {
     let post = {
       p_anypro: p_anyproDate.toString(),
       p_codinf: this.p_codinf,
-      p_desinf: this.r_descri,
-      p_arecod: this.carea,
-      p_fecnot: this.p_anypro,
+      // p_desinf: this.r_descri,
+      // p_arecod: this.carea,
+      // p_fecnot: this.p_anypro,
     };
 
     if (this.p_codinf != '') {
 
-      console.log(post);
-
-      this.spinner.show();
+      // this.spinner.show()
       this.sigtaService.obtenerDescripcionPorCod(post).subscribe({
         next: (data: any) => {
-          this.spinner.hide();
+          // this.spinner.hide();
           if (data && data.length > 0) {
             this.dareas = data[0].dareas;
             this.carea = data[0].carea;
@@ -328,22 +390,18 @@ export class CrearMultaComponent implements OnInit {
             this.r_descri = data[0].r_descri;
             this.p_codinf = data[0].r_codint;
             this.removerClase();
-            this.formatNumber();
-            this.validarCodInfra();
-
-            // let montoTotal = this.nmonto;
-            // montoTotal.toLocaleString();
-            // console.log(montoTotal);
-
-
+            // this.formatNumber();
           } else {
             this.errorSweetAlertCode();
+            this.dareas = '';
+            this.carea = '';
+            this.nmonto = '';
+            this.r_descri = '';
 
           }
-          console.log(data);
         },
         error: (error: any) => {
-          this.spinner.hide();
+          // this.spinner.hide();
           this.errorSweetAlertCode();
           console.log(error);
         },
@@ -360,7 +418,7 @@ export class CrearMultaComponent implements OnInit {
 
     if (this.ccontri != '') {
 
-      this.spinner.show();
+      // this.spinner.show();
 
       this.sigtaService.obtenerNombrePorCod(post).subscribe({
         next: (data: any) => {
@@ -375,12 +433,10 @@ export class CrearMultaComponent implements OnInit {
             this.errorSweetAlertCode();
           }
 
-          console.log(data);
-
         },
         error: (error: any) => {
-          this.spinner.hide();
-          this.errorSweetAlertCode();
+          // this.spinner.hide();
+          // this.errorSweetAlertCode();
           console.log(error);
         },
       });
@@ -403,22 +459,19 @@ export class CrearMultaComponent implements OnInit {
         next: (data: any) => {
           this.spinner.hide();
           this.datosReferencia = data;
-          console.log(data);
           // this.manzana = data[0].cpostal;
           this.via = data[0].cdvia;
           this.haburb = data[0].cpbdo
-          console.log(this.via);
-
 
           this.dtElementModal.dtInstance.then((dtInstance: DataTables.Api) => {
             dtInstance.destroy();
             this.dtTriggerModal.next();
           });
 
+
         },
         error: (error: any) => {
           this.spinner.hide();
-          // this.errorSweetAlert();
           console.log(error);
         },
       });
@@ -428,6 +481,8 @@ export class CrearMultaComponent implements OnInit {
   }
 
   registrarInfraccion() {
+    const montoLimpio = this.nmonto.replace('S/.', '').replace(',', '');
+    const montoFloat = parseFloat(montoLimpio);
 
     const nmontoAsNumber = parseFloat(this.nmonto);
 
@@ -437,6 +492,7 @@ export class CrearMultaComponent implements OnInit {
     }
 
     let post = {
+      tdi_id: this.tdi_id,
       nnumnot: this.nnumnot,
       dfecnot: this.p_anypro,
       ccontri: this.ccontri,
@@ -460,7 +516,8 @@ export class CrearMultaComponent implements OnInit {
       via: this.via,
       haburb: this.haburb,
       nroActaConstatacion: this.nroActaConstatacion,
-      nmonto: nmontoAsNumber,
+      nmonto: montoFloat,
+      usuins: this.sigtaService.cusuari
     };
 
     this.spinner.show();
@@ -469,7 +526,6 @@ export class CrearMultaComponent implements OnInit {
 
       next: (data: any) => {
         this.spinner.hide();
-        console.log(data);
 
         if (data && data.length > 0 && data[0].error) {
           this.error = data[0].mensa;
@@ -524,16 +580,13 @@ export class CrearMultaComponent implements OnInit {
   }
 
   validarCodInfra() {
-    if (this.p_codinf == '') {
-      // this.errorSweetAlertDate();
-      // this.p_codinf = '';
+    if (this.p_codinf.length < 5) {
+
       this.dareas = '';
       this.nmonto = '';
       this.r_descri = '';
 
     } else {
-      console.log("no hagas nada");
-
     }
   }
 
@@ -574,18 +627,18 @@ export class CrearMultaComponent implements OnInit {
   }
 
   formatNumber() {
-    const nmontoAsNumber = parseFloat(this.nmonto);
+    // const nmontoAsNumber = parseFloat(this.nmonto);
 
-    let formattedNumber = nmontoAsNumber.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    formattedNumber = formattedNumber.replace('.', '.');
+    // let formattedNumber = nmontoAsNumber.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    // formattedNumber = formattedNumber.replace('.', '.');
 
-    formattedNumber = formattedNumber.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+    // formattedNumber = formattedNumber.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
 
-    if (nmontoAsNumber >= 0) {
-      this.nmonto = formattedNumber;
-    } else {
-      this.nmonto = '0.00';
-    }
+    // if (nmontoAsNumber >= 0) {
+    //   this.nmonto = formattedNumber;
+    // } else {
+    //   this.nmonto = '0.00';
+    // }
   }
 
 

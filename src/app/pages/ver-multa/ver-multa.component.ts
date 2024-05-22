@@ -106,8 +106,6 @@ export class VerMultaComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log("ver-multa");
-    
 
     const datePite = new DatePipe('en-Us')
     this.ahora = datePite.transform(new Date(), 'yyyy-MM-dd')
@@ -156,13 +154,11 @@ export class VerMultaComponent implements OnInit {
       p_fecfin: this.p_fecfin.toString(),
       p_idcorr: this.id_corrl,
     };
-    console.log(post);
     this.spinner.show();
 
     this.sigtaService.consultarMulta(post).subscribe({
       next: (data: any) => {
         this.spinner.hide();
-        console.log(data);
 
         if (data && data.length > 0 && data) {
           this.datosMulta = data[0];
@@ -192,9 +188,7 @@ export class VerMultaComponent implements OnInit {
           this.dmulta = data[0].dmulta,
           this.mobserv = data[0].mobserv,
           this.ins_municipal = data[0].ins_municipal,
-          this.nro_informe = data[0].nro_informe,
-
-          console.log(this.desgiro);
+          this.nro_informe = data[0].nro_informe
 
         } else {
           this.errorSweetAlertData();

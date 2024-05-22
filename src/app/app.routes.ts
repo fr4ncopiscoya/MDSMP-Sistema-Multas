@@ -17,7 +17,7 @@ import { CosgasComponent } from './pages/cosgas/cosgas.component';
 
 export const ROUTES: Routes = [
   { path: 'login', component: LoginComponent },
-  { path: 'dashboard', component: DashboardComponent },
+  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
   { path: 'logout', component: LogoutComponent, canActivate: [AuthGuard] },
 
   //Multas
@@ -35,7 +35,7 @@ export const ROUTES: Routes = [
   { path: 'coactivo/ver/:id', component: CoactivoVerComponent, canActivate: [AuthGuard] },
 
   //COSTAS Y GASTOS
-  {path: 'cosgas/:id',component:CosgasComponent,canActivate:[AuthGuard]},
+  { path: 'cosgas/:id', component: CosgasComponent, canActivate: [AuthGuard] },
 
   { path: '', pathMatch: 'full', redirectTo: 'login' },
   { path: '**', pathMatch: 'full', redirectTo: 'login' },

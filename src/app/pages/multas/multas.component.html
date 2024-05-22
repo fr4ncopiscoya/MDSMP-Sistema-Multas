@@ -13,8 +13,10 @@
           <div class="mb-2-5 col-sm-2">
             <label for="" class="form-label col-form-label-sm">Codigo Administrado</label>
             <div class="" style="display: flex">
-              <input #inputCodigoAdm (keydown.tab)="obtenerNombrePorCod(inputCodigoAdm.value)"
-                (keyup.enter)="obtenerNombrePorCod(inputCodigoAdm.value)" maxlength="6" [(ngModel)]="p_codcon"
+              <input #inputCodigoAdm (blur)="obtenerNombrePorCod(inputCodigoAdm.value)"
+                (keyup.enter)="obtenerNombrePorCod(inputCodigoAdm.value)"
+                (keydown.delete)="validarCodigoMultaVacio(inputCodigoAdm)"
+                (keydown.backspace)="validarCodigoMultaVacio(inputCodigoAdm.value)" maxlength="6" [(ngModel)]="p_codcon"
                 oninput="this.value = this.value.toUpperCase()" type="text" class="form-control form-control-sm" />
             </div>
           </div>
@@ -53,8 +55,10 @@
         <div class="row">
           <div class="mb-3 col-sm-2">
             <label for="" class="form-label col-form-label-sm">Codigo Infracción</label>
-            <input #inputCodInfra (keydown.tab)="obtenerDescriPorCod(inputCodInfra.value)"
-              (keyup.enter)="obtenerDescriPorCod(inputCodInfra.value)" maxlength="7" [(ngModel)]="p_codinf"
+            <input #inputCodInfra (keyup.enter)="obtenerDescriPorCod(inputCodInfra.value)"
+              (keydown.backspace)="validarCodigoInfraVacio(inputCodInfra.value)"
+              (keydown.delete)="validarCodigoInfraVacio(inputCodInfra.value)"
+              (blur)="obtenerDescriPorCod(inputCodInfra.value)" maxlength="7" [(ngModel)]="p_codinf"
               oninput="this.value = this.value.toUpperCase()" type="text" class="form-control form-control-sm"
               id="employeeUrl" style="margin-right: 5px" />
           </div>
@@ -74,7 +78,6 @@
             <input [(ngModel)]="p_numnot" maxlength="6" type="text" class="form-control form-control-sm"
               id="employeeUrl" />
           </div>
-
           <div class="row mb-2">
             <div class="col-sm-auto mb-2-5">
               <button (click)="consultarMulta()" type="button" class="btn btn-primary btn-label btn-sm">
@@ -83,14 +86,15 @@
               </button>
             </div>
             <div class="col-sm-auto mb-2-5">
-              <button type="button" [routerLink]="['/multas/crear-multa']" class="btn btn-primary btn-label btn-sm">
+              <button [ngClass]="{'disabled-color': !btnNuevo}" [disabled]="!btnNuevo" type="button"
+                [routerLink]="['/multas/crear-multa']" class="btn btn-primary btn-label btn-sm">
                 <i class="ri-file-2-fill label-icon align-middle fs-16 me-2"></i>
                 Nuevo
               </button>
             </div>
             <div class="col-sm-auto mb-2-5">
-              <button type="button" class="btn_excel btn btn-success btn-label btn-sm" id="ExportarExcel"
-                (click)="exportarExcel()">
+              <button *ngIf="btnExcel === 1" type="button" class="btn_excel btn btn-success btn-label btn-sm"
+                id="ExportarExcel" (click)="exportarExcel()">
                 <i class="ri-file-excel-2-fill label-icon align-middle fs-16 me-2"></i>Excel
               </button>
             </div>
@@ -113,8 +117,11 @@
                   class=" align-middle mb-0 " style="width: 100%;">
                   <thead class="table-light">
                     <tr style="font-size: 12px;">
+                      <th class="text-center" style="display: none;"></th>
+                      <th class="text-center">Des. Acta</th>
                       <th class="text-center">Nº Not.</th>
                       <th class="text-center">Código</th>
+                      <th class="text-center">Nombre</th>
                       <th class="text-center">Descripción Multa</th>
                       <th class="text-center">Nº Resol</th>
                       <th class="text-center">F.Noti</th>
@@ -126,8 +133,11 @@
                   <tbody style="overflow-y: scroll;">
                     <tr ngClass="" *ngFor="let data of datosMulta; let i = index" (click)="getDataUser($event,data)"
                       class="text-center tr_hover">
+                      <td style="display: none;">{{ data.f_registro }}</td>
+                      <td>{{ data.tdi_abrevi }}</td>
                       <td>{{ data.nnumnot }}</td>
                       <td>{{ data.ccontri }}</td>
+                      <td>{{ data.cnombre }}</td>
                       <td>{{ data.dmulta }}</td>
                       <td>{{ data.cnumres }}</td>
                       <td>{{ data.dfecnot | date:'dd/MM/yyyy' }}</td>
@@ -137,11 +147,6 @@
                           {{ data.estreg }}
                         </span>
                       </td>
-                      <!-- <td  [style.background-color]="data.colreg">
-                        <span style="font-weight: bold; color: white">
-                          {{ data.estreg }}
-                        </span>
-                      </td> -->
                       <td>
 
                         <div class="d-flex center">
@@ -149,18 +154,26 @@
                             class="btn btn-sm btn-outline-primary btn-icon" data-bs-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false" (click)="validarBotones(data)">M</button>
                           <div class="dropdown-menu">
-                            <a class="dropdown-item verMulta" (click)="verDatosMulta(data.id_corrl)"
-                              style="cursor: pointer;">Ver</a>
-                            <a class="dropdown-item editarMulta" (click)="editarDatosMulta(data.id_corrl)"
-                              style="cursor: pointer;">Editar</a>
-                            <a class="dropdown-item anularMulta" (click)="modalAnularMulta(anularMulta,data)"
-                              style="cursor: pointer;">Anular</a>
-                            <!-- <a class="dropdown-item" style="cursor: pointer;">Anular</a> -->
-                            <a class="dropdown-item registraranularInfo" (click)="modalInforme(modalInformeFinal,data)" style="cursor: pointer;">Informe final</a>
+                            <button [ngClass]="{'disabled-color':!btnVer}" [disabled]="!btnVer"
+                              class="dropdown-item verMulta" (click)="verDatosMulta(data.id_corrl)"
+                              style="cursor: pointer;">Ver</button>
+                            <button [disabled]="!btnEditar" [ngClass]="{'disabled-color':!btnEditar}"
+                              class="dropdown-item editarMulta" (click)="editarDatosMulta(data.id_corrl)"
+                              style="cursor: pointer;">Editar
+                            </button>
+                            <button [disabled]="!btnAnular" [ngClass]="{'disabled-color':!btnAnular}"
+                              class="dropdown-item anularMulta" (click)="modalAnularMulta(anularMulta,data)"
+                              style="cursor: pointer;">Anular</button>
+                            <button class="dropdown-item registraranularInfo"
+                              (click)="modalInforme(modalInformeFinal,data)" style="cursor: pointer;">Informe
+                              final</button>
                           </div>
 
                           <button type="button" class="btn btn-sm btn-outline-danger btn-icon" data-bs-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false" (click)="validarBotones(data)">R</button>
+                            aria-haspopup="true" aria-expanded="false" id="btnReso"
+                            [disabled]="data.estreg != 'Registrado'"
+                            [ngClass]="{'disabled-color': data.estreg != 'Registrado'}"
+                            (click)="validarBotones(data)">R</button>
                           <div class="dropdown-menu">
                             <a class="dropdown-item registrarRes"
                               (click)="modalRegistrarResolucion(modalResolucion,data)"
@@ -210,7 +223,7 @@
         </div>
       </div>
 
-      <div class="row">
+      <!-- <div class="row">
         <div class="datos-container">
           <div class="col-12 datos-body">
             <div class="col-4">
@@ -218,12 +231,10 @@
                 <div class="dato-usuario">
                   <label for=""> <span class="datos-spancolor"> Usuario: &nbsp; </span> </label>
                   <label for=""> {{nomusi}} </label>
-                  <!-- <p> </p> -->
                 </div>
                 <div class="dato-fechacre">
                   <label for=""> <span class="datos-spancolor"> Fecha Creación: &nbsp; </span> </label>
                   <label for=""> {{fecins}} </label>
-                  <!-- <p> </p> -->
                 </div>
               </div>
             </div>
@@ -234,18 +245,16 @@
                 <div class="dato-modificado">
                   <label for=""> <span class="datos-spancolor"> Modificado: &nbsp; </span></label>
                   <label for=""> {{nomusm}}</label>
-                  <!-- <p></p> -->
                 </div>
                 <div class="dato-fecmod">
                   <label for=""> <span class="datos-spancolor">Fecha Modificado: &nbsp; </span></label>
                   <label for=""> {{fecmod}}</label>
-                  <!-- <p> </p> -->
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
 
     </div>
 
@@ -302,8 +311,8 @@
               <div class="col-md-6">
                 <div class="mb-3">
                   <label for="firstNameinput" class="form-label">Número Resolución</label>
-                  <input type="text" maxlength="8" (blur)="rellenarCerosResolucion()" class="form-control"
-                    formControlName="cnumres" [(ngModel)]="cnumres">
+                  <input type="text" maxlength="8" (blur)="rellenarCerosResolucion()" (keypress)="validarNumero($event)"
+                    class="form-control" formControlName="cnumres" [(ngModel)]="cnumres">
                   <div
                     *ngIf="formResolucion.get('cnumres')?.invalid && (formResolucion.get('cnumres')?.dirty || formResolucion.get('cnumres')?.touched || submitted)">
                     <div class="text-danger" *ngIf="formResolucion.get('cnumres')?.hasError('required')">
@@ -337,7 +346,8 @@
               <div class="col-md-6">
                 <div class="mb-3">
                   <label for="compnayNameinput" class="form-label">Observación</label>
-                  <textarea rows="1" class="form-control" formControlName="observc" [(ngModel)]="observc"></textarea>
+                  <textarea rows="1" class="form-control" formControlName="observc"
+                    oninput="this.value = this.value.toUpperCase()" [(ngModel)]="observc"></textarea>
                   <div
                     *ngIf="formResolucion.get('observc')?.invalid && (formResolucion.get('observc')?.dirty || formResolucion.get('observc')?.touched || submitted)">
                     <div class="text-danger" *ngIf="formResolucion.get('observc')?.hasError('required')">

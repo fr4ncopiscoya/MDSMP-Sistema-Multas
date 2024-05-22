@@ -153,7 +153,7 @@ export class CoactivoCrearComponent implements OnInit {
       p_codigo: this.p_codcon,
     };
 
-    console.log(post);
+    
 
     this.sigtaService.exportarccPDF(post).subscribe(
       (response: any) => { // Cambiado a 'any' en lugar de 'Blob'
@@ -190,7 +190,6 @@ export class CoactivoCrearComponent implements OnInit {
   }
 
   busquedaTipoFecha() {
-    console.log('llegas');
     const fechaActual = new Date().toISOString().split('T')[0];
 
     const disabled_fecini = document.getElementById('fecini') as HTMLInputElement
@@ -228,7 +227,6 @@ export class CoactivoCrearComponent implements OnInit {
 
   onSelectionDate(event: any) {
     this.mrf_id = event.mrf_id
-    console.log(this.mrf_id)
   }
 
 
@@ -325,9 +323,6 @@ export class CoactivoCrearComponent implements OnInit {
   }
 
   getDataUser(event: MouseEvent, data: any) {
-
-    console.log(data.idcorr);
-
     const target = event.target as HTMLInputElement;
     const tr = target.closest('tr') as HTMLTableRowElement | null;
 
@@ -348,35 +343,53 @@ export class CoactivoCrearComponent implements OnInit {
           this.p_idcorrl.splice(index, 1);
         }
       }
-      console.log(this.p_idcorrl);
+    }
+  }
 
+
+  //VALIDAR CAMPO VACIO EN CODIGO ADMINISTRADO
+  validarCodigoMultaVacio(event: any) {
+    const disabled_btn_consultar = document.getElementById('btn_consultar') as HTMLInputElement
+    if (this.p_codcon.length >= 6) {
+      disabled_btn_consultar.removeAttribute('disabled')
+      disabled_btn_consultar.classList.remove('disabled-color')
+      this.cnombre = ''
+    } else {
+      disabled_btn_consultar.setAttribute('disabled', 'disabled')
+      disabled_btn_consultar.classList.add('disabled-color')
+    }
+  }
+  validarNumExp(event: any) {
+    const disabled_btn_consultar = document.getElementById('btn_consultar') as HTMLInputElement
+    if (this.p_numexp.length >= 6) {
+      disabled_btn_consultar.removeAttribute('disabled')
+      disabled_btn_consultar.classList.remove('disabled-color')
+    } else {
+      disabled_btn_consultar.setAttribute('disabled', 'disabled')
+      disabled_btn_consultar.classList.add('disabled-color')
+    }
+  }
+  validarFecExp(event: any) {
+    const disabled_btn_consultar = document.getElementById('btn_consultar') as HTMLInputElement
+    if (this.p_fecexp.length >= 8) {
+      disabled_btn_consultar.removeAttribute('disabled')
+      disabled_btn_consultar.classList.remove('disabled-color')
+
+    } else {
+      disabled_btn_consultar.setAttribute('disabled', 'disabled')
+      disabled_btn_consultar.classList.add('disabled-color')
     }
   }
 
   validarCamposBusqueda() {
+    const disabled_btn_consultar = document.getElementById('btn_consultar') as HTMLInputElement
 
-    console.log('validarCamposBusqueda');
-    console.log(this.datosExpediente);
-
-
-    const disabled_numexp = document.getElementById('numexp') as HTMLInputElement
-    const disabled_fecexp = document.getElementById('fecexp') as HTMLInputElement
-
-    if (this.datosExpediente.length <= 0) {
-      disabled_numexp.removeAttribute('disabled')
-      disabled_numexp.classList.remove('disabled-color')
-
-      disabled_fecexp.removeAttribute('disabled')
-      disabled_fecexp.classList.remove('disabled-color')
+    if (this.p_codcon.length >= 6 && this.p_numexp.length >= 6 && this.p_fecexp.length >= 8) {
+      disabled_btn_consultar.removeAttribute('disabled')
+      disabled_btn_consultar.classList.remove('disabled-color')
     } else {
-      disabled_numexp.setAttribute('disabled', 'disabled')
-      disabled_numexp.classList.add('disabled-color')
-
-      disabled_fecexp.setAttribute('disabled', 'disabled')
-      disabled_fecexp.classList.add('disabled-color')
-
-      this.p_numexp = '';
-      this.p_fecexp = '';
+      disabled_btn_consultar.setAttribute('disabled', 'disabled')
+      disabled_btn_consultar.classList.add('disabled-color')
     }
   }
 
@@ -407,6 +420,7 @@ export class CoactivoCrearComponent implements OnInit {
     // this.p_fecfin = '';
     this.p_numexp = '';
     this.p_fecexp = '';
+    this.validarCamposBusqueda();
   }
 
   editarDatosMulta(id: string | null) {
@@ -414,17 +428,13 @@ export class CoactivoCrearComponent implements OnInit {
 
     if (id !== null) {
       this.router.navigate(['/multas/editar-multa'], { queryParams: { id: id } });
-      console.log(id);
       // this.router.navigate(['/multas/editar-multa/', id]);
     } else {
-      console.log('ni pases');
-
     }
   }
 
   verDatosMulta(id: string | null) {
     if (id !== null) {
-      console.log(id);
       this.router.navigate(['/multas/ver-multa/', id]);
     }
   }
@@ -439,7 +449,7 @@ export class CoactivoCrearComponent implements OnInit {
     let post = {
       p_codadm: this.p_codcon,
     };
-    console.log(post);
+    
 
 
     if (this.p_codcon.length > 3) {
@@ -450,9 +460,6 @@ export class CoactivoCrearComponent implements OnInit {
           // console.log(data);
 
           this.datosExpediente = data;
-          console.log(this.datosExpediente);
-
-
 
           this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
             dtInstance.destroy();
@@ -473,7 +480,6 @@ export class CoactivoCrearComponent implements OnInit {
   registrarExpediente() {
 
     const idCorrlString = this.p_idcorrl.join(', ');
-    console.log(idCorrlString); // Esto imprimirá la cadena de texto
 
     let post = {
       p_codadm: this.p_codcon,
@@ -484,7 +490,6 @@ export class CoactivoCrearComponent implements OnInit {
 
     this.sigtaService.registrarExpediente(post).subscribe({
       next: (data: any) => {
-        console.log(data);
 
         if (data && data.length > 0) {
           this.error = data[0].mensa;
@@ -519,7 +524,6 @@ export class CoactivoCrearComponent implements OnInit {
 
     this.sigtaService.listarFechas(post).subscribe({
       next: (data: any) => {
-        console.log(data);
 
         this.datosFechas = data;
       },
@@ -532,18 +536,16 @@ export class CoactivoCrearComponent implements OnInit {
 
   // ==================== ENCUENTRA NOMBRE DIGITANDO CODIGO ==================
   obtenerNombrePorCod(value: any) {
+    this.validarCamposBusqueda();
     let post = {
       p_codcon: this.p_codcon,
     };
 
     if (this.p_codcon != '') {
 
-      this.spinner.show();
-
       this.sigtaService.obtenerNombrePorCod(post).subscribe({
         next: (data: any) => {
           this.spinner.hide();
-          console.log(data);
 
           if (data && data.length > 0) {
             this.cnombre = data[0].cnombre;
@@ -551,12 +553,10 @@ export class CoactivoCrearComponent implements OnInit {
             this.errorSweetAlertCode();
             this.cnombre = '';
             this.p_codcon = '';
-            console.log("noData");
 
           }
         },
         error: (error: any) => {
-          this.spinner.hide();
           this.errorSweetAlertCode();
           this.cnombre = '';
           this.p_codcon = '';
@@ -576,11 +576,10 @@ export class CoactivoCrearComponent implements OnInit {
 
     this.spinner.show();
 
-    console.log(post);
+    
     this.sigtaService.busContribuyente(post).subscribe({
       next: (data: any) => {
         this.spinner.hide();
-        console.log();
 
         this.datosContribuyente = data;
         this.dtElementModal.dtInstance.then((dtInstance: DataTables.Api) => {

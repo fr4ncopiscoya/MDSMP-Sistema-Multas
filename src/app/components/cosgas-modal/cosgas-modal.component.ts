@@ -5,6 +5,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
+import { createMask } from '@ngneat/input-mask';
 
 @Component({
   selector: 'app-cosgas-modal',
@@ -39,6 +40,15 @@ export class CosgasModalComponent implements OnInit {
   selectedDesdil: string = '';
   destitulo: string = '';
   descombo: string = '';
+
+  currencyInputMask = createMask({
+    alias: 'numeric',
+    groupSeparator: ',',
+    digits: 2,
+    digitsOptional: false,
+    prefix: 'S/. ',
+    placeholder: '0',
+  });
 
   constructor(
     private sigtaService: SigtaService,
@@ -86,7 +96,7 @@ export class CosgasModalComponent implements OnInit {
     setTimeout(() => {
       switch (this.error) {
         case 'Registro Procesado Correctamente':
-          this.modalService.hide(7)
+          this.modalService.hide(8)
           // location.reload();
           // this.modalService.hide(5)
           break;
@@ -118,13 +128,11 @@ export class CosgasModalComponent implements OnInit {
     // console.log(this.p_concid + " " + this.p_subcid)
     console.log(this.p_concid);
     console.log(this.p_subcid);
-
   }
 
-  validarMonto(event: any): void {
+  validarNumero(event: any): void {
     const keyCode = event.keyCode;
-    // Permitir números del 0 al 9 (48-57) y el punto (46)
-    if ((keyCode < 48 || keyCode > 57) && keyCode !== 46) {
+    if (keyCode < 48 || keyCode > 57) {
       event.preventDefault();
     }
   }
@@ -194,6 +202,11 @@ export class CosgasModalComponent implements OnInit {
   }
 
   registrarCosGas() {
+    console.log("usuins: ", this.sigtaService.cusuari);
+    const montoLimpio = this.p_montot.replace('S/.', '').replace(',', '');
+    const montoFloat = parseFloat(montoLimpio);
+    console.log("sin-format:", this.p_montot);
+    console.log("format-number:", montoFloat);
 
     let post = {
       p_expnid: this.p_expnid,
@@ -201,7 +214,7 @@ export class CosgasModalComponent implements OnInit {
       p_subcid: this.p_subcid,
       p_feccga: this.p_feccga,
       p_fecncg: this.p_fecncg,
-      p_montot: this.p_montot,
+      p_montot: montoFloat,
     };
     // console.log(post);
     this.sigtaService.registrarCosGas(post).subscribe({

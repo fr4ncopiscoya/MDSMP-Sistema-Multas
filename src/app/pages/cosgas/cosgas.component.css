@@ -135,6 +135,10 @@ table#tablaAplicacion {
   .disabled-color {
     background-color: #e1e1e1;
   }
+
+  .hideHtml{
+    display: none;
+  }
   
   
   @media (max-width: 400px) {

@@ -43,6 +43,13 @@ import { CoactivoCrearComponent } from './pages/coactivo-crear/coactivo-crear.co
 import { CoactivoVerComponent } from './pages/coactivo-ver/coactivo-ver.component';
 import { CosgasComponent } from './pages/cosgas/cosgas.component';
 import { CosgasModalComponent } from './components/cosgas-modal/cosgas-modal.component';
+import { CrearReferenciaComponent } from './components/crear-referencia/crear-referencia.component';
+import { CrearReferenciaMultaComponent } from './components/crear-referencia-multa/crear-referencia-multa.component';
+import { ListarReferenciaMultaComponent } from './components/listar-referencia-multa/listar-referencia-multa.component';
+import { ListarRefereComponent } from './components/listar-refere/listar-refere.component';
+import { CrearRefereComponent } from './components/crear-refere/crear-refere.component';
+import { CleaveDirective } from '../cleave.directive';
+import { InputMaskModule } from '@ngneat/input-mask';
 
 @NgModule({
   declarations: [
@@ -72,8 +79,15 @@ import { CosgasModalComponent } from './components/cosgas-modal/cosgas-modal.com
     CoactivoVerComponent,
     CosgasComponent,
     CosgasModalComponent,
+    CrearReferenciaComponent,
+    CrearReferenciaMultaComponent,
+    ListarReferenciaMultaComponent,
+    ListarRefereComponent,
+    CrearRefereComponent,
+    CleaveDirective,
   ],
   imports: [
+    InputMaskModule.forRoot({ inputSelector: 'input', isAsync: true }),
     BrowserModule,
     HttpClientModule,
     FormsModule,
@@ -99,8 +113,10 @@ import { CosgasModalComponent } from './components/cosgas-modal/cosgas-modal.com
     DataTableDirective,
     TooltipModule,
     LoginGuard,
-    LoginComponent
+    LoginComponent,
+    // ListarRefereComponent,
+    ListarReferenciaComponent
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { }

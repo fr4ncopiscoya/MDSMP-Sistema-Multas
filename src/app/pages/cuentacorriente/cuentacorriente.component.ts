@@ -5,6 +5,7 @@ import {
   TemplateRef,
   AfterViewInit,
   ElementRef,
+  HostListener
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppComponent } from 'src/app/app.component';
@@ -102,7 +103,17 @@ export class CuentacorrienteComponent implements OnInit {
   nomusm: string = '';
   fecins: string = '';
   fecmod: string = '';
+  botonesCuentaCorriente: any;
 
+
+
+  //BOTONES
+  btnNuevo: number;
+  btnVer: number;
+  btnEditar: number;
+  btnAnular: number;
+  btnPdf: number;
+  btnExcel: number;
 
   constructor(
     private appComponent: AppComponent,
@@ -118,10 +129,19 @@ export class CuentacorrienteComponent implements OnInit {
     private platform: Platform,
   ) {
     this.appComponent.login = false;
-    this.dataUsuario = localStorage.getItem('dataUsuario');
-  }
 
-  ngOnInit(): void {
+    this.dataUsuario = localStorage.getItem('dataUsuario');
+    this.botonesCuentaCorriente = this.appComponent.botonesPermisos
+  }
+  // Redirige a la ruta especial al presionar F5
+  // @HostListener('document:keydown', ['$event'])
+  // handleKeyboardEvent(event: KeyboardEvent) {
+  //   if (event.key === 'F5') {
+  //     this.router.navigate(['/dashboard']);
+  //   }
+  // }
+
+  ngOnInit() {
     this.dtOptionsModal = {
       // paging: true,
       // pagingType: 'numbers',
@@ -129,16 +149,15 @@ export class CuentacorrienteComponent implements OnInit {
       scrollY: '400px',
       columnDefs: [
         { width: '500px', targets: 0 },
-      ],  
+      ],
       language: {
         url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
       },
     }
-
+    this.validacionBotones();
     this.listarFechas();
 
     const fechaActual = new Date().toISOString().split('T')[0];
-
   }
 
   ngOnDestroy(): void {
@@ -154,12 +173,40 @@ export class CuentacorrienteComponent implements OnInit {
     /* (document.querySelector('.dataTables_scrollBody') as HTMLElement).style.top = '150px'; */
   }
 
+  validacionBotones() {
+    const botonesCuentaCorriente = JSON.parse(localStorage.getItem('menu-items'))
+    // const botonesCuentaCorriente = JSON.parse(this.botonesCuentaCorriente);
+
+    botonesCuentaCorriente.forEach((item: any) => {
+      switch (item.bot_id) {
+        case 1:
+          this.btnNuevo = item.apb_activo
+          break;
+        case 2:
+          this.btnEditar = item.apb_activo
+          break;
+        case 3:
+          this.btnVer = item.apb_activo
+          break;
+        case 4:
+          this.btnAnular = item.apb_activo;
+          break;
+        case 5:
+          this.btnExcel = item.apb_activo
+          break;
+        case 10:
+          this.btnPdf = item.apb_activo
+          break;
+        default:
+          break;
+      }
+    })
+  }
+
   exportarccPDF() {
     let post = {
       p_codigo: this.p_codcon,
     };
-
-    console.log(post);
 
     this.sigtaService.exportarccPDF(post).subscribe(
       (response: any) => { // Cambiado a 'any' en lugar de 'Blob'
@@ -236,13 +283,18 @@ export class CuentacorrienteComponent implements OnInit {
     }
   }
 
+  validarCodigoMultaVacio(event: any) {
+    if (this.p_codcon.length < 7) {
+      this.cnombre = ''
+    }
+  }
+
   onInputChange(event: any) {
     event.target.value = event.target.value.toUpperCase();
   }
 
   onSelectionDate(event: any) {
     this.mrf_id = event.mrf_id
-    console.log(this.mrf_id)
   }
 
 
@@ -339,8 +391,6 @@ export class CuentacorrienteComponent implements OnInit {
   }
 
   getDataUser(event: MouseEvent, data: any) {
-    console.log(data);
-
     const trs = document.querySelectorAll('tbody tr') as NodeListOf<HTMLTableRowElement>;
     trs.forEach((tr: HTMLTableRowElement) => {
       tr.classList.remove('active-color');
@@ -397,17 +447,13 @@ export class CuentacorrienteComponent implements OnInit {
 
     if (id !== null) {
       this.router.navigate(['/multas/editar-multa'], { queryParams: { id: id } });
-      console.log(id);
       // this.router.navigate(['/multas/editar-multa/', id]);
     } else {
-      console.log('ni pases');
-
     }
   }
 
   verDatosMulta(id: string | null) {
     if (id !== null) {
-      console.log(id);
       this.router.navigate(['/multas/ver-multa/', id]);
     }
   }
@@ -422,8 +468,6 @@ export class CuentacorrienteComponent implements OnInit {
     let post = {
       p_codigo: this.p_codcon,
     };
-    console.log(post);
-
     if (this.p_codcon.length > 3) {
 
       this.spinner.show();
@@ -431,7 +475,6 @@ export class CuentacorrienteComponent implements OnInit {
       this.sigtaService.listarCuentaCorriente(post).subscribe({
         next: (data: any) => {
           this.spinner.hide();
-          console.log(data);
 
           this.datosCuenta = data;
 
@@ -446,10 +489,10 @@ export class CuentacorrienteComponent implements OnInit {
           console.log(error);
         },
       });
-      
+
       this.dtOptionsModal = {
-        order:[[0, 'desc']] 
-      }
+        order: [[0, 'desc']]
+      };
     }
 
 
@@ -462,7 +505,7 @@ export class CuentacorrienteComponent implements OnInit {
 
     this.sigtaService.listarFechas(post).subscribe({
       next: (data: any) => {
-        console.log(data);
+
 
         this.datosFechas = data;
         // this.mrf_descri = data[0].mrf_descri;
@@ -486,25 +529,20 @@ export class CuentacorrienteComponent implements OnInit {
 
     if (this.p_codcon != '') {
 
-      this.spinner.show();
+      // this.spinner.show();
 
       this.sigtaService.obtenerNombrePorCod(post).subscribe({
         next: (data: any) => {
-          this.spinner.hide();
-          console.log(data);
-
           if (data && data.length > 0) {
             this.cnombre = data[0].cnombre;
           } else {
             this.errorSweetAlertCode();
             this.cnombre = '';
             this.p_codcon = '';
-            console.log("noData");
-
           }
         },
         error: (error: any) => {
-          this.spinner.hide();
+          // this.spinner.hide();
           this.errorSweetAlertCode();
           this.cnombre = '';
           this.p_codcon = '';
@@ -523,12 +561,9 @@ export class CuentacorrienteComponent implements OnInit {
     };
 
     this.spinner.show();
-
-    console.log(post);
     this.sigtaService.busContribuyente(post).subscribe({
       next: (data: any) => {
         this.spinner.hide();
-        console.log();
 
         this.datosContribuyente = data;
         this.dtElementModal.dtInstance.then((dtInstance: DataTables.Api) => {

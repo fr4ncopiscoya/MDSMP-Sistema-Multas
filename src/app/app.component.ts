@@ -8,10 +8,19 @@ import { Component } from '@angular/core';
 export class AppComponent {
   login: boolean = true;
   dataUsuario: any;
+  botonesPermisos: any;
 
-  constructor(){
+  //BOTONES
+  // btnNuevo: number;
+  // btnVer: number;
+  // btnEditar: number;
+  // btnAnular: number;
+  // btnPdf: number;
+  // btnExcel: number;
+
+  constructor() {
   }
 
-  ngOnInit(){
+  ngOnInit() {
   }
 }

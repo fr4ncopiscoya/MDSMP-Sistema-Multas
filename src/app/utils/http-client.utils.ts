@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 
 export class HttpClientUtils {
     urlApi: string = environment.apiBackEndURL;
-    urlPide: string = environment.apiUtilitarios;
+    urlPide: string = environment.apiPide;
     urlApiMaster: string = environment.apiMaster;
     urlApiIp: string = environment.apiGetIp;
 

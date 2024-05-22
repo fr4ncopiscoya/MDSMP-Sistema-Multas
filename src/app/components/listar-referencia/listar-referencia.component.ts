@@ -1,9 +1,9 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewChild, OnDestroy, AfterViewInit, TemplateRef } from '@angular/core';
 import { Subject } from 'rxjs';
 import { SigtaService } from 'src/app/services/sigta.service';
 import { DataTableDirective } from 'angular-datatables';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { BsModalService } from 'ngx-bootstrap/modal';
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-listar-referencia',
@@ -11,6 +11,8 @@ import { BsModalService } from 'ngx-bootstrap/modal';
   styleUrls: ['./listar-referencia.component.css']
 })
 export class ListarReferenciaComponent implements OnInit, AfterViewInit, OnDestroy {
+
+  modalRefs: { [key: string]: BsModalRef } = {}; // Objeto para almacenar los modalRefs
 
   p_desubi: string = '';
   via: string = '';
@@ -35,6 +37,7 @@ export class ListarReferenciaComponent implements OnInit, AfterViewInit, OnDestr
   constructor(
     private sigtaService: SigtaService,
     private spinner: NgxSpinnerService,
+    private modalService: BsModalService
   ) { }
 
   ngOnInit(): void {
@@ -60,13 +63,33 @@ export class ListarReferenciaComponent implements OnInit, AfterViewInit, OnDestr
     this.confirmClicked.emit(data);
   }
 
+  confirmClick(value: string) {
+    // this.p_nomcontri = value;
+    // this.busContribuyente(value);
+    // this.modalService.hide(8);
+  }
+  modalCrearRefere(template: TemplateRef<any>) {
+    this.modalRefs['crear-referencia'] = this.modalService.show(template, { id: 8, class: 'modal-lg crear-refe', backdrop: 'static', keyboard: false });
+    const secondModalBackdrop = document.getElementsByClassName('crear-refe')[0]?.parentElement;
+    if (secondModalBackdrop) {
+      secondModalBackdrop.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+    }
+    // this.modalService.hide(1);
+  }
+
+  cerrarModal(modalKey: string) {
+    if (this.modalRefs[modalKey]) {
+      this.modalRefs[modalKey].hide(); // Cierra el modal si está definido
+    } else {
+    }
+  }
+
+
   obtenerReferencia(value: any) {
 
     let post = {
       p_desubi: this.p_desubi,
     };
-
-    console.log(post);
 
     if (this.p_desubi.length > 2) {
 
@@ -75,7 +98,6 @@ export class ListarReferenciaComponent implements OnInit, AfterViewInit, OnDestr
       this.sigtaService.listarReferencia(post).subscribe({
         next: (data: any) => {
           this.spinner.hide();
-          console.log(data);
           this.datosReferencia = data;
           this.via = data[0].cdvia;
           this.haburb = data[0].cpbdo;
@@ -86,10 +108,6 @@ export class ListarReferenciaComponent implements OnInit, AfterViewInit, OnDestr
           this.ccodvia = data[0].v_codi;
           this.dtipvia = data[0].v_tipo;
           // this.dnomvia= data[0].cdvia;
-          console.log(this.ccodurb);
-          console.log(this.dtipurb);
-          console.log(this.ccodvia);
-          console.log(this.dtipvia);
 
 
           this.dtElementModal.dtInstance.then((dtInstance: DataTables.Api) => {
@@ -105,9 +123,12 @@ export class ListarReferenciaComponent implements OnInit, AfterViewInit, OnDestr
         },
       });
     } else {
-      console.log("cantidad-caracteres");
 
     }
+  }
+
+  changeModal() {
+    this.modalService.hide(1);
   }
 
 }
