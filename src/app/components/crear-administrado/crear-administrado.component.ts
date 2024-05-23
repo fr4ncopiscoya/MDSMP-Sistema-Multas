@@ -69,6 +69,10 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
   ccodhur: string = ''
   ctiphur: string = ''
   dpoblad: string = ''
+  ctipvia: string = ''
+
+  dnomurbvalue: string = ''
+  dnomviavalue: string = ''
 
   valor: boolean = false
 
@@ -165,22 +169,26 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
 
   confirmClickRefere(value: any) {
     console.log(value);
-    this.dnomvia = value.dnomvia;
-    this.dnomurb = value.dpoblad;
+
+    this.ctipvia = value.ctipvia
+    this.ccodhur = value.ccodhur
+
+    this.dnomviavalue = value.dpoblad;
+    this.dnomurbvalue = value.v_tipo;
     this.ccodurb = value.cpoblad;
     this.dtipurb = value.dtippob;
     this.ccodvia = value.v_codi;
-    this.dtipvia = value.v_tipo;
+    // this.dtipvia = value.v_tipo;
 
     //Datos emitidos de crear referencia
     // this.dnomvia = value.cdvia;
-    this.dtipvia = value.cdtipvia;
+    this.dtipvia = value.v_descri;
     this.cdescri = value.cdescri;
     // this.ccodhur = value.ccodhur;
-    this.dtipurb = value.ctiphur;
+    // this.dtipurb = value.ctiphur;
     this.dpoblad = value.dpoblad;
 
-    let nombreVia: string = value.v_tipo + ' ' + value.v_descri;
+    let nombreVia: string = value.v_descri + ' ' + value.v_tipo;
     let nombreUrb: string = value.dtippob + ' ' + value.dpoblad;
     this.dnomvia = nombreVia;
     this.dnomurb = nombreUrb;
@@ -441,10 +449,10 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
       cpostal: this.cpostal,
       ccodurb: this.ccodurb,
       dtipurb: this.dtipurb,
-      dnomurb: this.dnomurb,
+      dnomurb: this.dnomurbvalue,
       ccodvia: this.ccodvia,
       dtipvia: this.dtipvia,
-      dnomvia: this.dnomvia,
+      dnomvia: this.dnomviavalue,
       dnrofis: this.dnrofis,
       dintfis: this.dintfis,
       ddepfis: this.ddepfis,

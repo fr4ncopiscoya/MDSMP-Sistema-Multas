@@ -1,7 +1,11 @@
-#light-dark-mode a{
+#light-dark-mode a {
     cursor: pointer;
 }
 
-.logOutButton{
+.logOutButton {
     cursor: pointer;
+}
+
+.disabled-color {
+    background-color: #e1e1e1;
 }

@@ -393,6 +393,16 @@ export class SigtaService {
       );
   }
 
+  cambiarPass(data: any) {
+    return this.httpClientUtils
+      .postQuery('sigta/password/editar', data)
+      .pipe(
+        map((data) => {
+          return data;
+        })
+      );
+  }
+
   getIp() {
     return this.httpClientUtils
       .getQueryIp()

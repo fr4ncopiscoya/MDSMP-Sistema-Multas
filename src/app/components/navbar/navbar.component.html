@@ -48,9 +48,100 @@
                         <a class="dropdown-item logOutButton" (click)="logOut()"><i
                                 class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i> <span
                                 class="align-middle" data-key="t-logout">Cerrar Sesión</span></a>
+                        <a class="dropdown-item logOutButton"><i
+                                class="bx bx-lock-alt text-muted fs-16 align-middle me-1"></i> <span
+                                class="align-middle" (click)="modalPass(modalCambiarPass)">Cambiar
+                                Contraseña</span></a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </header>
+
+<ng-template #modalCambiarPass>
+    <div class="row">
+        <!-- <form [formGroup]="formResolucion" (ngSubmit)="guardarResolucion()"> -->
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header"
+                    style="display: flex; justify-content: space-between; background-color: #20529d; color: white">
+                    <h4 class="card-title mb-0" style="color: white;">Cambiar Contraseña</h4>
+                    <a class="" (click)="cerrarModal('modalCambiarPass')" style="cursor: pointer;"> <i
+                            style="font-size: 1.50rem; " class=" ri-close-fill"></i></a>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Usuario</label>
+                            <div class="input-group">
+                                <span class="input-group-text" id="basic-addon1"><i class="ri-user-3-line"></i></span>
+                                <input #inputUsuario [(ngModel)]="usu_nomcom" disabled="" type="text"
+                                    class="form-control disabled-color" id="username" autocomplete="off">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="mb-3">
+                            <label class="form-label" for="password-input">Contraseña Actual</label>
+                            <div class="position-relative auth-pass-inputgroup overflow-hidden">
+                                <div class="input-group">
+                                    <span class="input-group-text" id="basic-addon1"><i
+                                            class="bx bx-lock-open-alt"></i></span>
+                                    <input #inputContra type="password" [(ngModel)]="p_usu_passwd"
+                                        class="form-control pe-5 password-input"
+                                        placeholder="Ingrese su contraseña actual..." id="password-input">
+                                </div>
+                                <button
+                                    class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon"
+                                    type="button" id="password-addon" (click)="togglePasswordActual()"><i
+                                        id="passwordEye" class="ri-eye-fill align-middle"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="mb-3">
+                            <label class="form-label" for="password-input">Nueva Contraseña</label>
+                            <div class="position-relative auth-pass-inputgroup overflow-hidden">
+                                <div class="input-group">
+                                    <span class="input-group-text" id="basic-addon1"><i
+                                            class="ri-lock-2-line"></i></span>
+                                    <input #inputContra type="password" [(ngModel)]="p_usu_pasnew"
+                                        class="form-control pe-5 password-input"
+                                        placeholder="Ingrese su contraseña nueva..." id="password-input-new">
+                                </div>
+                                <button
+                                    class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon"
+                                    type="button" id="password-addon" (click)="togglePasswordNew()"><i
+                                        id="passwordEye-new" class="ri-eye-fill align-middle"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="mb-3">
+                            <label class="form-label" for="password-input">Confirmar Contraseña</label>
+                            <div class="position-relative auth-pass-inputgroup overflow-hidden">
+                                <div class="input-group">
+                                    <span class="input-group-text" id="basic-addon1"><i
+                                            class="ri-lock-2-line"></i></span>
+                                    <input #inputContra type="password" [(ngModel)]="p_usu_pasval"
+                                        class="form-control pe-5 password-input" placeholder="Confirme su contraseña..."
+                                        id="password-input-confirm">
+                                </div>
+                                <button
+                                    class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon"
+                                    type="button" id="password-addon" (click)="togglePasswordConfirm()"><i
+                                        id="passwordEye-confirm" class="ri-eye-fill align-middle"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <button id="btnLoginAction" class="btn bg-smp-color w-100 tc-white br-15" type="button"
+                            (click)="cambiarPass()">Aceptar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- </form> -->
+    </div>
+</ng-template>
