@@ -97,8 +97,8 @@
               </button>
             </div>
             <div class="col-sm-auto mb-2-5">
-              <button *ngIf="btnExcel === 1" type="button" class="btn_excel btn btn-success btn-label btn-sm"
-                id="ExportarExcel" (click)="exportarExcel()">
+              <button [ngClass]="{'disabled-color': !btnExcel}" [disabled]="!btnExcel" type="button"
+                class="btn_excel btn btn-success btn-label btn-sm" id="ExportarExcel" (click)="exportarExcel()">
                 <i class="ri-file-excel-2-fill label-icon align-middle fs-16 me-2"></i>Excel
               </button>
             </div>
@@ -184,10 +184,13 @@
                               style="cursor: pointer;">Registrar</a>
                             <a class="dropdown-item verRes" (click)="modalVerResolucion(modalResolucionVer, data)"
                               style="cursor: pointer; display: none;">Ver</a>
-                            <a class="dropdown-item anularRes" (click)="modalAnularResolucion(anularResolucion, data)"
+                            <a class="dropdown-item anularRes" (click)="sweetAlertAnularReso(data.id_corrl)"
                               style="cursor: pointer; display: none;"> Anular</a>
-
                           </div>
+                          <button type="button" [disabled]="data.estreg != 'Registrado'"
+                            [ngClass]="{'disabled-color': data.estreg != 'Registrado'}" (click)="getDeuda(data.deudid)"
+                            style="margin-left: 2px; text-align: 5px;" class="btn btn-sm btn-outline-success btn-icon"
+                            aria-haspopup="true" aria-expanded="false">%</button>
                         </div>
                       </td>
                     </tr>
@@ -336,7 +339,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col-md-6">
+              <!-- <div class="col-md-6">
                 <div class="mb-3">
                   <label for="lastNameinput" class="form-label">Fecha Notificación</label>
                   <input type="date" class="form-control" formControlName="dfecnot" [(ngModel)]="dfecnot">
@@ -358,7 +361,7 @@
                       Campo obligatorio</div>
                   </div>
                 </div>
-              </div>
+              </div> -->
               <div class="col-lg-12">
                 <div class="text-end">
                   <button type="submit" class="btn btn-primary">Guardar</button>

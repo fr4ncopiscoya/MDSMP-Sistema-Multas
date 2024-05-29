@@ -11,7 +11,6 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import Swal from 'sweetalert2';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { createMask } from '@ngneat/input-mask';
-
 @Component({
   selector: 'app-crear-multa',
   templateUrl: './crear-multa.component.html',

@@ -1,0 +1,336 @@
+<div class="main-content">
+    <div class="page-content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                        <h4 class="mb-sm-0">FILTROS DE BUSQUEDA - MULTAS ADMINISTRATIVAS</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="card container-fluid" id="cardsuperior">
+                <div class="row">
+                    <div class="col-sm-2 mb-3">
+                        <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Tipo
+                            Documento <span style="color: red;">*</span> </label>
+                        <!-- <ng-select [(ngModel)]="ctipdoc" [items]="datosTipoDocumento"
+                            (change)="ChangeTipoDoc($event); ChangeTipoInput($event)" [closeOnSelect]="true"
+                            [searchable]="true" bindValue="ccodtip" bindLabel="dcodtip" name=""
+                            class="form-control custom" style="border: 1px solid #b9b9b9 !important">
+                        </ng-select> -->
+                        <ng-select style="border: 1px solid #b9b9b9; border-radius: 5px;" class=""
+                            (input)="onInputChange($event)" [(ngModel)]="ctipdoc" [items]="datosTipoDocumento"
+                            bindValue="ccodtip" bindLabel="dcodtip" placeholder="Seleccionar"
+                            (change)="ChangeTipoDoc($event); ChangeTipoInput($event)">
+                        </ng-select>
+                        <div *ngIf="error === 'Tipo Documento Incorrecto'" class="text-danger">Campo Obligatorio
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Nº Doc. <span
+                                style="color: red;">*</span>
+                        </label>
+                        <input [(ngModel)]="dtipdoc" oninput="this.value = this.value.toUpperCase()" type="text"
+                            class="form-control form-control-sm" id="" (keypress)="validarDocumento($event)" />
+                    </div>
+                    <div class="col-sm-2">
+                        <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm">Código</label>
+                        <div class="" style="display: flex">
+                            <input maxlength="6" [(ngModel)]="p_codcon" oninput="this.value = this.value.toUpperCase()"
+                                type="text" class="form-control form-control-sm" />
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="" class="form-label col-form-label col-form-label-sm">Apellido Paterno</label>
+                        <div class="" style="display: flex; align-items: center">
+                            <input id="cnombre" [(ngModel)]="p_apepat" oninput="this.value = this.value.toUpperCase()"
+                                type="text" class="form-control form-control-sm" />
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="" class="form-label col-form-label col-form-label-sm">Apellido Materno</label>
+                        <div class="" style="display: flex; align-items: center">
+                            <input id="cnombre" [(ngModel)]="p_apemat" oninput="this.value = this.value.toUpperCase()"
+                                type="text" class="form-control form-control-sm" />
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-sm-auto mb-2-5">
+                            <button (click)="listarPersonas()" type="button" class="btn btn-primary btn-label btn-sm">
+                                <i class="ri-search-line label-icon align-middle fs-16 me-2"></i>
+                                Consultar
+                            </button>
+                        </div>
+                        <!-- <div class="col-sm-auto mb-2-5">
+                            <button [ngClass]="{'disabled-color': !btnNuevo}" [disabled]="!btnNuevo" type="button"
+                                [routerLink]="['/multas/crear-multa']" class="btn btn-primary btn-label btn-sm">
+                                <i class="ri-file-2-fill label-icon align-middle fs-16 me-2"></i>
+                                Nuevo
+                            </button>
+                        </div>
+                        <div class="col-sm-auto mb-2-5">
+                            <button [ngClass]="{'disabled-color': !btnExcel}" [disabled]="!btnExcel" type="button"
+                                class="btn_excel btn btn-success btn-label btn-sm" id="ExportarExcel"
+                                (click)="exportarExcel()">
+                                <i class="ri-file-excel-2-fill label-icon align-middle fs-16 me-2"></i>Excel
+                            </button>
+                        </div> -->
+                        <div class="col-sm-auto mb-2-5">
+                            <button (click)="limpiarCampos()" type="button" class="btn btn-info btn-label btn-sm">
+                                <i class=" ri-brush-2-line label-icon align-middle fs-16 me-2"></i>
+                                Limpiar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card card-h-100">
+                        <div class="card-body">
+                            <div>
+                                <table id="tablaAplicacion" datatable [dtOptions]="dtOptionsModal"
+                                    [dtTrigger]="dtTrigger" class=" align-middle mb-0 " style="width: 100%;">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th class="text-center">ID</th>
+                                            <th class="text-center">Código</th>
+                                            <th class="text-center">Tipo Documento</th>
+                                            <th class="text-center">Número Documento</th>
+                                            <th class="text-center">Apellido Paterno</th>
+                                            <th class="text-center">Apellido Materno</th>
+                                            <th class="text-center">Nombre</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ngClass="" *ngFor="let data of datosPersona; let i = index"
+                                            (click)="getDataUser($event,data)" class="text-center tr_hover"
+                                            style="font-size: 14px;">
+                                            <td>{{ i + 1 }}</td>
+                                            <td>{{ data.ccontri }}</td>
+                                            <td>{{ data.dcodtip }}</td>
+                                            <td>{{ data.dtipdoc }}</td>
+                                            <td style="text-align: left;">{{ data.dpatern }}</td>
+                                            <td style="text-align: left;">{{ data.dmatern }}</td>
+                                            <td style="text-align: left;">{{ data.dnombre}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- <div class="row">
+                <div class="datos-container">
+                    <div class="col-12 datos-body">
+                        <div class="col-4">
+                            <div class="datos-creacion">
+                                <div class="dato-usuario">
+                                    <label for=""> <span class="datos-spancolor"> Creado: &nbsp; </span> </label>
+                                    <label for=""> {{nomusi}} </label>
+                                </div>
+                                <div class="dato-fechacre">
+                                    <label for=""> <span class="datos-spancolor"> Fecha Creación: &nbsp; </span>
+                                    </label>
+                                    <label for=""> {{fecins}} </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                        </div>
+                        <div class="col-4">
+                            <div class="datos-modificados">
+                                <div class="dato-modificado">
+                                    <label for=""> <span class="datos-spancolor"> Modificado: &nbsp; </span></label>
+                                    <label for=""> {{nomusm}}</label>
+                                </div>
+                                <div class="dato-fecmod">
+                                    <label for=""> <span class="datos-spancolor">Fecha Modificado: &nbsp;
+                                        </span></label>
+                                    <label for=""> {{fecmod}}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+
+        </div>
+
+
+    </div>
+</div>
+
+<ng-template #template>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header" style="display: flex; justify-content: space-between;">
+                    <h4 class="card-title mb-0">Buscar</h4>
+                    <a class="" style="cursor: pointer;" (click)="cerrarModal('listar-administrado')"> <i
+                            style="font-size: 1.50rem; " class=" ri-close-fill"></i></a>
+                </div>
+                <div class="card-body">
+                    <app-listar-administrado (confirmClicked)="confirmClick($event)"></app-listar-administrado>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #templateDescri>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header" style="display: flex; justify-content: space-between;">
+                    <h4 class="card-title mb-0">Buscar</h4>
+                    <a class="" style="cursor: pointer;" (click)="cerrarModal('listar-descri')"> <i
+                            style="font-size: 1.50rem; " class=" ri-close-fill"></i></a>
+                </div>
+                <div class="card-body">
+                    <app-listar-descripcion (confirmClicked)="confirmClickDescri($event)"></app-listar-descripcion>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #modalResolucion>
+    <div class="row">
+        <form [formGroup]="formResolucion" (ngSubmit)="guardarResolucion()">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header" style="display: flex; justify-content: space-between;">
+                        <h4 class="card-title mb-0">Registrar Resolución</h4>
+                        <a class="" (click)="cerrarModal('modalRegistrarRes')" style="cursor: pointer;"> <i
+                                style="font-size: 1.50rem; " class=" ri-close-fill"></i></a>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="firstNameinput" class="form-label">Número Resolución</label>
+                                    <input type="text" maxlength="8" (blur)="rellenarCerosResolucion()"
+                                        (keypress)="validarNumero($event)" class="form-control"
+                                        formControlName="cnumres" [(ngModel)]="cnumres">
+                                    <div
+                                        *ngIf="formResolucion.get('cnumres')?.invalid && (formResolucion.get('cnumres')?.dirty || formResolucion.get('cnumres')?.touched || submitted)">
+                                        <div class="text-danger"
+                                            *ngIf="formResolucion.get('cnumres')?.hasError('required')">
+                                            Campo obligatorio</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="lastNameinput" class="form-label">Fecha Resolución</label>
+                                    <input type="date" class="form-control" (blur)="this.dfecnot = this.dfecres"
+                                        formControlName="dfecres" [(ngModel)]="dfecres">
+                                    <div
+                                        *ngIf="formResolucion.get('dfecres')?.invalid && (formResolucion.get('dfecres')?.dirty || formResolucion.get('dfecres')?.touched || submitted)">
+                                        <div class="text-danger"
+                                            *ngIf="formResolucion.get('dfecres')?.hasError('required')">
+                                            Campo obligatorio</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="text-end">
+                                    <button type="submit" class="btn btn-primary">Guardar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #modalResolucionVer>
+    <div class="col-lg-12">
+        <div class="row">
+            <form>
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header" style="display: flex; justify-content: space-between;">
+                            <h4 class="card-title mb-0">Ver Resolución</h4>
+                            <a class="" (click)="cerrarModal('modalVerResolucion')" style="cursor: pointer;"> <i
+                                    style="font-size: 1.50rem; " class=" ri-close-fill"></i></a>
+                        </div>
+                        <div class="card-body">
+                            <app-ver-resolucion></app-ver-resolucion>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #anularResolucion>
+    <div class="row">
+        <!-- <form [formGroup]="formAnularResolucion" (ngSubmit)="submitAnularResolucion()"> -->
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header" style="display: flex; justify-content: space-between;">
+                    <h4 class="card-title mb-0">Anular Resolución</h4>
+                    <a class="" (click)="cerrarModal('modalAnularRes')" style="cursor: pointer;"> <i
+                            style="font-size: 1.50rem; " class=" ri-close-fill"></i></a>
+                </div>
+                <div class="card-body">
+                    <app-anular-resolucion></app-anular-resolucion>
+                </div>
+            </div>
+        </div>
+        <!-- </form> -->
+    </div>
+</ng-template>
+
+<ng-template #anularMulta>
+    <div class="row">
+        <!-- <form [formGroup]="formAnularResolucion" (ngSubmit)="submitAnularResolucion()"> -->
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header" style="display: flex; justify-content: space-between;">
+                    <h4 class="card-title mb-0">Anular Multa</h4>
+                    <a class="" (click)="cerrarModal('modalAnularMulta')" style="cursor: pointer;"> <i
+                            style="font-size: 1.50rem; " class=" ri-close-fill"></i></a>
+                </div>
+                <div class="card-body">
+                    <app-anular-multa></app-anular-multa>
+                </div>
+            </div>
+        </div>
+        <!-- </form> -->
+    </div>
+</ng-template>
+
+<ng-template #modalInformeFinal>
+    <div class="col-lg-12">
+        <div class="row">
+            <form>
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header" style="display: flex; justify-content: space-between;">
+                            <h4 class="card-title mb-0">Registrar Informe Final</h4>
+                            <a class="" (click)="cerrarModal('modalInformeFinal')" style="cursor: pointer;"> <i
+                                    style="font-size: 1.50rem; " class=" ri-close-fill"></i></a>
+                        </div>
+                        <div class="card-body">
+                            <app-crear-informe-final></app-crear-informe-final>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</ng-template>
+
+
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="ball-square-spin" [fullScreen]="false">
+    <p style="color: white">Buscando información...</p>
+</ngx-spinner>

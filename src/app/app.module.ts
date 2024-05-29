@@ -50,6 +50,7 @@ import { ListarRefereComponent } from './components/listar-refere/listar-refere.
 import { CrearRefereComponent } from './components/crear-refere/crear-refere.component';
 import { CleaveDirective } from '../cleave.directive';
 import { InputMaskModule } from '@ngneat/input-mask';
+import { PersonasComponent } from './pages/personas/personas.component';
 
 @NgModule({
   declarations: [
@@ -85,6 +86,7 @@ import { InputMaskModule } from '@ngneat/input-mask';
     ListarRefereComponent,
     CrearRefereComponent,
     CleaveDirective,
+    PersonasComponent,
   ],
   imports: [
     InputMaskModule.forRoot({ inputSelector: 'input', isAsync: true }),

@@ -99,6 +99,17 @@ export class SigtaService {
           return data
         })
       );
+  } 
+
+  listarPersonas(data: any) {
+    console.log(data);
+    return this.httpClientUtils
+      .postQuery('sigta/persona/listar', data)
+      .pipe(
+        map((data) => {
+          return data
+        })
+      );
   }
 
   obtenerDescripcionPorCod(data: any) {
@@ -326,6 +337,26 @@ export class SigtaService {
   listarHabUrb(data: any) {
     return this.httpClientUtils
       .postQuery('sigta/haburb/listar', data)
+      .pipe(
+        map((data) => {
+          return data;
+        })
+      );
+  }
+
+  validarDescuento(data: any) {
+    return this.httpClientUtils
+      .postQuery('sigta/descuento/validar', data)
+      .pipe(
+        map((data) => {
+          return data;
+        })
+      );
+  }
+
+  aplicarDescuento(data: any) {
+    return this.httpClientUtils
+      .postQuery('sigta/descuento/aplicar', data)
       .pipe(
         map((data) => {
           return data;

@@ -147,7 +147,7 @@ export class CoactivoComponent implements OnInit {
       // paging: true,
       // pagingType: 'numbers',
       info: false,
-      scrollY: '400px',
+      scrollY: '500px',
       columnDefs: [
         { width: '500px', targets: 2 },
       ],

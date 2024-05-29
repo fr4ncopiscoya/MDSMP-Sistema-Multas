@@ -13,12 +13,16 @@ import { CoactivoComponent } from './pages/coactivo/coactivo.component';
 import { CoactivoCrearComponent } from './pages/coactivo-crear/coactivo-crear.component';
 import { CoactivoVerComponent } from './pages/coactivo-ver/coactivo-ver.component';
 import { CosgasComponent } from './pages/cosgas/cosgas.component';
+import { PersonasComponent } from './pages/personas/personas.component';
 
 
 export const ROUTES: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
   { path: 'logout', component: LogoutComponent, canActivate: [AuthGuard] },
+
+  //PERSONAS
+  { path: 'personas', component: PersonasComponent, canActivate: [AuthGuard] },
 
   //Multas
   { path: 'multas', component: MultasComponent, canActivate: [AuthGuard] },

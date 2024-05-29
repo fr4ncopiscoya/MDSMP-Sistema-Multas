@@ -26,10 +26,10 @@ import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-multas',
-  templateUrl: './multas.component.html',
-  styleUrls: ['./multas.component.css'],
+  templateUrl: './personas.component.html',
+  styleUrls: ['./personas.component.css'],
 })
-export class MultasComponent implements OnInit {
+export class PersonasComponent implements OnInit {
   // MODAL
   @ViewChild('template') miModal!: ElementRef;
   modalRefs: { [key: string]: BsModalRef } = {}; // Objeto para almacenar los modalRefs
@@ -50,6 +50,8 @@ export class MultasComponent implements OnInit {
 
   //DATA PARA ALMACENAR
   data: any;
+  datosTipoDocumento: any;
+  datosPersona: any;
   dataMulta: any;
   datosMulta: any;
   datosContribuyente: any;
@@ -121,7 +123,16 @@ export class MultasComponent implements OnInit {
   btnPdf: number;
   btnExcel: number;
 
-  numid_deuda: number;
+  //DATOS PERSONA BUSCAR
+  p_grutipDoc: string = '01';
+  p_grutipPer: string = '02';
+  valor: boolean = false
+
+  ctipdoc: string;
+  dtipdoc: string;
+  // p_codcon: string = '';
+  p_apepat: string = '';
+  p_apemat: string = '';
 
 
   constructor(
@@ -156,18 +167,21 @@ export class MultasComponent implements OnInit {
     this.dtOptionsModal = {
       // paging: true,
       // pagingType: 'numbers',
+      pageLength: 25,
+      lengthMenu: [[25, 30, 50, 100 - 1], [25, 30, 50, 100, "Todos"]],
       info: false,
-      scrollY: '400px',
+      scrollY: '500px',
       columnDefs: [
-        { width: '650px', targets: 5 },
+        // { width: '200px', targets: 4 },
       ],
       language: {
         url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
       },
-      order: [['0', 'desc']]
+      // order: [['0', 'desc']]
     }
     this.validacionBotones();
     this.listarFechas();
+    this.listarTipoDocumento();
     const fechaActual = new Date().toISOString().split('T')[0];
   }
 
@@ -180,6 +194,60 @@ export class MultasComponent implements OnInit {
     this.dtTrigger.next();
     this.dtTriggerModal.next();
     /* (document.querySelector('.dataTables_scrollBody') as HTMLElement).style.top = '150px'; */
+  }
+
+  ChangeTipoDoc(event: any) {
+    // this.dtipdoc = event.dcodtip
+    this.ctipdoc = event.ccodtip
+    console.log(this.ctipdoc)
+  }
+
+  ChangeTipoInput(event: any): void {
+    this.dtipdoc = ''
+
+    const tipoDocumentoSeleccionado = event.ccodtip;
+
+    if (tipoDocumentoSeleccionado === '01' || tipoDocumentoSeleccionado === '04') {
+      this.valor = true;
+    } else {
+      this.valor = false;
+    }
+  }
+
+  validarDocumento(event: any): void {
+    if (this.valor) {
+      const keyCode = event.keyCode;
+      if (keyCode < 48 || keyCode > 57) {
+        event.preventDefault();
+      }
+    }
+  }
+
+  listarPersonas() {
+    let post = {
+      p_contri: this.p_codcon,
+      p_apepat: this.p_apepat,
+      p_apemat: this.p_apemat,
+      p_tipdoc: this.ctipdoc,
+      p_numdoc: this.dtipdoc,
+    };
+
+    this.spinner.show();
+
+    this.sigtaService.listarPersonas(post).subscribe({
+      next: (data: any) => {
+        this.spinner.hide();
+
+        this.datosPersona = data;
+        this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+          dtInstance.destroy();
+          this.dtTrigger.next();
+        });
+      },
+      error: (error: any) => {
+        this.spinner.hide();
+      },
+    });
   }
 
   validacionBotones() {
@@ -305,86 +373,6 @@ export class MultasComponent implements OnInit {
       this.p_fecfin = '';
     }
   }
-
-  getDeuda(id: any) {
-    let post = {
-      p_deudid: id,
-    };
-    console.log(post);
-    this.spinner.show();
-
-    this.sigtaService.validarDescuento(post).subscribe({
-      next: (data: any) => {
-        this.spinner.hide();
-        console.log(data);
-        // this.numid_deuda = data[0].numid
-        this.error = data[0].mensa;
-        const errorCode = data[0].error;
-        console.log(this.error);
-
-        Swal.fire({
-          title: this.error,
-          // text: "No podrás deshacer esto!",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33",
-          confirmButtonText: "Si"
-        }).then((result) => {
-          if (result.isConfirmed) {
-            this.aplicarDescuento(id,data[0].numid);
-          }
-        });
-
-        // const icon = this.getIconByErrorCode(errorCode);
-
-        // this.errorSweetAlert(icon, this.goBackToMultas.bind(this));
-      },
-      error: (error: any) => {
-        this.spinner.hide();
-        console.log(error);
-        Swal.fire({
-          title: "Error",
-          text: "Hubo un problema al intentar eliminar la resolución.",
-          icon: "error"
-        });
-      },
-    });
-  }
-
-  aplicarDescuento(deudid: any, chk:any) {
-    let post = {
-      p_deudid: deudid,
-      p_chkdes: chk,
-    };
-    console.log(post);
-    this.spinner.show();
-
-    this.sigtaService.aplicarDescuento(post).subscribe({
-      next: (data: any) => {
-        this.spinner.hide();
-        console.log(data);
-
-        this.error = data[0].mensa;
-        const errorCode = data[0].error;
-        console.log(this.error);
-
-        const icon = this.getIconByErrorCode(errorCode);
-
-        this.errorSweetAlert(icon, this.goBackToMultas.bind(this));
-      },
-      error: (error: any) => {
-        this.spinner.hide();
-        console.log(error);
-        Swal.fire({
-          title: "Error",
-          text: "Hubo un problema al intentar eliminar la resolución.",
-          icon: "error"
-        });
-      },
-    });
-  }
-
 
   validarFechas(): boolean {
     let result = false;
@@ -936,6 +924,27 @@ export class MultasComponent implements OnInit {
 
 
 
+  listarTipoDocumento() {
+    let post = {
+      p_grutip: this.p_grutipDoc,
+    };
+
+    this.spinner.show();
+
+    console.log(post);
+    this.sigtaService.listarTipoPersona(post).subscribe({
+      next: (data: any) => {
+        this.spinner.hide();
+        console.log();
+
+        this.datosTipoDocumento = data;
+      },
+      error: (error: any) => {
+        console.log(error);
+        this.spinner.hide();
+      },
+    });
+  }
 
 
   // ==================== ENCUENTRA NOMBRE DIGITANDO CODIGO ==================

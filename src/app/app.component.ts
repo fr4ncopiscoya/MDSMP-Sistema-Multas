@@ -10,11 +10,10 @@ export class AppComponent {
   dataUsuario: any;
   botonesPermisos: any;
 
-  @HostListener('window:beforeunload', ['$event'])
-  clearLocalStorage(event: Event) {
-    // Aquí puedes limpiar los datos de localStorage que desees
-   localStorage.clear()
-  }
+  // @HostListener('window:beforeunload', ['$event'])
+  // clearLocalStorage(event: Event) {
+  //  localStorage.clear()
+  // }
 
   //BOTONES
   // btnNuevo: number;

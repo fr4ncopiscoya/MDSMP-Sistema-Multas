@@ -145,8 +145,9 @@ export class CuentacorrienteComponent implements OnInit {
     this.dtOptionsModal = {
       // paging: true,
       // pagingType: 'numbers',
+      pageLength: 25,
       info: false,
-      scrollY: '400px',
+      scrollY: '500px',
       columnDefs: [
         { width: '500px', targets: 0 },
       ],
