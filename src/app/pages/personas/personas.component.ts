@@ -52,6 +52,7 @@ export class PersonasComponent implements OnInit {
   data: any;
   datosTipoDocumento: any;
   datosPersona: any;
+  dataPersonaExport: any;
   dataMulta: any;
   datosMulta: any;
   datosContribuyente: any;
@@ -61,6 +62,9 @@ export class PersonasComponent implements OnInit {
   datosFechas: any;
 
   databotones: any;
+
+  tittle: string;
+
 
   // BUSQUEDA POR CODIGO CONTRIBUYENTE
   cnombre: string = '';
@@ -133,6 +137,8 @@ export class PersonasComponent implements OnInit {
   // p_codcon: string = '';
   p_apepat: string = '';
   p_apemat: string = '';
+
+  codcon: string = '';
 
 
   constructor(
@@ -286,7 +292,7 @@ export class PersonasComponent implements OnInit {
     for (let i = 0; i < this.datosMulta.length; i++) {
       array.push({
         'Nº Notificación': this.datosMulta[i].nnumnot || "",
-        'Código Administrado': this.datosMulta[i].ccontri || "",
+        'Código Administrado': this.datosMulta[i].codcon || "",
         'Descripción Multa': this.datosMulta[i].dmulta || "",
         'Nº Resolución': this.datosMulta[i].cnumres || "",
         'Fecha de Notificiación': this.datosMulta[i].dfecnot || "",
@@ -414,9 +420,8 @@ export class PersonasComponent implements OnInit {
   //=========================== MODALES =============================
   cerrarModal(modalKey: string) {
     if (this.modalRefs[modalKey]) {
-      this.modalRefs[modalKey].hide(); // Cierra el modal si está definido
+      this.modalRefs[modalKey].hide();
     }
-    this.formResolucion.reset();
   }
 
   listarAdm(template: TemplateRef<any>) {
@@ -438,6 +443,23 @@ export class PersonasComponent implements OnInit {
     this.sigtaService.idcorrl = this.idcorrl;
   }
 
+  modalCrearAdm(template: TemplateRef<any>) {    
+    this.modalRefs['crearadm'] = this.modalService.show(template, { id: 2, class: 'modal-xl second', backdrop: 'static', keyboard: false });
+    const secondModalBackdrop = document.getElementsByClassName('second')[0]?.parentElement;
+    if (secondModalBackdrop) {
+      secondModalBackdrop.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+    }
+  }
+
+  modalEditarAdm(template: TemplateRef<any>, data: any) {
+    console.log(data);
+
+    this.modalRefs['editaradm'] = this.modalService.show(template, { id: 18, class: 'modal-xl second', backdrop: 'static', keyboard: false });
+    const secondModalBackdrop = document.getElementsByClassName('second')[0]?.parentElement;
+    if (secondModalBackdrop) {
+      secondModalBackdrop.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+    }
+  }
 
 
 
@@ -530,6 +552,16 @@ export class PersonasComponent implements OnInit {
     });
   }
 
+  validarTitulo() {
+    console.log(this.codcon);
+
+    if (this.codcon != '') {
+      this.tittle = 'Editar Administrado'
+    } else {
+      this.tittle = 'Registrar Admimistrado'
+    }
+  }
+
   anularResolucion() {
     let post = {
       p_idcorr: this.idcorrl,
@@ -585,6 +617,12 @@ export class PersonasComponent implements OnInit {
   // }
 
   getDataUser(event: MouseEvent, data: any) {
+    this.dataPersonaExport = data
+    this.codcon = this.dataPersonaExport.ccontri;
+    console.log(this.codcon);
+
+    // console.log(this.dataPersonaExport);
+
     const trs = document.querySelectorAll('tbody tr') as NodeListOf<HTMLTableRowElement>;
     trs.forEach((tr: HTMLTableRowElement) => {
       tr.classList.remove('active-color');
@@ -795,8 +833,6 @@ export class PersonasComponent implements OnInit {
   }
 
   editarDatosMulta(id: string | null) {
-
-
     if (id !== null) {
       this.router.navigate(['/multas/editar-multa'], { queryParams: { id: id } });
       // this.router.navigate(['/multas/editar-multa/', id]);

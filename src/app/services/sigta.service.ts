@@ -99,10 +99,9 @@ export class SigtaService {
           return data
         })
       );
-  } 
+  }
 
   listarPersonas(data: any) {
-    console.log(data);
     return this.httpClientUtils
       .postQuery('sigta/persona/listar', data)
       .pipe(
@@ -407,6 +406,16 @@ export class SigtaService {
   registrarDireccion(data: any) {
     return this.httpClientUtils
       .postQuery('sigta/direccion/registrar', data)
+      .pipe(
+        map((data) => {
+          return data;
+        })
+      );
+  }
+
+  regularizarCuentaCorriente(data: any) {
+    return this.httpClientUtils
+      .postQuery('sigta/regularizar/cuentacorriente', data)
       .pipe(
         map((data) => {
           return data;

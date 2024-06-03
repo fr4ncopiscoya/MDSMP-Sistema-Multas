@@ -7,13 +7,14 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import Swal from 'sweetalert2';
 import { ListarAdministradoComponent } from '../listar-administrado/listar-administrado.component';
 import { PersonasComponent } from 'src/app/pages/personas/personas.component';
+import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-crear-administrado',
-  templateUrl: './crear-administrado.component.html',
-  styleUrls: ['./crear-administrado.component.css']
+  selector: 'app-editar-administrado',
+  templateUrl: './editar-administrado.component.html',
+  styleUrls: ['./editar-administrado.component.css']
 })
-export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDestroy {
+export class EditarAdministradoComponent implements OnInit, AfterViewInit, OnDestroy {
   modalRef?: BsModalRef;
 
   p_grutipDoc: string = '01';
@@ -95,9 +96,10 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
     private sigtaService: SigtaService,
     private spinner: NgxSpinnerService,
     private modalService: BsModalService,
-    // private personaComponent: PersonasComponent
+    private personaComponent: PersonasComponent,
+    private router: Router
   ) {
-    // this.datosPersona = this.personaComponent.dataPersonaExport
+    this.datosPersona = this.personaComponent.dataPersonaExport
   }
 
   ngOnInit(): void {
@@ -147,13 +149,32 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
     }
   }
 
-  private errorSweetAlertCode(icon: 'error' | 'warning' | 'info' | 'success' = 'error') {
+  private errorSweetAlert(icon: 'error' | 'warning' | 'info' | 'success' = 'error', callback?: () => void) {
     Swal.fire({
       icon: icon,
       text: this.error || 'Hubo un error al procesar la solicitud',
+    }).then((result) => {
+      if (result.isConfirmed && callback) {
+        callback();
+      }
     });
   }
 
+
+  goBackToPersonas() {
+    setTimeout(() => {
+      switch (this.error) {
+        case 'Transaccion Realizada Correctamente':
+          this.modalService.hide(18)
+          // this.router.navigateByUrl('/personas')
+          this.personaComponent.listarPersonas();
+          break;
+        default:
+          //
+          break;
+      }
+    });
+  }
 
 
 
@@ -207,12 +228,11 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
   }
 
   modalDescri(template: TemplateRef<any>) {
-    this.modalRefs['listar-urba'] = this.modalService.show(template, { id: 1, class: ' modal-lg urba', backdrop: 'static', keyboard: false });
-    const secondModalBackdrop = document.getElementsByClassName('urba')[0]?.parentElement;
+    this.modalRefs['listar-urba'] = this.modalService.show(template, { id: 12, class: ' modal-lg back', backdrop: 'static', keyboard: false });
+    const secondModalBackdrop = document.getElementsByClassName('back')[0]?.parentElement;
     if (secondModalBackdrop) {
       secondModalBackdrop.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
     }
-    console.log("modal-descri-ubi");
   }
 
 
@@ -288,6 +308,10 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
     this.dmzafis = this.datosPersona.dmzafis
     this.dlotfis = this.datosPersona.dlotfis
     this.drefere = this.datosPersona.drefere
+    this.dtipvia = this.datosPersona.dtipvia
+    this.ccodurb = this.datosPersona.ccodurb
+    this.ccodvia = this.datosPersona.ccodvia
+    this.dtipurb = this.datosPersona.dtipurb
   }
 
   obtenerReferencia() {
@@ -460,13 +484,16 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
 
   registrarAdministrado() {
 
+    console.log(this.ccodurb);
+
+
     let storedData = localStorage.getItem('dataUsuario')
     if (storedData != null) {
       this.dataUsuario = JSON.parse(storedData);
     }
 
     let post = {
-      ccontri: this.ccontri,
+      ccontri: this.datosPersona.ccontri,
       ctipper: this.ctipper,
       ctipdoc: this.ctipdoc,
       dtipdoc: this.dtipdoc,
@@ -476,10 +503,10 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
       cpostal: this.cpostal,
       ccodurb: this.ccodurb,
       dtipurb: this.dtipurb,
-      dnomurb: this.dnomurbvalue,
+      dnomurb: this.dnomurb,
       ccodvia: this.ccodvia,
       dtipvia: this.dtipvia,
-      dnomvia: this.dnomviavalue,
+      dnomvia: this.dnomvia,
       dnrofis: this.dnrofis,
       dintfis: this.dintfis,
       ddepfis: this.ddepfis,
@@ -512,24 +539,17 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
           const icon = this.getIconByErrorCode(errorCode);
 
           // Muestra el SweetAlert con el icono y el mensaje de error
-          this.errorSweetAlertCode(icon);
+          this.errorSweetAlert(icon, this.goBackToPersonas.bind(this));
+          // this.goBackToMultas()
 
         } else {
-          this.errorSweetAlertCode();
-        }
-
-        if (this.error === "Registrado correctamente") {
-          if (this.modalService) {
-            setTimeout(() => {
-              this.modalService.hide(2);
-            }, 1000);
-          }
+          this.errorSweetAlert();
         }
 
       },
       error: (error: any) => {
         this.spinner.hide();
-        this.errorSweetAlertCode();
+        this.errorSweetAlert();
         console.log(error);
       },
     });

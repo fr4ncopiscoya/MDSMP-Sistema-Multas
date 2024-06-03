@@ -61,14 +61,15 @@
                                 Consultar
                             </button>
                         </div>
-                        <!-- <div class="col-sm-auto mb-2-5">
+                        <div class="col-sm-auto mb-2-5">
                             <button [ngClass]="{'disabled-color': !btnNuevo}" [disabled]="!btnNuevo" type="button"
-                                [routerLink]="['/multas/crear-multa']" class="btn btn-primary btn-label btn-sm">
+                                (click)="modalCrearAdm(templateCrearAdministrado); validarTitulo()"
+                                class="btn btn-primary btn-label btn-sm">
                                 <i class="ri-file-2-fill label-icon align-middle fs-16 me-2"></i>
                                 Nuevo
                             </button>
                         </div>
-                        <div class="col-sm-auto mb-2-5">
+                        <!-- <div class="col-sm-auto mb-2-5">
                             <button [ngClass]="{'disabled-color': !btnExcel}" [disabled]="!btnExcel" type="button"
                                 class="btn_excel btn btn-success btn-label btn-sm" id="ExportarExcel"
                                 (click)="exportarExcel()">
@@ -101,11 +102,12 @@
                                             <th class="text-center">Apellido Paterno</th>
                                             <th class="text-center">Apellido Materno</th>
                                             <th class="text-center">Nombre</th>
+                                            <th class="text-center">Acciones</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr ngClass="" *ngFor="let data of datosPersona; let i = index"
-                                            (click)="getDataUser($event,data)" class="text-center tr_hover"
+                                            (click)="getDataUser($event,data)" class="text-center tr_hover active-color"
                                             style="font-size: 14px;">
                                             <td>{{ i + 1 }}</td>
                                             <td>{{ data.ccontri }}</td>
@@ -114,6 +116,29 @@
                                             <td style="text-align: left;">{{ data.dpatern }}</td>
                                             <td style="text-align: left;">{{ data.dmatern }}</td>
                                             <td style="text-align: left;">{{ data.dnombre}}</td>
+                                            <td>
+                                                <div class="" style="margin: 2px 0;">
+                                                    <button type="button" style="margin-right: 2px;"
+                                                        class="btn btn-sm btn-outline-primary btn-icon"
+                                                        data-bs-toggle="dropdown" aria-haspopup="true"
+                                                        aria-expanded="false">M</button>
+                                                    <div class="dropdown-menu">
+                                                        <!-- <button class="dropdown-item verMulta"
+                                                            style="cursor: pointer;">Ver</button> -->
+                                                        <button class="dropdown-item editarMulta"
+                                                            style="cursor: pointer;"
+                                                            (click)="modalEditarAdm(templateEditarAdministrado, this.dataPersonaExport)">Editar
+                                                        </button>
+                                                        <!-- <button class="dropdown-item anularMulta"
+                                                            style="cursor: pointer;">Anular</button> -->
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <!-- <td>
+                                                <button type="button" style="margin: 2px;"
+                                                    class="btn btn-sm btn-outline-primary btn-icon" aria-haspopup="true"
+                                                    aria-expanded="false">E</button>
+                                            </td> -->
                                         </tr>
                                     </tbody>
                                 </table>
@@ -163,6 +188,55 @@
 
     </div>
 </div>
+
+<ng-template #templateCrearAdministrado>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header" style="display: flex; justify-content: space-between;">
+                    <h4 class="card-title mb-0">Registrar Administrado</h4>
+                    <a class="" (click)="cerrarModal('crearadm')" style="cursor: pointer;"> <i
+                            style="font-size: 1.50rem; " class=" ri-close-fill"></i></a>
+                </div>
+                <div class="card-body">
+                    <app-crear-administrado (regresarClick)="'crearadm'"
+                        (confirmClicked)="confirmClick($event)"></app-crear-administrado>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #templateEditarAdministrado>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header" style="display: flex; justify-content: space-between;">
+                    <h4 class="card-title mb-0">Editar Administrado</h4>
+                    <a class="" (click)="cerrarModal('editaradm')" style="cursor: pointer;"> <i
+                            style="font-size: 1.50rem; " class=" ri-close-fill"></i></a>
+                </div>
+                <div class="card-body">
+                    <app-editar-administrado (regresarClick)="'editaradm'"
+                        (confirmClicked)="confirmClick($event)"></app-editar-administrado>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <ng-template #template>
     <div class="row">

@@ -124,11 +124,12 @@
                       <th class="text-center" style="display: none;"></th>
                       <th class="text-center">Des. Acta</th>
                       <th class="text-center">Nº Not.</th>
+                      <th class="text-center">F.Noti</th>
                       <th class="text-center">Código</th>
                       <th class="text-center">Nombre</th>
                       <th class="text-center">Descripción Multa</th>
                       <th class="text-center">Nº Resol</th>
-                      <th class="text-center">F.Noti</th>
+                      <th class="text-center">F.Reso</th>
                       <th class="text-center">Monto</th>
                       <th class="text-center">Estado</th>
                       <th class="text-center">Acciones</th>
@@ -140,11 +141,12 @@
                       <td style="display: none;">{{ data.f_registro }}</td>
                       <td>{{ data.tdi_abrevi }}</td>
                       <td>{{ data.nnumnot }}</td>
+                      <td>{{ data.dfecnot | date:'dd/MM/yyyy' }}</td>
                       <td>{{ data.ccontri }}</td>
                       <td>{{ data.cnombre }}</td>
                       <td>{{ data.dmulta }}</td>
                       <td>{{ data.cnumres }}</td>
-                      <td>{{ data.dfecnot | date:'dd/MM/yyyy' }}</td>
+                      <td>{{ data.dfecres | date:'dd/MM/yyyy' }}</td>
                       <td>{{ data.nmonto | number : "1.2-2" }}</td>
                       <td>
                         <span style="font-weight: bold" [style.color]="data.colreg">
@@ -152,7 +154,6 @@
                         </span>
                       </td>
                       <td>
-
                         <div class="d-flex center">
                           <button type="button" style="margin-right: 2px;"
                             class="btn btn-sm btn-outline-primary btn-icon" data-bs-toggle="dropdown"
@@ -172,7 +173,6 @@
                               (click)="modalInforme(modalInformeFinal,data)" style="cursor: pointer;">Informe
                               final</button>
                           </div>
-
                           <button type="button" class="btn btn-sm btn-outline-danger btn-icon" data-bs-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false" id="btnReso"
                             [disabled]="data.estreg != 'Registrado'"
@@ -187,10 +187,14 @@
                             <a class="dropdown-item anularRes" (click)="sweetAlertAnularReso(data.id_corrl)"
                               style="cursor: pointer; display: none;"> Anular</a>
                           </div>
-                          <button type="button" [disabled]="data.estreg != 'Registrado'"
-                            [ngClass]="{'disabled-color': data.estreg != 'Registrado'}" (click)="getDeuda(data.deudid)"
+                          <button type="button" [disabled]="data.chkpor === '0'"
+                            [ngClass]="{'disabled-color': data.chkpor === '0'}" (click)="getDeuda(data.deudid)"
                             style="margin-left: 2px; text-align: 5px;" class="btn btn-sm btn-outline-success btn-icon"
                             aria-haspopup="true" aria-expanded="false">%</button>
+                          <button type="button" [disabled]="data.deudid != '0'"
+                            [ngClass]="{'disabled-color': data.deudid != '0'}" (click)="regularizarCuenta(data)"
+                            style="margin-left: 2px; text-align: 5px;" class="btn btn-sm btn-outline-primary btn-icon"
+                            aria-haspopup="true" aria-expanded="false">A</button>
                         </div>
                       </td>
                     </tr>

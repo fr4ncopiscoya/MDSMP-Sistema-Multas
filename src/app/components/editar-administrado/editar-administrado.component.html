@@ -56,8 +56,8 @@
                             <input [(ngModel)]="dtipdoc" [disabled]="ctipdoc === '' || ctipdoc === null"
                                 [ngClass]="{'disabled-color': ctipdoc === '' || ctipdoc === null}"
                                 oninput="this.value = this.value.toUpperCase()" type="text"
-                                class="form-control form-control-sm" id="" (blur)="consultarPide(); validarNumDoc()"
-                                (keyup.enter)=" consultarPide();" (keypress)="validarDocumento($event)" />
+                                class="form-control form-control-sm" id="" (blur)="validarNumDoc()"
+                                (keypress)="validarDocumento($event)" />
                         </div>
                         <div class="col-sm-6">
                             <label for="" class="form-label col-form-label-sm">Apellido
@@ -95,7 +95,7 @@
                         <div class="col-sm-8">
                             <label for="" class="form-label col-    sm-8 col-form-label col-form-label-sm"> Correo
                                 Electrónico </label>
-                            <input [(ngModel)]="de_mail" type="text" class="form-control form-control-sm" id="" />
+                            <input [(ngModel)]="de_mail" type="email" class="form-control form-control-sm" id="" />
                         </div>
                         <div class="col-sm-4">
                             <label for="" class="form-label col-sm-8 col-form-label col-form-label-sm"> Fecha nacimiento
@@ -207,7 +207,7 @@
     <div class="col-sm-auto mb-2-5">
         <button type="button" (click)="registrarAdministrado()" class="btn btn-primary btn-label btn-sm">
             <i class="ri-file-2-fill label-icon align-middle fs-16 me-2"></i>
-            Registrar
+            Modificar
         </button>
     </div>
 </div>

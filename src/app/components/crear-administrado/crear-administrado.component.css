@@ -76,6 +76,10 @@ ng-select.form-control.input-sm.ng-select-searchable.ng-select-clearable.ng-sele
   font-weight: bold;
 }
 
+.hideButton{
+  display: none;
+}
+
 .estados {
   display: flex;
   justify-content: space-between;

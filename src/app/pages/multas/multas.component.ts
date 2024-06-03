@@ -159,7 +159,7 @@ export class MultasComponent implements OnInit {
       info: false,
       scrollY: '400px',
       columnDefs: [
-        { width: '650px', targets: 5 },
+        { width: '650px', targets: 6 },
       ],
       language: {
         url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Spanish.json"
@@ -332,7 +332,7 @@ export class MultasComponent implements OnInit {
           confirmButtonText: "Si"
         }).then((result) => {
           if (result.isConfirmed) {
-            this.aplicarDescuento(id,data[0].numid);
+            this.aplicarDescuento(id, data[0].numid);
           }
         });
 
@@ -352,7 +352,7 @@ export class MultasComponent implements OnInit {
     });
   }
 
-  aplicarDescuento(deudid: any, chk:any) {
+  aplicarDescuento(deudid: any, chk: any) {
     let post = {
       p_deudid: deudid,
       p_chkdes: chk,
@@ -361,6 +361,41 @@ export class MultasComponent implements OnInit {
     this.spinner.show();
 
     this.sigtaService.aplicarDescuento(post).subscribe({
+      next: (data: any) => {
+        this.spinner.hide();
+        console.log(data);
+
+        this.error = data[0].mensa;
+        const errorCode = data[0].error;
+        console.log(this.error);
+
+        const icon = this.getIconByErrorCode(errorCode);
+
+        this.errorSweetAlert(icon, this.goBackToMultas.bind(this));
+      },
+      error: (error: any) => {
+        this.spinner.hide();
+        console.log(error);
+        Swal.fire({
+          title: "Error",
+          text: "Hubo un problema al intentar eliminar la resolución.",
+          icon: "error"
+        });
+      },
+    });
+  }
+
+  regularizarCuenta(data: any) {
+    console.log(data);
+    let post = {
+      p_codcon: data.ccontri,
+      p_numnot: data.nnumnot,
+      p_anynot: data.cano,
+    };
+    console.log(post);
+    this.spinner.show();
+
+    this.sigtaService.regularizarCuentaCorriente(post).subscribe({
       next: (data: any) => {
         this.spinner.hide();
         console.log(data);
@@ -779,6 +814,7 @@ export class MultasComponent implements OnInit {
       switch (this.error) {
         case 'Resolucion Registrada Correctamente':
         case 'Resolucion Anulada Correctamente':
+        case 'Cuenta Corriente Actualizada':
           this.modalService.hide(3)
           this.consultarMulta();
           // location.reload();
