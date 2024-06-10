@@ -184,7 +184,6 @@ export class CosgasModalComponent implements OnInit {
   }
 
 
-
   consultarCosGas() {
 
     let post = {

@@ -98,8 +98,7 @@
 
 
           <li class="nav-item" *ngIf="!menuItem.sub_menu || menuItem.sub_menu.length === 0" style="cursor: pointer;">
-            <a (click)="getMenuID(menuItem.obj_id,menuItem.obj_enlace)" class="nav-link menu-link"
-              [ngClass]="{'active': menuItem.obj_id == activeMenuId}">
+            <a (click)="getMenuID(menuItem.obj_id,menuItem.obj_enlace)" class="nav-link menu-link">
               <span>{{ menuItem.obj_descri}}</span>
             </a>
           </li>

@@ -132,8 +132,8 @@ export class PersonasComponent implements OnInit {
   p_grutipPer: string = '02';
   valor: boolean = false
 
-  ctipdoc: string;
-  dtipdoc: string;
+  ctipdoc: string = '';
+  dtipdoc: string = '';
   // p_codcon: string = '';
   p_apepat: string = '';
   p_apemat: string = '';
@@ -230,6 +230,7 @@ export class PersonasComponent implements OnInit {
   }
 
   listarPersonas() {
+
     let post = {
       p_contri: this.p_codcon,
       p_apepat: this.p_apepat,
@@ -238,22 +239,34 @@ export class PersonasComponent implements OnInit {
       p_numdoc: this.dtipdoc,
     };
 
-    this.spinner.show();
+    if (this.p_codcon != '' || this.p_apemat != '' || this.p_apepat != '' || this.ctipdoc != '' || this.dtipdoc != '') {
 
-    this.sigtaService.listarPersonas(post).subscribe({
-      next: (data: any) => {
-        this.spinner.hide();
+      this.spinner.show();
 
-        this.datosPersona = data;
-        this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-          dtInstance.destroy();
-          this.dtTrigger.next();
-        });
-      },
-      error: (error: any) => {
-        this.spinner.hide();
-      },
-    });
+      this.sigtaService.listarPersonas(post).subscribe({
+        next: (data: any) => {
+          this.spinner.hide();
+
+          this.datosPersona = data;
+          if (!data || data.length === 0) {
+            this.datosPersona = [];
+          }
+          this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+            dtInstance.destroy();
+            this.dtTrigger.next();
+          });
+        },
+        error: (error: any) => {
+          this.spinner.hide();
+        },
+      });
+    } else {
+      this.datosPersona = [];
+      this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+        dtInstance.destroy();
+        this.dtTrigger.next();
+      });
+    }
   }
 
   validacionBotones() {
@@ -443,7 +456,7 @@ export class PersonasComponent implements OnInit {
     this.sigtaService.idcorrl = this.idcorrl;
   }
 
-  modalCrearAdm(template: TemplateRef<any>) {    
+  modalCrearAdm(template: TemplateRef<any>) {
     this.modalRefs['crearadm'] = this.modalService.show(template, { id: 2, class: 'modal-xl second', backdrop: 'static', keyboard: false });
     const secondModalBackdrop = document.getElementsByClassName('second')[0]?.parentElement;
     if (secondModalBackdrop) {
@@ -823,13 +836,12 @@ export class PersonasComponent implements OnInit {
       this.spinner.hide();
     }, 200);
 
+    this.ctipdoc = '';
+    this.dtipdoc = '';
     this.p_codcon = '';
-    this.cnombre = '';
-    // this.p_fecini = '';
-    // this.p_fecfin = '';
-    this.p_codinf = '';
-    this.r_descri = '';
-    this.p_numnot = '';
+    this.p_apepat = '';
+    this.p_apemat = '';
+    this.listarPersonas();
   }
 
   editarDatosMulta(id: string | null) {

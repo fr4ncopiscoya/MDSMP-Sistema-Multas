@@ -118,7 +118,7 @@
             <div class="card-body">
               <div>
                 <table id="tablaAplicacion" datatable [dtOptions]="dtOptionsModal" [dtTrigger]="dtTrigger"
-                  class=" align-middle mb-0 " style="width: 100%;">
+                  class=" align-middle mb-0 " style="width: 100%; position: relative;">
                   <thead class="table-light">
                     <tr style="font-size: 12px;">
                       <th class="text-center" style="display: none;"></th>
@@ -148,16 +148,20 @@
                       <td>{{ data.cnumres }}</td>
                       <td>{{ data.dfecres | date:'dd/MM/yyyy' }}</td>
                       <td>{{ data.nmonto | number : "1.2-2" }}</td>
-                      <td>
-                        <span style="font-weight: bold" [style.color]="data.colreg">
+                      <td [ngClass]="{'td_hover': data.chkpag === '1'}"
+                        (click)="data.chkpag === '1' && modalPago(modalVerPago,data)">
+                        <span [ngClass]="{'td_hover_color': data.chkpag === '1'}" style="font-weight: bold"
+                          [style.color]="data.colreg">
                           {{ data.estreg }}
                         </span>
                       </td>
                       <td>
                         <div class="d-flex center">
-                          <button type="button" style="margin-right: 2px;"
+                          <button type="button" title="Modificar" style="margin-right: 2px;"
                             class="btn btn-sm btn-outline-primary btn-icon" data-bs-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false" (click)="validarBotones(data)">M</button>
+                            aria-haspopup="true" aria-expanded="false" (click)="validarBotones(data)">M
+                            <!-- <span class="">Modificar</span> -->
+                          </button>
                           <div class="dropdown-menu">
                             <button [ngClass]="{'disabled-color':!btnVer}" [disabled]="!btnVer"
                               class="dropdown-item verMulta" (click)="verDatosMulta(data.id_corrl)"
@@ -173,11 +177,12 @@
                               (click)="modalInforme(modalInformeFinal,data)" style="cursor: pointer;">Informe
                               final</button>
                           </div>
-                          <button type="button" class="btn btn-sm btn-outline-danger btn-icon" data-bs-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false" id="btnReso"
+                          <button type="button" title="Resolución" class="btn btn-sm btn-outline-danger btn-icon"
+                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="btnReso"
                             [disabled]="data.estreg != 'Registrado'"
-                            [ngClass]="{'disabled-color': data.estreg != 'Registrado'}"
-                            (click)="validarBotones(data)">R</button>
+                            [ngClass]="{'disabled-color': data.estreg != 'Registrado'}" (click)="validarBotones(data)">R
+                            <!-- <span class="tooltiptext">Resolución</span> -->
+                          </button>
                           <div class="dropdown-menu">
                             <a class="dropdown-item registrarRes"
                               (click)="modalRegistrarResolucion(modalResolucion,data)"
@@ -188,13 +193,17 @@
                               style="cursor: pointer; display: none;"> Anular</a>
                           </div>
                           <button type="button" [disabled]="data.chkpor === '0'"
-                            [ngClass]="{'disabled-color': data.chkpor === '0'}" (click)="getDeuda(data.deudid)"
-                            style="margin-left: 2px; text-align: 5px;" class="btn btn-sm btn-outline-success btn-icon"
-                            aria-haspopup="true" aria-expanded="false">%</button>
+                            [ngClass]="{'disabled-color': data.chkpor === '0'}" title="Descuento"
+                            (click)="getDeuda(data.deudid)" style="margin-left: 2px; text-align: 5px;"
+                            class="btn btn-sm btn-outline-success btn-icon" aria-haspopup="true" aria-expanded="false">%
+                            <!-- <span class="tooltiptext">Descuento</span> -->
+                          </button>
                           <button type="button" [disabled]="data.deudid != '0'"
-                            [ngClass]="{'disabled-color': data.deudid != '0'}" (click)="regularizarCuenta(data)"
-                            style="margin-left: 2px; text-align: 5px;" class="btn btn-sm btn-outline-primary btn-icon"
-                            aria-haspopup="true" aria-expanded="false">A</button>
+                            [ngClass]="{'disabled-color': data.deudid != '0'}" title="Actualizar Cuenta"
+                            (click)="regularizarCuenta(data)" style="margin-left: 2px; text-align: 5px;"
+                            class="btn btn-sm btn-outline-primary btn-icon" aria-haspopup="true" aria-expanded="false">A
+                            <!-- <span class="tooltiptext">Actualizar</span> -->
+                          </button>
                         </div>
                       </td>
                     </tr>
@@ -301,6 +310,109 @@
         </div>
         <div class="card-body">
           <app-listar-descripcion (confirmClicked)="confirmClickDescri($event)"></app-listar-descripcion>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #modalVerPago>
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header" style="display: flex; justify-content: space-between;">
+          <h4 class="card-title mb-0">Detalles Pago</h4>
+          <a class="" (click)="cerrarModal('modalVerPago')" style="cursor: pointer;"> <i style="font-size: 1.50rem; "
+              class="ri-close-fill"></i></a>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-8">
+              <div class="mb-3">
+                <label for="firstNameinput" class="form-label col-form-label-sm">Número Recibo</label>
+                <input type="text" style="background-color: #e1e1e1" disabled="" class="form-control form-control-sm"
+                  [(ngModel)]="pago_numrec">
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="mb-3">
+                <label for="firstNameinput" class="form-label col-form-label-sm">Fecha Pago</label>
+                <input type="date" style="background-color: #e1e1e1" disabled="" class="form-control form-control-sm"
+                  [(ngModel)]="pago_fecpag">
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="mb-3">
+                <label for="lastNameinput" class="form-label col-form-label-sm">Monto Multa</label>
+                <input type="text" style="background-color: #e1e1e1" disabled="" class="form-control form-control-sm"
+                  (blur)="this.dfecnot = this.dfecres" [(ngModel)]="pago_montot">
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="mb-3">
+                <label for="firstNameinput" class="form-label col-form-label-sm">Monto Pagado</label>
+                <input type="text" style="background-color: #e1e1e1" disabled="" [inputMask]="currencyInputMask"
+                  class="form-control form-control-sm" [(ngModel)]="pago_monpag">
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="mb-3">
+                <label for="lastNameinput" class="form-label col-form-label-sm">Monto Beneficio</label>
+                <input type="text" style="background-color: #e1e1e1" disabled="" class="form-control form-control-sm"
+                  (blur)="this.dfecnot = this.dfecres" [(ngModel)]="pago_monben">
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="mb-3">
+                <label for="firstNameinput" class="form-label col-form-label-sm">Tipo Documento</label>
+                <input type="text" style="background-color: #e1e1e1" disabled="" class="form-control form-control-sm"
+                  [(ngModel)]="pago_tipdoi">
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="mb-3">
+                <label for="firstNameinput" class="form-label col-form-label-sm">Número Notificación</label>
+                <input type="text" style="background-color: #e1e1e1" disabled="" class="form-control form-control-sm"
+                  [(ngModel)]="pago_numnot">
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="mb-3">
+                <label for="firstNameinput" class="form-label col-form-label-sm">Fecha Notificación</label>
+                <input type="date" style="background-color: #e1e1e1" disabled="" class="form-control form-control-sm"
+                  [(ngModel)]="pago_fecnot">
+              </div>
+            </div>
+            <div class="col-md-12 mb-3 ">
+              <label for="" class="form-label col-form-label-sm">Administrado</label>
+              <div class="" style="display: flex; align-items: center; width: 100%;">
+                <div class="" style="width: 20%; margin-right: 5px;">
+                  <input id="cnombre" disabled="" [(ngModel)]="pago_codadm"
+                    oninput="this.value = this.value.toUpperCase()" type="text" class="form-control form-control-sm"
+                    style="background-color: #e1e1e1" />
+                </div>
+                <div class="" style="width: 80%;">
+                  <input id="cnombre" disabled="" [(ngModel)]="pago_nomadm"
+                    oninput="this.value = this.value.toUpperCase()" type="text" class="form-control form-control-sm"
+                    style="background-color: #e1e1e1" />
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="mb-3">
+                <label for="lastNameinput" class="form-label col-form-label-sm">Descripción Infraccion</label>
+                <textarea name="" class="form-control form-control-sm" [(ngModel)]="pago_desmul"
+                  style="background-color: #e1e1e1; width: 100%; height: 100px; resize: none;" disabled="" id="">
+                </textarea>
+                <!-- <input type="text" class=""> -->
+              </div>
+            </div>
+            <!-- <div class="col-lg-12">
+              <div class="text-end">
+                <button type="submit" class="btn btn-primary">Guardar</button>
+              </div>
+            </div> -->
+          </div>
         </div>
       </div>
     </div>

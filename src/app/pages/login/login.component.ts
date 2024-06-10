@@ -218,6 +218,20 @@ export class LoginComponent implements OnInit {
 
         if (data[0].error == 0) {
           this.toastComponent.showToast('Inicio de sesión correcto.', 'success');
+          let postMenu = {
+            p_usu_id: this.dataUsuario = data[0].numid,
+            p_apl_id: 10,
+            p_obp_id: 0,
+          };
+
+          this.sigtaService.listarMenu(postMenu).subscribe({
+            next: (result: any) => {
+              localStorage.setItem("dataMenu", JSON.stringify(result));
+              this.appComponent.dataMenu = result;
+            },
+            error: (error: any) => {
+            },
+          });
 
           setTimeout(() => {
             btnLogin.innerHTML = 'Ingresar';

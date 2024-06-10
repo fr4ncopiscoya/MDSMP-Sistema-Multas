@@ -40,22 +40,27 @@ export class MenuComponent implements OnInit {
     private appComponent: AppComponent
   ) {
     const storedData = localStorage.getItem("dataUsuario");
+    this.datosMenu = this.appComponent.dataMenu;
+    console.log(this.datosMenu);
+    
+    
     if (storedData !== null) {
       this.dataUsuario = JSON.parse(storedData);
     }
+    
   }
 
   ngOnInit(): void {
-    this.listarMenu();
-    const storedActiveMenuId = localStorage.getItem('activeMenuId');
-    if (storedActiveMenuId) {
-      this.activeMenuId = storedActiveMenuId;
-    }
+    //this.listarMenu();
+    // const storedActiveMenuId = localStorage.getItem('activeMenuId');
+    // if (storedActiveMenuId) {
+    //   this.activeMenuId = storedActiveMenuId;
+    // }
 
-    const storedActiveMenuColor = localStorage.getItem('activeMenuColor');
-    if (storedActiveMenuColor) {
-      this.activeMenuColor = storedActiveMenuColor;
-    }
+    // const storedActiveMenuColor = localStorage.getItem('activeMenuColor');
+    // if (storedActiveMenuColor) {
+    //   this.activeMenuColor = storedActiveMenuColor;
+    // }
   }
 
   toggleCollapse(id: string) {

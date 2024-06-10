@@ -41,7 +41,8 @@ export class NavbarComponent implements OnInit {
     private router: Router,
     // public appComponent:AppComponent
     private sigtaService: SigtaService,
-    private modalService: BsModalService
+    private modalService: BsModalService,
+    private appComponent: AppComponent
   ) {
     // this.dataUsuario = localStorage.getItem('dataUsuario');
     const storedData = localStorage.getItem("dataUsuario");
@@ -154,6 +155,7 @@ export class NavbarComponent implements OnInit {
         this.usu_nomcom = data[0].usu_nomcom
         this.cusuari = data[0].usu_loging;
         this.p_usu_id = data[0].usu_id;
+        localStorage.setItem('dataUser', JSON.stringify(data))
         this.sigtaService.cusuari = this.cusuari;
       }
     });
@@ -247,9 +249,9 @@ export class NavbarComponent implements OnInit {
   }
 
   logOut() {
-    localStorage.clear()
-    this.router.navigateByUrl('/login')
-
+    localStorage.clear();
+    this.router.navigateByUrl('/login');
+    this.appComponent.dataMenu = null;
     // this.dataUsuario.removeItem('dataUsuario')
   }
 

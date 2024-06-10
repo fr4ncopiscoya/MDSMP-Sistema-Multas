@@ -21,6 +21,8 @@ import { MenuComponent } from 'src/app/components/menu/menu.component';
 import Swal from 'sweetalert2';
 import { Platform } from '@angular/cdk/platform';
 import * as XLSX from 'xlsx';
+import { createMask } from '@ngneat/input-mask';
+import { formatNumber } from '@angular/common';
 
 
 
@@ -45,6 +47,15 @@ export class MultasComponent implements OnInit {
   dtTriggerModal: Subject<void> = new Subject<void>();
   dtOptionsModal: DataTables.Settings = {};
 
+  currencyInputMask = createMask({
+    alias: 'numeric',
+    groupSeparator: ',',
+    digits: 2,
+    digitsOptional: false,
+    prefix: 'S/. ',
+    placeholder: '0',
+  });
+
 
   /// ================== VARIABLES ============================
 
@@ -56,7 +67,9 @@ export class MultasComponent implements OnInit {
   datosNombreContribuyente: any = [];
   datosDescripcion: any;
   dataUsuario: any;
+  datosUser: any;
   datosFechas: any;
+  dataPago: any;
 
   databotones: any;
 
@@ -107,6 +120,20 @@ export class MultasComponent implements OnInit {
   fecins: string = '';
   fecmod: string = '';
 
+  //VER DATOS PAGO
+  pago_codadm: string;
+  pago_codmul: string;
+  pago_desmul: string;
+  pago_fecnot: string;
+  pago_fecpag: string;
+  pago_monben: string;
+  pago_monpag: string;
+  pago_montot: string;
+  pago_nomadm: string;
+  pago_numnot: string;
+  pago_numrec: string;
+  pago_tipdoi: string;
+
   //Botones activar
   apb_activo: number = 0;
   btn_id: number = 0;
@@ -140,6 +167,8 @@ export class MultasComponent implements OnInit {
 
     this.appComponent.login = false;
     this.dataUsuario = localStorage.getItem('dataUsuario');
+    this.datosUser = JSON.parse(localStorage.getItem('dataUser'))
+
     // this.botonesMultas = this.appComponent.botonesPermisos;
 
     // this.botonesMultas = localStorage.getItem('menu-items')
@@ -262,7 +291,7 @@ export class MultasComponent implements OnInit {
   validarCodigoMultaVacio(event: any) {
     if (this.p_codcon.length < 7) {
       this.cnombre = ''
-    }
+    } 1
   }
 
   validarCodigoInfraVacio(event: any) {
@@ -345,7 +374,7 @@ export class MultasComponent implements OnInit {
         console.log(error);
         Swal.fire({
           title: "Error",
-          text: "Hubo un problema al intentar eliminar la resolución.",
+          text: "Ocurrió un problema",
           icon: "error"
         });
       },
@@ -378,7 +407,7 @@ export class MultasComponent implements OnInit {
         console.log(error);
         Swal.fire({
           title: "Error",
-          text: "Hubo un problema al intentar eliminar la resolución.",
+          text: "Hubo un problema al intentar aplicar el descuento.",
           icon: "error"
         });
       },
@@ -413,7 +442,7 @@ export class MultasComponent implements OnInit {
         console.log(error);
         Swal.fire({
           title: "Error",
-          text: "Hubo un problema al intentar eliminar la resolución.",
+          text: "Hubo un problema al intentar actualizar la cuenta",
           icon: "error"
         });
       },
@@ -482,6 +511,12 @@ export class MultasComponent implements OnInit {
     this.idcorrl = data.id_corrl;
 
     this.modalRefs['modalAnularMulta'] = this.modalService.show(template, { id: 6, class: '', backdrop: 'static', keyboard: false });
+    this.sigtaService.idcorrl = this.idcorrl;
+  }
+
+  modalPago(template: TemplateRef<any>, data: any) {
+    this.verDatosPago(data.id_corrl)
+    this.modalRefs['modalVerPago'] = this.modalService.show(template, { id: 8, class: '', backdrop: 'static', keyboard: false });
     this.sigtaService.idcorrl = this.idcorrl;
   }
 
@@ -871,6 +906,7 @@ export class MultasComponent implements OnInit {
 
   //====================== CONSULTAR/FILTRAR MULTA =====================
   consultarMulta() {
+
     let post = {
       p_codcon: this.p_codcon,
       p_numnot: this.p_numnot,
@@ -879,6 +915,7 @@ export class MultasComponent implements OnInit {
       p_fecini: this.p_fecini.toString(),
       p_fecfin: this.p_fecfin.toString(),
       p_idcorr: this.p_idcorr,
+      tdi_id: this.datosUser[0].tdi_id,
     };
 
     if (this.mrf_id > 0 || this.p_codcon != '' || this.p_codinf != '' || this.p_numnot != '') {
@@ -970,11 +1007,56 @@ export class MultasComponent implements OnInit {
     });
   }
 
-
-
-
-
   // ==================== ENCUENTRA NOMBRE DIGITANDO CODIGO ==================
+  verDatosPago(id: any) {
+    console.log(id);
+
+    let post = {
+      p_idcorrl: id,
+    };
+
+    this.sigtaService.verDatosPago(post).subscribe({
+      next: (data: any) => {
+        console.log("datos-pago: ", data);
+
+        this.dataPago = data;
+
+        // let montotconvert = parseFloat(data[0].montot.replace(/[^\d.,]/g, '').replace(',', '.'));
+        // let montotformat = montotconvert.toLocaleString('es-ES', { minimumFractionDigits: 2 });
+        // this.pago_montot = montotformat;
+
+        // let monpagconvert = parseFloat(data[0].monpag.replace(/[^\d.,]/g, '').replace(',', '.'));
+        // let monpagformat = monpagconvert.toLocaleString('es-ES', { minimumFractionDigits: 2 });
+        // this.pago_monpag = monpagformat;
+
+        // let monbenconvert = parseFloat(data[0].monben.replace(/[^\d.]/g, ''));
+        // let monbenformat = monbenconvert.toLocaleString('es-ES', { minimumFractionDigits: 2 });
+        // this.pago_monben = monbenformat;
+
+        this.pago_codadm = data[0].codadm
+        this.pago_codmul = data[0].codmul
+        this.pago_desmul = data[0].desmul
+        this.pago_fecnot = data[0].fecnot
+        this.pago_fecpag = data[0].fecpag
+        this.pago_monben = formatNumber(Number(data[0].monben), 'en-US', '1.2')
+        this.pago_monpag = formatNumber(Number(data[0].monpag), 'en-US', '1.2')
+        this.pago_montot = formatNumber(Number(data[0].montot), 'en-US', '1.2')
+        this.pago_nomadm = data[0].nomadm
+        this.pago_numnot = data[0].numnot
+        this.pago_numrec = data[0].numrec
+        this.pago_tipdoi = data[0].tipdoi
+
+        const date = new Date(this.pago_fecnot);
+        this.pago_fecnot = date.toISOString().split('T')[0];
+
+      },
+      error: (error: any) => {
+      },
+    });
+
+  }
+
+
   obtenerNombrePorCod(value: any) {
     let post = {
       p_codcon: this.p_codcon,

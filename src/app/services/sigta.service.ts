@@ -363,6 +363,16 @@ export class SigtaService {
       );
   }
 
+  verDatosPago(data: any) {
+    return this.httpClientUtils
+      .postQuery('sigta/ver/pago', data)
+      .pipe(
+        map((data) => {
+          return data;
+        })
+      );
+  }
+
   anularResolucion(data: any) {
     return this.httpClientUtils
       .postQuery('sigta/resolucion/anular', data)

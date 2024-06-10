@@ -147,15 +147,30 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
     }
   }
 
-  private errorSweetAlertCode(icon: 'error' | 'warning' | 'info' | 'success' = 'error') {
+  private errorSweetAlertCode(icon: 'error' | 'warning' | 'info' | 'success' = 'error', callback?: () => void) {
     Swal.fire({
       icon: icon,
       text: this.error || 'Hubo un error al procesar la solicitud',
+    }).then((result) => {
+      if (result.isConfirmed && callback) {
+        callback();
+      }
     });
   }
 
 
-
+  goBackToMultas() {
+    setTimeout(() => {
+      switch (this.error) {
+        case 'Transaccion Realizada Correctamente':
+          this.modalService.hide(2)
+          break;
+        default:
+          //
+          break;
+      }
+    });
+  }
 
 
 
@@ -512,19 +527,19 @@ export class CrearAdministradoComponent implements OnInit, AfterViewInit, OnDest
           const icon = this.getIconByErrorCode(errorCode);
 
           // Muestra el SweetAlert con el icono y el mensaje de error
-          this.errorSweetAlertCode(icon);
+          this.errorSweetAlertCode(icon, this.goBackToMultas.bind(this));
 
         } else {
           this.errorSweetAlertCode();
         }
 
-        if (this.error === "Registrado correctamente") {
-          if (this.modalService) {
-            setTimeout(() => {
-              this.modalService.hide(2);
-            }, 1000);
-          }
-        }
+        // if (this.error === "Registrado correctamente") {
+        //   if (this.modalService) {
+        //     setTimeout(() => {
+        //       this.modalService.hide(2);
+        //     }, 1000);
+        //   }
+        // }
 
       },
       error: (error: any) => {

@@ -497,7 +497,8 @@ export class CrearMultaComponent implements OnInit {
     }
 
     let post = {
-      tdi_id: this.tdi_id,
+      // tdi_id: this.tdi_id,
+      tdi_id: 0,
       nnumnot: this.nnumnot,
       dfecnot: this.p_anypro,
       ccontri: this.ccontri,
